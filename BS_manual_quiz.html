@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<!--
+  Manual interactivo de Brightspace - Quizzes y Question Library
+  (c) 2026 Jose M. Fernandez, ABE/ASE Math Master Teacher,
+  Harry S. Truman College - City Colleges of Chicago.
+  Licencia: Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+  (CC BY-NC-SA 4.0) - https://creativecommons.org/licenses/by-nc-sa/4.0/
+-->
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manual Brightspace - Quizzes y Question Library</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --tinta: #2e7d87;
+        --tinta-oscura: #1f5a62;
+        --azul: #357abd;
+        --azul-claro: #4a90e2;
+        --foco: #ffd54f;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 20px;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #2e7d87 0%, #3ba99c 100%);
+        color: white;
+        padding: 40px 30px;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2em;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .header p {
+        font-size: 1.1em;
+        opacity: 0.95;
+      }
+
+      /* ---------- Barra de herramientas ---------- */
+      .toolbar {
+        max-width: 1000px;
+        margin: 0 auto 18px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .search-input {
+        flex: 1 1 240px;
+        min-width: 0;
+        padding: 12px 16px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1em;
+        font-family: inherit;
+        color: #333;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .search-input::placeholder {
+        color: #6b6b6b;
+      }
+
+      .tool-btn {
+        padding: 12px 18px;
+        border: none;
+        border-radius: 10px;
+        background: #ffffff;
+        color: var(--tinta);
+        font-weight: 600;
+        font-family: inherit;
+        font-size: 0.95em;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        transition: background 0.2s ease, color 0.2s ease;
+      }
+
+      .tool-btn:hover {
+        background: var(--tinta);
+        color: #ffffff;
+      }
+
+      .search-input:focus-visible,
+      .tool-btn:focus-visible {
+        outline: 3px solid var(--foco);
+        outline-offset: 2px;
+      }
+
+      .sin-resultados {
+        display: none;
+        max-width: 1000px;
+        margin: 0 auto 18px;
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 22px 24px;
+        text-align: center;
+        color: #555;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .sin-resultados.visible {
+        display: block;
+      }
+
+      .accordion-container {
+        padding: 30px;
+      }
+
+      .accordion-item {
+        margin-bottom: 15px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+      }
+
+      .accordion-item:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+      }
+
+      /* El encabezado de cada sección es un <button> dentro de un heading */
+      .accordion-h,
+      .sub-accordion-h {
+        margin: 0;
+        font-weight: normal;
+      }
+
+      .accordion-header {
+        width: 100%;
+        border: none;
+        font-family: inherit;
+        text-align: left;
+        background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+        color: white;
+        padding: 20px 25px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        transition: background 0.3s ease;
+      }
+
+      .accordion-header:hover {
+        background: linear-gradient(135deg, #5ba0f2 0%, #4689cd 100%);
+      }
+
+      .accordion-header[aria-expanded="true"] {
+        background: linear-gradient(135deg, #3ba99c 0%, #2e7d87 100%);
+      }
+
+      .accordion-title {
+        font-size: 1.3em;
+        font-weight: 600;
+        flex: 1;
+      }
+
+      .accordion-icon {
+        font-size: 1.5em;
+        transition: transform 0.3s ease;
+        font-weight: bold;
+        flex-shrink: 0;
+      }
+
+      .accordion-header[aria-expanded="true"] .accordion-icon {
+        transform: rotate(180deg);
+      }
+
+      /* Animación de despliegue con CSS grid (sin números mágicos) */
+      .accordion-content {
+        display: grid;
+        grid-template-rows: 1fr; /* visible por defecto -> accesible sin JS */
+        background: #f8f9fa;
+      }
+
+      body.js-enabled .accordion-content {
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.35s ease;
+      }
+
+      body.js-enabled .accordion-content.open {
+        grid-template-rows: 1fr;
+      }
+
+      .accordion-content > .accordion-inner {
+        min-height: 0;
+        overflow: hidden;
+      }
+
+      .accordion-inner {
+        padding: 25px;
+        line-height: 1.8;
+        color: #333;
+      }
+
+      /* ---------- Acordeones anidados ---------- */
+      .sub-accordion-item {
+        margin: 15px 0;
+        border-radius: 8px;
+        overflow: hidden;
+        background: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+      }
+
+      .sub-accordion-header {
+        width: 100%;
+        border: none;
+        font-family: inherit;
+        text-align: left;
+        background: linear-gradient(135deg, #e8f4f8 0%, #d4ebf3 100%);
+        color: #1f5a62;
+        padding: 15px 20px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        transition: background 0.3s ease, color 0.3s ease;
+        border-left: 4px solid #3ba99c;
+      }
+
+      .sub-accordion-header:hover {
+        background: linear-gradient(135deg, #d4ebf3 0%, #c0e3ed 100%);
+      }
+
+      .sub-accordion-header[aria-expanded="true"] {
+        background: linear-gradient(135deg, #3ba99c 0%, #2e7d87 100%);
+        color: white;
+      }
+
+      .sub-accordion-title {
+        font-size: 1.15em;
+        font-weight: 600;
+        flex: 1;
+      }
+
+      .sub-accordion-icon {
+        font-size: 1.2em;
+        transition: transform 0.3s ease;
+        flex-shrink: 0;
+      }
+
+      .sub-accordion-header[aria-expanded="true"] .sub-accordion-icon {
+        transform: rotate(180deg);
+      }
+
+      .sub-accordion-content {
+        display: grid;
+        grid-template-rows: 1fr;
+      }
+
+      body.js-enabled .sub-accordion-content {
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.35s ease;
+      }
+
+      body.js-enabled .sub-accordion-content.open {
+        grid-template-rows: 1fr;
+      }
+
+      .sub-accordion-content > .sub-accordion-inner {
+        min-height: 0;
+        overflow: hidden;
+      }
+
+      .sub-accordion-inner {
+        padding: 20px;
+        background: #fafbfc;
+      }
+
+      /* ---------- Foco visible para teclado ---------- */
+      .accordion-header:focus-visible,
+      .sub-accordion-header:focus-visible {
+        outline: 3px solid var(--foco);
+        outline-offset: -3px;
+      }
+
+      .accordion-inner > p:first-child {
+        margin-bottom: 20px;
+      }
+
+      .accordion-inner h4 {
+        color: #2e6699;
+        margin-top: 15px;
+        margin-bottom: 10px;
+        font-size: 1.05em;
+      }
+
+      .accordion-inner p {
+        margin-bottom: 12px;
+      }
+
+      .accordion-inner ul,
+      .accordion-inner ol {
+        margin-left: 25px;
+        margin-bottom: 15px;
+      }
+
+      .accordion-inner li {
+        margin-bottom: 8px;
+      }
+
+      .accordion-inner strong {
+        color: #1f5a62;
+        font-weight: 600;
+      }
+
+      .highlight {
+        background: #fff3cd;
+        padding: 15px;
+        border-left: 4px solid #b06f00;
+        margin: 15px 0;
+        border-radius: 5px;
+      }
+
+      .important {
+        background: #ffe8e8;
+        padding: 15px;
+        border-left: 4px solid #c0392b;
+        margin: 15px 0;
+        border-radius: 5px;
+      }
+
+      .recommendation {
+        background: #e8f5e9;
+        padding: 15px;
+        border-left: 4px solid #2e7d32;
+        margin: 15px 0;
+        border-radius: 5px;
+      }
+
+      /* ---------- Pie de licencia ---------- */
+      .pie-licencia {
+        max-width: 1000px;
+        margin: 30px auto 0;
+        text-align: center;
+        color: #ffffff;
+        font-size: 0.9em;
+        line-height: 1.6;
+        opacity: 0.95;
+      }
+
+      .pie-licencia a {
+        color: #ffffff;
+        font-weight: 600;
+      }
+
+      .pie-licencia a:focus-visible {
+        outline: 3px solid var(--foco);
+        outline-offset: 2px;
+      }
+
+      @media (max-width: 768px) {
+        .header h1 {
+          font-size: 1.5em;
+        }
+
+        .accordion-title {
+          font-size: 1.1em;
+        }
+
+        .accordion-inner {
+          padding: 20px;
+        }
+
+        .sub-accordion-inner {
+          padding: 15px;
+        }
+
+        .tool-btn {
+          flex: 1 1 auto;
+        }
+      }
+
+      /* ---------- Respeta la preferencia de movimiento reducido ---------- */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          transition: none !important;
+          animation: none !important;
+        }
+      }
+
+      /* ---------- Impresión: todo desplegado, sin adornos ---------- */
+      @media print {
+        body {
+          background: #ffffff;
+          padding: 0;
+        }
+
+        .toolbar,
+        .sin-resultados,
+        .accordion-icon,
+        .sub-accordion-icon {
+          display: none !important;
+        }
+
+        .container {
+          box-shadow: none;
+          border-radius: 0;
+          max-width: 100%;
+        }
+
+        .header {
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+
+        .accordion-content,
+        .sub-accordion-content {
+          grid-template-rows: 1fr !important;
+        }
+
+        .accordion-content > .accordion-inner,
+        .sub-accordion-content > .sub-accordion-inner {
+          overflow: visible;
+        }
+
+        .accordion-item,
+        .sub-accordion-item {
+          box-shadow: none;
+          transform: none;
+          break-inside: avoid;
+        }
+
+        .pie-licencia,
+        .pie-licencia a {
+          color: #000000;
+        }
+      }
+    </style>
+    <meta name="description" content="Manual interactivo de Brightspace: creacion de quizzes y uso de la Question Library. Guia para profesores." />
+    <meta name="author" content="José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago" />
+    <meta name="license" content="CC BY-NC-SA 4.0" />
+    <link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>📚 Manual interactivo de Brightspace</h1>
+        <p>Quizzes y Question Library — Guía completa para profesores</p>
+      </div>
+
+      <div class="toolbar" role="search">
+        <input type="text" id="buscador" class="search-input" placeholder="Buscar en el manual…" aria-label="Buscar en el manual" autocomplete="off" />
+        <button type="button" class="tool-btn" id="btn-expandir">Abrir todo</button>
+        <button type="button" class="tool-btn" id="btn-colapsar">Cerrar todo</button>
+        <button type="button" class="tool-btn" id="btn-imprimir">Imprimir</button>
+      </div>
+      <p id="sin-resultados" class="sin-resultados" role="status">No se encontraron resultados para tu búsqueda.</p>
+
+      <div class="accordion-container">
+        <!-- Sección 1: Cómo crear un Quiz -->
+        <div class="accordion-item" id="seccion-1">
+          <h2 class="accordion-h">
+            <button class="accordion-header" type="button" aria-expanded="false" aria-controls="acc-content-1" id="acc-btn-1">
+              <span class="accordion-title">✏️ Cómo crear un quiz</span>
+              <span class="accordion-icon" aria-hidden="true">▼</span>
+            </button>
+          </h2>
+          <div class="accordion-content" id="acc-content-1" role="region" aria-labelledby="acc-btn-1">
+            <div class="accordion-inner">
+              <p>
+                La herramienta de Quizzes te permite crear exámenes en línea
+                para que los estudiantes los realicen y tú puedas calificarlos y
+                darles retroalimentación. El término "quiz" se utiliza para
+                referirse a cualquier tipo de evaluación creada con esta
+                herramienta (examen, prueba, test, etc.).
+              </p>
+
+              <!-- Sub-acordeón: Paso 1 -->
+              <div class="sub-accordion-item">
+                <h3 class="sub-accordion-h">
+                  <button class="sub-accordion-header" type="button" aria-expanded="false" aria-controls="sub-content-1" id="sub-btn-1">
+                    <span class="sub-accordion-title">Paso 1: Acceder a la herramienta y crear el quiz</span>
+                    <span class="sub-accordion-icon" aria-hidden="true">▼</span>
+                  </button>
+                </h3>
+                <div class="sub-accordion-content" id="sub-content-1" role="region" aria-labelledby="sub-btn-1">
+                  <div class="sub-accordion-inner">
+                    <p>
+                      Para comenzar a crear tu quiz, primero debes navegar a la
+                      herramienta correspondiente dentro de tu curso.
+                    </p>
+                    <ol>
+                      <li>
+                        En la barra de navegación (Navbar) de tu curso, haz clic
+                        en <strong>"Course Admin"</strong> (Administración del
+                        Curso).
+                      </li>
+                      <li>
+                        En la sección de
+                        <strong>"Assessment"</strong> (Evaluación), haz clic en
+                        <strong>"Quizzes"</strong>.
+                      </li>
+                      <li>
+                        Una vez en la página de
+                        <strong>"Manage Quizzes"</strong> (Administrar Quizzes),
+                        haz clic en el botón azul
+                        <strong>"New Quiz"</strong> (Nuevo Quiz) para comenzar.
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sub-acordeón: Paso 2 -->
+              <div class="sub-accordion-item">
+                <h3 class="sub-accordion-h">
+                  <button class="sub-accordion-header" type="button" aria-expanded="false" aria-controls="sub-content-2" id="sub-btn-2">
+                    <span class="sub-accordion-title">Paso 2: Asignar un nombre al quiz</span>
+                    <span class="sub-accordion-icon" aria-hidden="true">▼</span>
+                  </button>
+                </h3>
+                <div class="sub-accordion-content" id="sub-content-2" role="region" aria-labelledby="sub-btn-2">
+                  <div class="sub-accordion-inner">
+                    <p>
+                      Lo primero que debes hacer es darle un nombre a tu
+                      evaluación.
+                    </p>
+                    <ol>
+                      <li>
+                        En el campo <strong>"Name"</strong> (Nombre), introduce
+                        un título claro y descriptivo para tu quiz.
+                      </li>
+                      <li>
+                        <div class="recommendation">
+                          <strong>Recomendación:</strong> Crear este "marcador
+                          de posición" (placeholder) con solo el nombre y
+                          hacerlo visible (aunque aún no tenga preguntas ni
+                          fechas) puede reducir la ansiedad de los estudiantes,
+                          ya que sabrán dónde encontrar sus evaluaciones
+                          futuras.
+                        </div>
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sub-acordeón: Paso 3 -->
+              <div class="sub-accordion-item">
+                <h3 class="sub-accordion-h">
+                  <button class="sub-accordion-header" type="button" aria-expanded="false" aria-controls="sub-content-3" id="sub-btn-3">
+                    <span class="sub-accordion-title">Paso 3: Configurar la calificación (Grade Info)</span>
+                    <span class="sub-accordion-icon" aria-hidden="true">▼</span>
+                  </button>
+                </h3>
+                <div class="sub-accordion-content" id="sub-content-3" role="region" aria-labelledby="sub-btn-3">
+                  <div class="sub-accordion-inner">
+                    <p>
+                      En esta sección, decides cómo se conectará el quiz con tu
+                      libro de calificaciones (Gradebook).
+                    </p>
+
+                    <h4>Si el quiz será calificado:</h4>
+                    <ul>
+                      <li>
+                        Haz clic en <strong>"Not in Gradebook"</strong> (No en
+                        el libro de calificaciones) para abrir las opciones.
+                      </li>
+                      <li>
+                        <strong>Opción A (Recomendada):</strong> Si ya has
+                        configurado tu libro de calificaciones previamente,
+                        selecciona
+                        <strong>"Link to an existing grade item"</strong>
+                        (Vincular a un elemento de calificación existente) y
+                        elige el elemento correspondiente del menú desplegable.
+                        Esta es la práctica recomendada.
+                      </li>
+                      <li>
+                        <strong>Opción B:</strong> Si no has creado un elemento
+                        en el libro de calificaciones, puedes seleccionar
+                        <strong>"Create and link to a new grade item"</strong>
+                        (Crear y vincular a un nuevo elemento de calificación).
+                        El sistema usará el nombre y los puntos del quiz para
+                        crearlo automáticamente.
+                      </li>
+                    </ul>
+
+                    <h4>Si el quiz no será calificado (pero sí puntuado):</h4>
+                    <ul>
+                      <li>
+                        Deja la opción por defecto
+                        <strong>"Not in Gradebook"</strong>. Los estudiantes
+                        recibirán una puntuación que podrán ver en
+                        <strong>"Class Progress"</strong> (Progreso de la
+                        Clase), pero no afectará a su calificación final.
+                      </li>
+                    </ul>
+
+                    <h4>Asignar el puntaje:</h4>
+                    <ul>
+                      <li>
+                        En el campo de <strong>"points"</strong> (puntos),
+                        introduce el valor máximo del quiz. Este valor debe
+                        coincidir con el puntaje del elemento correspondiente en
+                        el Gradebook.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sub-acordeón: Paso 4 -->
+              <div class="sub-accordion-item">
+                <h3 class="sub-accordion-h">
+                  <button class="sub-accordion-header" type="button" aria-expanded="false" aria-controls="sub-content-4" id="sub-btn-4">
+                    <span class="sub-accordion-title">Paso 4: Establecer los parámetros de tiempo</span>
+                    <span class="sub-accordion-icon" aria-hidden="true">▼</span>
+                  </button>
+                </h3>
+                <div class="sub-accordion-content" id="sub-content-4" role="region" aria-labelledby="sub-btn-4">
+                  <div class="sub-accordion-inner">
+                    <p>
+                      Existen tres configuraciones de tiempo clave que
+                      determinan cómo y cuándo los estudiantes pueden acceder y
+                      completar el quiz.
+                    </p>
+
+                    <h4>1. Due Date (Fecha de Entrega):</h4>
+                    <ul>
+                      <li>
+                        Es la fecha límite para entregar el quiz. Cualquier
+                        entrega posterior será marcada como
+                        <strong>"Submitted Late"</strong> (Entregado con
+                        retraso). Para establecerla, haz clic en los campos de
+                        fecha y hora.
+                      </li>
+                    </ul>
+
+                    <h4>2. Availability Dates (Fechas de Disponibilidad):</h4>
+                    <ul>
+                      <li>
+                        Determinan la ventana de tiempo (fecha de inicio y fecha
+                        de fin) durante la cual los estudiantes pueden acceder
+                        al quiz. Para configurarlas, despliega la sección
+                        <strong>"Availability Dates & Conditions"</strong>.
+                      </li>
+                      <li>
+                        <div class="important">
+                          <strong>Importante:</strong> Una vez que la fecha de
+                          finalización (End Date) ha pasado, un estudiante no
+                          puede reingresar al quiz, incluso si le queda tiempo
+                          en su temporizador. Por esto, no se recomienda usar
+                          ventanas de disponibilidad muy cortas.
+                        </div>
+                      </li>
+                    </ul>
+
+                    <h4>3. Timing (Límite de Tiempo):</h4>
+                    <ul>
+                      <li>
+                        Establece la duración en minutos que tiene un estudiante
+                        para completar el quiz una vez que lo ha iniciado.
+                      </li>
+                      <li>
+                        Para activarlo, despliega
+                        <strong>"Timing & Display"</strong>, marca la casilla
+                        <strong>"Set time limit"</strong> e introduce los
+                        minutos.
+                      </li>
+                      <li>
+                        Haz clic en <strong>"Timer Settings"</strong> para
+                        definir dos opciones cruciales:
+                      </li>
+                    </ul>
+
+                    <h4>Quiz Start (Inicio del temporizador):</h4>
+                    <ul>
+                      <li>
+                        <strong>Asynchronous (Asíncrono):</strong> El
+                        temporizador comienza cuando el estudiante inicia el
+                        quiz. Esto les da el tiempo completo asignado, sin
+                        importar cuándo empiecen dentro de la ventana de
+                        disponibilidad.
+                      </li>
+                      <li>
+                        <strong>Synchronous (Síncrono):</strong> El temporizador
+                        empieza a correr para todos en la fecha de inicio del
+                        quiz. Esto simula una experiencia de examen en clase,
+                        donde todos terminan a la misma hora.
+                      </li>
+                    </ul>
+
+                    <h4>
+                      When The Time Limit Expires (Cuando el tiempo expira):
+                    </h4>
+                    <ul>
+                      <li>
+                        <strong
+                          >Automatically submit the quiz attempt
+                          (Recomendado):</strong
+                        >
+                        El examen se envía automáticamente cuando el tiempo se
+                        agota. Es la opción más común.
+                      </li>
+                      <li>
+                        <strong>Flag as "exceeded time limit"...:</strong>
+                        Permite al estudiante seguir trabajando, pero marca su
+                        intento como que ha excedido el tiempo.
+                      </li>
+                      <li>
+                        <strong>Do nothing:</strong> El límite de tiempo es solo
+                        una recomendación no forzada.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sub-acordeón: Paso 5 -->
+              <div class="sub-accordion-item">
+                <h3 class="sub-accordion-h">
+                  <button class="sub-accordion-header" type="button" aria-expanded="false" aria-controls="sub-content-5" id="sub-btn-5">
+                    <span class="sub-accordion-title">Paso 5: Añadir preguntas al quiz</span>
+                    <span class="sub-accordion-icon" aria-hidden="true">▼</span>
+                  </button>
+                </h3>
+                <div class="sub-accordion-content" id="sub-content-5" role="region" aria-labelledby="sub-btn-5">
+                  <div class="sub-accordion-inner">
+                    <p>
+                      Una vez configurada la estructura, es momento de añadir el
+                      contenido. La mejor práctica es tener las preguntas ya
+                      creadas en la Question Library (Biblioteca de Preguntas).
+                    </p>
+                    <ol>
+                      <li>
+                        Dentro de la edición del quiz, ve a la pestaña
+                        <strong>"Add/Edit Questions"</strong> (Añadir/Editar
+                        Preguntas).
+                      </li>
+                      <li>
+                        Aquí puedes:
+                        <ul>
+                          <li>Crear preguntas nuevas directamente.</li>
+                          <li>Importar preguntas desde tu Question Library.</li>
+                          <li>
+                            <strong
+                              >Usar "Question Pools" (Grupos de
+                              Preguntas):</strong
+                            >
+                            Esta es la herramienta más efectiva para la
+                            integridad académica. Te permite seleccionar un
+                            número aleatorio de preguntas de un conjunto más
+                            grande (por ejemplo, mostrar 3 de 13 preguntas
+                            disponibles). Cada estudiante recibirá un examen
+                            diferente pero equivalente.
+                          </li>
+                        </ul>
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sub-acordeón: Paso 6 -->
+              <div class="sub-accordion-item">
+                <h3 class="sub-accordion-h">
+                  <button class="sub-accordion-header" type="button" aria-expanded="false" aria-controls="sub-content-6" id="sub-btn-6">
+                    <span class="sub-accordion-title">Paso 6: Configurar la visualización de las preguntas</span>
+                    <span class="sub-accordion-icon" aria-hidden="true">▼</span>
+                  </button>
+                </h3>
+                <div class="sub-accordion-content" id="sub-content-6" role="region" aria-labelledby="sub-btn-6">
+                  <div class="sub-accordion-inner">
+                    <p>
+                      Puedes controlar cómo se presentan las preguntas a los
+                      estudiantes para mejorar la experiencia y la seguridad.
+                    </p>
+
+                    <h4>1. Paging (Paginación):</h4>
+                    <p>
+                      En la sección <strong>"Timing & Display"</strong>, puedes
+                      elegir cuántas preguntas mostrar por página (todas juntas,
+                      una por una, etc.).
+                    </p>
+
+                    <h4>
+                      2. Prevent going back to previous pages (Impedir
+                      retroceder):
+                    </h4>
+                    <div class="important">
+                      <p>
+                        Esta opción evita que los estudiantes vuelvan a
+                        preguntas anteriores.
+                      </p>
+                      <p>
+                        <strong>Advertencia:</strong> Aunque puede aumentar la
+                        integridad, es una de las mayores fuentes de estrés y
+                        ansiedad para los estudiantes. Si la usas, es crucial
+                        que se lo comuniques claramente a tus alumnos.
+                      </p>
+                    </div>
+
+                    <h4>3. Shuffle Quiz (Mezclar Quiz):</h4>
+                    <p>
+                      Activa esta opción para que el orden de las preguntas y
+                      secciones sea aleatorio para cada estudiante, lo cual es
+                      una buena práctica para la integridad académica.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sub-acordeón: Paso 7 -->
+              <div class="sub-accordion-item">
+                <h3 class="sub-accordion-h">
+                  <button class="sub-accordion-header" type="button" aria-expanded="false" aria-controls="sub-content-7" id="sub-btn-7">
+                    <span class="sub-accordion-title">Paso 7: Hacer visible y accesible el quiz</span>
+                    <span class="sub-accordion-icon" aria-hidden="true">▼</span>
+                  </button>
+                </h3>
+                <div class="sub-accordion-content" id="sub-content-7" role="region" aria-labelledby="sub-btn-7">
+                  <div class="sub-accordion-inner">
+                    <p>
+                      Finalmente, debes asegurarte de que los estudiantes puedan
+                      ver y acceder al quiz en el momento adecuado.
+                    </p>
+
+                    <h4>1. Visibilidad:</h4>
+                    <p>
+                      El quiz debe estar visible para los estudiantes. Utiliza
+                      el interruptor de
+                      <strong>"Visibility"</strong> (Visibilidad) para
+                      activarlo. Por defecto, está oculto. Haz esto solo cuando
+                      todas las configuraciones estén listas.
+                    </p>
+
+                    <h4>2. Añadir a Contenido:</h4>
+                    <p>
+                      La mejor práctica es añadir un enlace al quiz dentro de un
+                      módulo de contenido para que los estudiantes lo encuentren
+                      fácilmente.
+                    </p>
+                    <ul>
+                      <li>
+                        Ve a <strong>"Content"</strong> (Contenido) en la barra
+                        de navegación.
+                      </li>
+                      <li>
+                        En el módulo deseado, haz clic en
+                        <strong>"Add Activity"</strong> (Añadir Actividad) y
+                        selecciona <strong>"Quizzes"</strong>.
+                      </li>
+                      <li>Elige el quiz que acabas de crear de la lista.</li>
+                    </ul>
+
+                    <div class="recommendation">
+                      <p>
+                        Espero que esta guía detallada te sea de gran utilidad
+                        para crear tus quizzes. ¡Si tienes alguna otra pregunta,
+                        no dudes en consultarme!
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección 2: Question Library -->
+        <div class="accordion-item" id="seccion-2">
+          <h2 class="accordion-h">
+            <button class="accordion-header" type="button" aria-expanded="false" aria-controls="acc-content-2" id="acc-btn-2">
+              <span class="accordion-title">📖 Question Library (Biblioteca de preguntas)</span>
+              <span class="accordion-icon" aria-hidden="true">▼</span>
+            </button>
+          </h2>
+          <div class="accordion-content" id="acc-content-2" role="region" aria-labelledby="acc-btn-2">
+            <div class="accordion-inner">
+              <p>
+                La Question Library es una herramienta centralizada que te
+                permite organizar, almacenar y gestionar todas las preguntas de
+                tus exámenes y quizzes en un solo lugar. Utilizarla es una buena
+                práctica, ya que facilita la reutilización y organización de
+                preguntas para diferentes evaluaciones como quizzes, encuestas y
+                autoevaluaciones.
+              </p>
+
+              <!-- Sub-acordeón: 1.1 -->
+              <div class="sub-accordion-item">
+                <h3 class="sub-accordion-h">
+                  <button class="sub-accordion-header" type="button" aria-expanded="false" aria-controls="sub-content-8" id="sub-btn-8">
+                    <span class="sub-accordion-title">1.1. Acceso y funcionalidades principales</span>
+                    <span class="sub-accordion-icon" aria-hidden="true">▼</span>
+                  </button>
+                </h3>
+                <div class="sub-accordion-content" id="sub-content-8" role="region" aria-labelledby="sub-btn-8">
+                  <div class="sub-accordion-inner">
+                    <p>
+                      Puedes acceder a la Question Library desde las
+                      herramientas de Quizzes, Surveys (Encuestas) o Self
+                      Assessments (Autoevaluaciones).
+                    </p>
+
+                    <h4>Funciones clave de la interfaz:</h4>
+                    <ul>
+                      <li>
+                        <strong>New (Nuevo):</strong> Permite crear nuevas
+                        secciones o preguntas.
+                      </li>
+                      <li>
+                        <strong>Import (Importar):</strong> Puedes añadir
+                        preguntas desde un archivo externo, un quiz existente u
+                        otras colecciones.
+                      </li>
+                      <li>
+                        <strong>Move (Mover):</strong> Te permite mover
+                        preguntas a una sección o una sección dentro de otra.
+                      </li>
+                      <li>
+                        <strong>Delete (Eliminar):</strong> Borra preguntas o
+                        secciones.
+                      </li>
+                      <li>
+                        <strong>Order (Ordenar):</strong> Reorganiza el orden de
+                        las preguntas o secciones.
+                      </li>
+                      <li>
+                        <strong>Edit Values (Editar Valores):</strong> Permite
+                        modificar el puntaje, el nivel de dificultad o el estado
+                        obligatorio de las preguntas.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sub-acordeón: 1.2 -->
+              <div class="sub-accordion-item">
+                <h3 class="sub-accordion-h">
+                  <button class="sub-accordion-header" type="button" aria-expanded="false" aria-controls="sub-content-9" id="sub-btn-9">
+                    <span class="sub-accordion-title">1.2. Organización con secciones</span>
+                    <span class="sub-accordion-icon" aria-hidden="true">▼</span>
+                  </button>
+                </h3>
+                <div class="sub-accordion-content" id="sub-content-9" role="region" aria-labelledby="sub-btn-9">
+                  <div class="sub-accordion-inner">
+                    <p>
+                      Las secciones funcionan como carpetas para agrupar
+                      preguntas, lo que te ayuda a mantener todo organizado por
+                      tema, tipo de pregunta o dificultad.
+                    </p>
+                    <ul>
+                      <li>
+                        <strong>Crear una sección:</strong> Haz clic en
+                        <strong>"New"</strong> y luego en
+                        <strong>"Section"</strong>. Puedes añadirle un título,
+                        una descripción y configurar si las preguntas dentro de
+                        ella deben mostrarse de forma aleatoria (shuffle).
+                      </li>
+                      <li>
+                        <strong>Mover preguntas a una sección:</strong> Una vez
+                        creadas tus preguntas, puedes seleccionarlas y usar el
+                        botón <strong>"Move"</strong> para asignarlas a la
+                        sección deseada.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sub-acordeón: 1.3 -->
+              <div class="sub-accordion-item">
+                <h3 class="sub-accordion-h">
+                  <button class="sub-accordion-header" type="button" aria-expanded="false" aria-controls="sub-content-10" id="sub-btn-10">
+                    <span class="sub-accordion-title">1.3. Importación de preguntas</span>
+                    <span class="sub-accordion-icon" aria-hidden="true">▼</span>
+                  </button>
+                </h3>
+                <div class="sub-accordion-content" id="sub-content-10" role="region" aria-labelledby="sub-btn-10">
+                  <div class="sub-accordion-inner">
+                    <p>
+                      La Question Library te ofrece varias formas de importar
+                      preguntas para ahorrar tiempo:
+                    </p>
+
+                    <h4>1. Desde un archivo CSV:</h4>
+                    <p>
+                      Puedes importar varios tipos de preguntas, como de
+                      respuesta escrita, respuesta corta, opción múltiple,
+                      verdadero/falso, entre otras, utilizando una plantilla
+                      CSV. Es importante configurar el archivo correctamente
+                      según el tipo de pregunta.
+                    </p>
+
+                    <h4>2. Desde una colección existente:</h4>
+                    <p>
+                      Puedes importar preguntas de otros quizzes, encuestas o
+                      autoevaluaciones que ya hayas creado en el curso.
+                    </p>
+
+                    <h4>
+                      3. Desde un repositorio de objetos de aprendizaje (LOR):
+                    </h4>
+                    <p>
+                      Te permite importar preguntas desde el Learning Object
+                      Repository.
+                    </p>
+
+                    <h4>4. Desde archivos de editoriales:</h4>
+                    <div class="highlight">
+                      <p>
+                        Puedes importar bancos de preguntas proporcionados por
+                        editoriales. Se recomienda revisar y reformular estas
+                        preguntas, ya que las respuestas pueden encontrarse
+                        fácilmente en línea.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sub-acordeón: 1.4 -->
+              <div class="sub-accordion-item">
+                <h3 class="sub-accordion-h">
+                  <button class="sub-accordion-header" type="button" aria-expanded="false" aria-controls="sub-content-11" id="sub-btn-11">
+                    <span class="sub-accordion-title">1.4. Creación de "Question Pools" (grupos de preguntas)</span>
+                    <span class="sub-accordion-icon" aria-hidden="true">▼</span>
+                  </button>
+                </h3>
+                <div class="sub-accordion-content" id="sub-content-11" role="region" aria-labelledby="sub-btn-11">
+                  <div class="sub-accordion-inner">
+                    <p>
+                      La Question Library es fundamental para crear "Question
+                      Pools", una de las herramientas más efectivas para
+                      mantener la integridad académica. Un Question Pool te
+                      permite seleccionar un número determinado de preguntas de
+                      un conjunto más grande para que se asignen aleatoriamente
+                      a cada estudiante.
+                    </p>
+
+                    <h4>Beneficios:</h4>
+                    <ul>
+                      <li>
+                        <strong>Aumenta la integridad:</strong> Reduce las
+                        posibilidades de que los estudiantes compartan
+                        respuestas, ya que no todos recibirán las mismas
+                        preguntas.
+                      </li>
+                      <li>
+                        <strong>Mejora la evaluación:</strong> Puedes asegurarte
+                        de que cada estudiante sea evaluado sobre los mismos
+                        conceptos, pero con preguntas diferentes.
+                      </li>
+                    </ul>
+
+                    <h4>Estrategias de uso:</h4>
+                    <ul>
+                      <li>
+                        <strong>Agrupar por dificultad:</strong> Puedes crear
+                        grupos de preguntas fáciles, intermedias y difíciles
+                        para asegurar que cada estudiante reciba una combinación
+                        equilibrada.
+                      </li>
+                      <li>
+                        <strong>Agrupar por tema:</strong> Puedes crear un grupo
+                        de preguntas para cada tema o capítulo y asignar
+                        aleatoriamente un número específico de preguntas de cada
+                        uno.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección 3: Quizzes a partir de Question Library -->
+        <div class="accordion-item" id="seccion-3">
+          <h2 class="accordion-h">
+            <button class="accordion-header" type="button" aria-expanded="false" aria-controls="acc-content-3" id="acc-btn-3">
+              <span class="accordion-title">🎯 Quizzes a partir de Question Library (Cuestionarios)</span>
+              <span class="accordion-icon" aria-hidden="true">▼</span>
+            </button>
+          </h2>
+          <div class="accordion-content" id="acc-content-3" role="region" aria-labelledby="acc-btn-3">
+            <div class="accordion-inner">
+              <p>
+                La herramienta de Quizzes en Brightspace permite a los
+                estudiantes realizar exámenes en línea y a los profesores
+                calificarlos y dar retroalimentación. El término "quiz" se usa
+                para referirse a cualquier tipo de evaluación creada con esta
+                herramienta (examen, prueba, etc.).
+              </p>
+
+              <!-- Sub-acordeón: 2.1 -->
+              <div class="sub-accordion-item">
+                <h3 class="sub-accordion-h">
+                  <button class="sub-accordion-header" type="button" aria-expanded="false" aria-controls="sub-content-12" id="sub-btn-12">
+                    <span class="sub-accordion-title">2.1. Creación de un quiz</span>
+                    <span class="sub-accordion-icon" aria-hidden="true">▼</span>
+                  </button>
+                </h3>
+                <div class="sub-accordion-content" id="sub-content-12" role="region" aria-labelledby="sub-btn-12">
+                  <div class="sub-accordion-inner">
+                    <ol>
+                      <li>
+                        <strong>Accede a la herramienta:</strong> En la barra de
+                        navegación de tu curso, ve a
+                        <strong>"Course Admin"</strong> y selecciona
+                        <strong>"Quizzes"</strong>.
+                      </li>
+                      <li>
+                        <strong>Crea un nuevo quiz:</strong> Haz clic en
+                        <strong>"New Quiz"</strong>.
+                      </li>
+                      <li>
+                        <strong>Asigna un nombre:</strong> Es el primer paso y
+                        es fundamental. Darle un nombre y hacerlo visible
+                        (incluso sin preguntas) crea un marcador de posición
+                        para que los estudiantes sepan dónde encontrar sus
+                        evaluaciones, lo cual reduce su ansiedad.
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sub-acordeón: 2.2 -->
+              <div class="sub-accordion-item">
+                <h3 class="sub-accordion-h">
+                  <button class="sub-accordion-header" type="button" aria-expanded="false" aria-controls="sub-content-13" id="sub-btn-13">
+                    <span class="sub-accordion-title">2.2. Configuración de calificaciones</span>
+                    <span class="sub-accordion-icon" aria-hidden="true">▼</span>
+                  </button>
+                </h3>
+                <div class="sub-accordion-content" id="sub-content-13" role="region" aria-labelledby="sub-btn-13">
+                  <div class="sub-accordion-inner">
+                    <p>
+                      Puedes vincular el quiz a un elemento de calificación en
+                      el Gradebook (Libro de Calificaciones).
+                    </p>
+                    <ul>
+                      <li>
+                        <strong>Opción A (Recomendada):</strong> Vincular a un
+                        elemento de calificación existente (<strong
+                          >"Link to an existing grade item"</strong
+                        >). Se recomienda configurar el libro de calificaciones
+                        antes de crear las actividades.
+                      </li>
+                      <li>
+                        <strong>Opción B:</strong> Crear y vincular un nuevo
+                        elemento de calificación (<strong
+                          >"Create and link to a new grade item"</strong
+                        >).
+                      </li>
+                      <li>
+                        <strong>Sin calificación:</strong> Si el quiz no será
+                        calificado pero sí puntuado, puedes dejar la opción por
+                        defecto (<strong>"Not in Gradebook"</strong>). Los
+                        estudiantes podrán ver su puntuación a través de
+                        <strong>"Class Progress"</strong>.
+                      </li>
+                      <li>
+                        <strong>Puntaje:</strong> Debes definir el puntaje
+                        máximo del quiz (<strong>"points"</strong>), que debe
+                        coincidir con el valor en el Gradebook.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sub-acordeón: 2.3 -->
+              <div class="sub-accordion-item">
+                <h3 class="sub-accordion-h">
+                  <button class="sub-accordion-header" type="button" aria-expanded="false" aria-controls="sub-content-14" id="sub-btn-14">
+                    <span class="sub-accordion-title">2.3. Configuración de tiempo y disponibilidad</span>
+                    <span class="sub-accordion-icon" aria-hidden="true">▼</span>
+                  </button>
+                </h3>
+                <div class="sub-accordion-content" id="sub-content-14" role="region" aria-labelledby="sub-btn-14">
+                  <div class="sub-accordion-inner">
+                    <p>Existen tres parámetros de tiempo clave:</p>
+
+                    <h4>Due Date (Fecha de entrega):</h4>
+                    <p>
+                      Es la fecha límite para enviar el quiz. Las entregas
+                      posteriores se marcan como
+                      <strong>"Submitted Late"</strong> (Entregado tarde).
+                    </p>
+
+                    <h4>Availability Dates (Fechas de disponibilidad):</h4>
+                    <p>
+                      Definen el período (fecha de inicio y fin) durante el cual
+                      los estudiantes pueden acceder al quiz.
+                    </p>
+                    <div class="important">
+                      <p>
+                        <strong>Importante:</strong> Un estudiante no puede
+                        reingresar a un quiz si se desconecta y la fecha de
+                        finalización ya pasó, incluso si le queda tiempo en el
+                        temporizador.
+                      </p>
+                    </div>
+
+                    <h4>Timing (Duración):</h4>
+                    <p>
+                      Establece el límite de tiempo que tiene un estudiante para
+                      completar el quiz una vez que lo ha iniciado.
+                    </p>
+
+                    <h4>Tipos de inicio del temporizador:</h4>
+                    <ul>
+                      <li>
+                        <strong>Asynchronous (Asíncrono):</strong> El
+                        temporizador comienza cuando el estudiante inicia el
+                        quiz. Esto les da el tiempo completo asignado, sin
+                        importar cuándo comiencen dentro de la ventana de
+                        disponibilidad.
+                      </li>
+                      <li>
+                        <strong>Synchronous (Síncrono):</strong> El temporizador
+                        comienza a correr para todos en la fecha de inicio
+                        establecida. Esto simula mejor una experiencia en clase,
+                        asegurando que todos terminen a la misma hora.
+                      </li>
+                    </ul>
+
+                    <h4>Acciones cuando el tiempo expira:</h4>
+                    <ul>
+                      <li>
+                        <strong>Enviar automáticamente el intento:</strong> Es
+                        la opción más común para asegurar que todos los envíos
+                        se realicen cuando se acaba el tiempo.
+                      </li>
+                      <li>
+                        <strong
+                          >Marcar como tiempo excedido y permitir
+                          continuar:</strong
+                        >
+                        El estudiante puede seguir trabajando, pero su intento
+                        se marcará como que excedió el límite.
+                      </li>
+                      <li>
+                        <strong>No hacer nada:</strong> El límite de tiempo es
+                        solo una recomendación.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sub-acordeón: 2.4 -->
+              <div class="sub-accordion-item">
+                <h3 class="sub-accordion-h">
+                  <button class="sub-accordion-header" type="button" aria-expanded="false" aria-controls="sub-content-15" id="sub-btn-15">
+                    <span class="sub-accordion-title">2.4. Visualización y presentación de preguntas</span>
+                    <span class="sub-accordion-icon" aria-hidden="true">▼</span>
+                  </button>
+                </h3>
+                <div class="sub-accordion-content" id="sub-content-15" role="region" aria-labelledby="sub-btn-15">
+                  <div class="sub-accordion-inner">
+                    <p>
+                      Puedes personalizar cómo se presentan las preguntas a los
+                      estudiantes:
+                    </p>
+
+                    <h4>Paging (Paginación):</h4>
+                    <p>
+                      Decide cuántas preguntas se muestran por página (todas
+                      juntas, una por página, etc.).
+                    </p>
+
+                    <h4>Prevent going back (Impedir retroceder):</h4>
+                    <div class="important">
+                      <p>
+                        Esta opción restringe a los estudiantes de volver a
+                        páginas anteriores.
+                      </p>
+                      <p>
+                        <strong>Advertencia:</strong> Aunque puede aumentar la
+                        integridad académica, esta función es una de las mayores
+                        fuentes de estrés y ansiedad para los estudiantes, ya
+                        que les impide revisar o cambiar respuestas anteriores.
+                        Si la usas, es crucial que lo comuniques claramente a
+                        tus estudiantes.
+                      </p>
+                    </div>
+
+                    <h4>Shuffle Quiz (Mezclar preguntas):</h4>
+                    <p>
+                      Presenta las preguntas y secciones en un orden aleatorio
+                      para cada estudiante.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sub-acordeón: 2.5 -->
+              <div class="sub-accordion-item">
+                <h3 class="sub-accordion-h">
+                  <button class="sub-accordion-header" type="button" aria-expanded="false" aria-controls="sub-content-16" id="sub-btn-16">
+                    <span class="sub-accordion-title">2.5. Configuración de acceso y visibilidad</span>
+                    <span class="sub-accordion-icon" aria-hidden="true">▼</span>
+                  </button>
+                </h3>
+                <div class="sub-accordion-content" id="sub-content-16" role="region" aria-labelledby="sub-btn-16">
+                  <div class="sub-accordion-inner">
+                    <h4>Descripción:</h4>
+                    <p>
+                      Usa este campo para dar instrucciones claras, qué hacer en
+                      caso de problemas técnicos o cuándo esperarán la
+                      retroalimentación. La descripción es visible antes de la
+                      fecha de inicio del quiz.
+                    </p>
+
+                    <h4>Special Access (Acceso Especial):</h4>
+                    <p>
+                      Permite otorgar condiciones diferentes a ciertos
+                      estudiantes, como más tiempo (por adaptaciones académicas)
+                      o una ventana de disponibilidad distinta (en caso de
+                      exámenes diferidos).
+                    </p>
+
+                    <h4>Visibilidad:</h4>
+                    <p>
+                      El quiz debe estar visible para que los estudiantes puedan
+                      acceder a él. Activa la visibilidad solo cuando todas las
+                      configuraciones estén listas.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sub-acordeón: 2.6 -->
+              <div class="sub-accordion-item">
+                <h3 class="sub-accordion-h">
+                  <button class="sub-accordion-header" type="button" aria-expanded="false" aria-controls="sub-content-17" id="sub-btn-17">
+                    <span class="sub-accordion-title">2.6. Tipos de preguntas</span>
+                    <span class="sub-accordion-icon" aria-hidden="true">▼</span>
+                  </button>
+                </h3>
+                <div class="sub-accordion-content" id="sub-content-17" role="region" aria-labelledby="sub-btn-17">
+                  <div class="sub-accordion-inner">
+                    <p>
+                      Brightspace ofrece una amplia variedad de tipos de
+                      preguntas que se pueden crear tanto en la Question Library
+                      como directamente en un quiz.
+                    </p>
+
+                    <h4>Auto-calificables:</h4>
+                    <ul>
+                      <li>
+                        <strong>True / False (Verdadero / Falso):</strong> El
+                        estudiante determina si una afirmación es correcta o
+                        incorrecta.
+                      </li>
+                      <li>
+                        <strong>Multiple Choice (Opción Múltiple):</strong> Se
+                        elige una única respuesta correcta de una lista. Puedes
+                        aleatorizar las opciones.
+                      </li>
+                      <li>
+                        <strong>Multi-Select (Selección Múltiple):</strong> Se
+                        eligen una o más respuestas correctas. Se recomienda
+                        incluir "Seleccione todas las que apliquen" en el
+                        enunciado.
+                      </li>
+                      <li>
+                        <strong>Short Answer (Respuesta Corta):</strong> El
+                        sistema califica automáticamente si la respuesta del
+                        estudiante coincide exactamente con una respuesta
+                        predefinida. Puede ser sensible a errores de tipeo.
+                      </li>
+                      <li>
+                        <strong
+                          >Multi-Short Answer (Respuesta Corta
+                          Múltiple):</strong
+                        >
+                        Similar a la anterior, pero permite varias respuestas
+                        posibles, cada una con un puntaje diferente.
+                      </li>
+                      <li>
+                        <strong
+                          >Fill in the Blanks (Completar los Espacios):</strong
+                        >
+                        El estudiante llena los espacios en blanco de una frase.
+                      </li>
+                      <li>
+                        <strong>Matching (Relacionar Columnas):</strong> Se
+                        asocian elementos de una lista con los de otra.
+                      </li>
+                      <li>
+                        <strong>Ordering (Ordenar):</strong> Se organiza una
+                        serie de elementos en el orden correcto.
+                      </li>
+                      <li>
+                        <strong
+                          >Arithmetic y Significant Figures (Aritmética y Cifras
+                          Significativas):</strong
+                        >
+                        Para preguntas matemáticas que requieren cálculos
+                        numéricos.
+                      </li>
+                    </ul>
+
+                    <h4>Calificación Manual:</h4>
+                    <ul>
+                      <li>
+                        <strong>Written Response (Respuesta Escrita):</strong>
+                        Preguntas de respuesta abierta (corta o larga) que
+                        requieren calificación manual. Se puede habilitar un
+                        editor HTML para que los estudiantes den formato a sus
+                        respuestas o adjunten archivos.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sub-acordeón: 2.7 -->
+              <div class="sub-accordion-item">
+                <h3 class="sub-accordion-h">
+                  <button class="sub-accordion-header" type="button" aria-expanded="false" aria-controls="sub-content-18" id="sub-btn-18">
+                    <span class="sub-accordion-title">2.7. Reportes y estadísticas</span>
+                    <span class="sub-accordion-icon" aria-hidden="true">▼</span>
+                  </button>
+                </h3>
+                <div class="sub-accordion-content" id="sub-content-18" role="region" aria-labelledby="sub-btn-18">
+                  <div class="sub-accordion-inner">
+                    <p>
+                      Puedes generar reportes para recopilar información
+                      detallada sobre el rendimiento de los estudiantes en un
+                      quiz.
+                    </p>
+
+                    <h4>Crear un reporte:</h4>
+                    <p>
+                      Desde la opción <strong>"Setup Reports"</strong> de un
+                      quiz, puedes añadir un nuevo reporte, nombrarlo, elegir el
+                      tipo (estadísticas de preguntas, de usuario, detalles de
+                      intentos, etc.) y definir quién puede verlo.
+                    </p>
+
+                    <h4>Generar un reporte:</h4>
+                    <p>
+                      Una vez configurado, puedes generar el reporte en formato
+                      CSV, Excel o HTML para analizar los datos.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sub-acordeón: 2.8 -->
+              <div class="sub-accordion-item">
+                <h3 class="sub-accordion-h">
+                  <button class="sub-accordion-header" type="button" aria-expanded="false" aria-controls="sub-content-19" id="sub-btn-19">
+                    <span class="sub-accordion-title">2.8. Integridad académica y solución de problemas</span>
+                    <span class="sub-accordion-icon" aria-hidden="true">▼</span>
+                  </button>
+                </h3>
+                <div class="sub-accordion-content" id="sub-content-19" role="region" aria-labelledby="sub-btn-19">
+                  <div class="sub-accordion-inner">
+                    <h4>Estrategias para la integridad:</h4>
+                    <div class="recommendation">
+                      <p>
+                        El uso combinado de Question Pools, la aleatorización de
+                        preguntas y opciones, y la configuración adecuada del
+                        tiempo son las mejores prácticas para promover la
+                        integridad académica.
+                      </p>
+                    </div>
+
+                    <h4>Problemas técnicos comunes:</h4>
+                    <p>
+                      A veces, los estudiantes pueden experimentar problemas
+                      como el bloqueo del navegador (especialmente Chrome en
+                      Mac) al intentar hacer un quiz. Soluciones comunes
+                      incluyen limpiar la caché del navegador o usar un
+                      navegador diferente como Safari. Es recomendable que los
+                      estudiantes contacten al soporte de TI si el problema
+                      persiste.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+        <script>
+      (function () {
+        "use strict";
+        document.body.classList.add("js-enabled");
+
+        function content(btn) {
+          return document.getElementById(btn.getAttribute("aria-controls"));
+        }
+        function isOpen(btn) {
+          return btn.getAttribute("aria-expanded") === "true";
+        }
+        function setOpen(btn, open) {
+          btn.setAttribute("aria-expanded", open ? "true" : "false");
+          var c = content(btn);
+          if (c) c.classList.toggle("open", open);
+        }
+
+        var mainBtns = [].slice.call(document.querySelectorAll(".accordion-header"));
+        var subBtns = [].slice.call(document.querySelectorAll(".sub-accordion-header"));
+        var allBtns = mainBtns.concat(subBtns);
+        var mainItems = [].slice.call(document.querySelectorAll(".accordion-item"));
+
+        // Los <button> ya son accesibles por teclado (Enter / Espacio).
+        allBtns.forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            setOpen(btn, !isOpen(btn));
+          });
+        });
+
+        // Abrir todo / Cerrar todo
+        var btnExpand = document.getElementById("btn-expandir");
+        var btnCollapse = document.getElementById("btn-colapsar");
+        if (btnExpand)
+          btnExpand.addEventListener("click", function () {
+            allBtns.forEach(function (b) { setOpen(b, true); });
+          });
+        if (btnCollapse)
+          btnCollapse.addEventListener("click", function () {
+            allBtns.forEach(function (b) { setOpen(b, false); });
+          });
+
+        // Imprimir
+        var btnPrint = document.getElementById("btn-imprimir");
+        if (btnPrint)
+          btnPrint.addEventListener("click", function () { window.print(); });
+
+        // Apertura inicial / navegación por hash
+        function openFirst() {
+          if (mainBtns.length) setOpen(mainBtns[0], true);
+        }
+        function openFromHash() {
+          if (!location.hash) return false;
+          var target = document.querySelector(location.hash);
+          if (target && target.classList.contains("accordion-item")) {
+            var b = target.querySelector(".accordion-header");
+            if (b) {
+              setOpen(b, true);
+              target.scrollIntoView({ behavior: "smooth", block: "start" });
+              return true;
+            }
+          }
+          return false;
+        }
+
+        // Búsqueda (sin distinguir mayúsculas ni acentos)
+        function norm(s) {
+          return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        }
+        var input = document.getElementById("buscador");
+        var sinRes = document.getElementById("sin-resultados");
+
+        function clearSearch() {
+          mainItems.forEach(function (item) {
+            item.style.display = "";
+            [].slice.call(item.querySelectorAll(".sub-accordion-item")).forEach(
+              function (s) { s.style.display = ""; }
+            );
+          });
+          if (sinRes) sinRes.classList.remove("visible");
+        }
+
+        function runSearch(raw) {
+          var q = norm(raw.trim());
+          if (!q) {
+            clearSearch();
+            allBtns.forEach(function (b) { setOpen(b, false); });
+            openFirst();
+            return;
+          }
+          var anyMain = false;
+          mainItems.forEach(function (item) {
+            var mainBtn = item.querySelector(".accordion-header");
+            var subItems = [].slice.call(item.querySelectorAll(".sub-accordion-item"));
+            var match = false;
+            subItems.forEach(function (sub) {
+              var subBtn = sub.querySelector(".sub-accordion-header");
+              var hit = norm(sub.textContent).indexOf(q) !== -1;
+              sub.style.display = hit ? "" : "none";
+              if (hit) {
+                match = true;
+                if (subBtn) setOpen(subBtn, true);
+              }
+            });
+            if (!match && norm(item.textContent).indexOf(q) !== -1) {
+              match = true;
+              subItems.forEach(function (s) { s.style.display = ""; });
+            }
+            item.style.display = match ? "" : "none";
+            if (match && mainBtn) setOpen(mainBtn, true);
+            if (match) anyMain = true;
+          });
+          if (sinRes) sinRes.classList.toggle("visible", !anyMain);
+        }
+
+        if (input)
+          input.addEventListener("input", function () { runSearch(input.value); });
+
+        if (!openFromHash()) openFirst();
+        window.addEventListener("hashchange", openFromHash);
+      })();
+    </script>
+    <footer class="pie-licencia">
+      <p>Manual interactivo de Brightspace — Quizzes y Question Library</p>
+      <p>© 2026 José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago.</p>
+      <p>
+        Esta obra está bajo una licencia
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license noopener" target="_blank">CC BY-NC-SA 4.0</a>.
+      </p>
+    </footer>
+  </body>
+</html>
