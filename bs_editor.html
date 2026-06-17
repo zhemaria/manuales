@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<!--
+  Manual del Editor de Brightspace
+  © José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago
+  Licencia: CC BY-NC-SA 4.0  ·  https://creativecommons.org/licenses/by-nc-sa/4.0/
+-->
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manual del Editor de Brightspace</title>
+    <meta name="description" content="Guía visual de referencia del editor HTML de Brightspace: vistas de contenido, formato de texto, inserción de elementos, accesibilidad y editor gráfico de ecuaciones." />
+    <meta name="author" content="José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago" />
+    <meta name="license" content="CC BY-NC-SA 4.0" />
+    <link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* ============================================================
+         SISTEMA DE DISEÑO — colores sólidos (sin gradientes ni rgba),
+         contraste WCAG verificado, foco de teclado visible.
+         ============================================================ */
+      :root {
+        --paper: #eef2f6;
+        --surface: #ffffff;
+        --surface-2: #f5f8fb;
+
+        --ink: #16202e;       /* texto principal  ~14:1 sobre blanco */
+        --ink-soft: #4b566e;  /* texto secundario  ~6.6:1 sobre blanco */
+        --line: #dce3ec;
+        --line-strong: #c3cdda;
+
+        --primary: #0e5a66;       /* verde petróleo  blanco encima 7.6:1 */
+        --primary-deep: #093f47;
+        --primary-tint: #e4f0f1;
+
+        --accent-ink: #5c3900;    /* marrón ámbar  10.3:1 sobre crema */
+        --accent-line: #b26a00;
+        --accent-tint: #fcf1df;
+
+        --focus: #11497f;
+
+        --serif: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+        --sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+        --radius: 12px;
+        --radius-sm: 8px;
+      }
+
+      * { box-sizing: border-box; }
+
+      html { scroll-behavior: smooth; }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+      }
+
+      body {
+        font-family: var(--sans);
+        line-height: 1.65;
+        background-color: var(--paper);
+        color: var(--ink);
+        margin: 0;
+        padding: 28px 20px 64px;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      a { color: var(--primary); }
+
+      :focus-visible {
+        outline: 3px solid var(--focus);
+        outline-offset: 3px;
+        border-radius: 4px;
+      }
+
+      /* ============================ HERO ============================ */
+      .hero {
+        max-width: 1180px;
+        margin: 0 auto 28px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        overflow: hidden;
+      }
+
+      /* Barra superior con motivo de "ventana de editor" */
+      .chrome {
+        background: var(--primary-deep);
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 11px 18px;
+        flex-wrap: wrap;
+      }
+      .chrome-id {
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #cfe6e9;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .chrome-id .dot {
+        width: 9px; height: 9px; border-radius: 50%;
+        background: #5fbac4; display: inline-block;
+      }
+      /* Barra de herramientas falsa: glifos de formato (decorativa) */
+      .toolbar { display: flex; gap: 6px; }
+      .tbtn {
+        font-family: var(--mono);
+        font-size: 0.82rem;
+        font-weight: 600;
+        width: 26px; height: 26px;
+        display: grid; place-items: center;
+        background: #0e5a66;
+        border: 1px solid #2c7b86;
+        border-radius: 6px;
+        color: #eafafb;
+      }
+      .tbtn.it { font-style: italic; }
+      .tbtn.un { text-decoration: underline; }
+      .tbtn.st { text-decoration: line-through; }
+
+      .hero-body { padding: 34px 38px 38px; }
+      .eyebrow {
+        font-family: var(--mono);
+        font-size: 0.74rem;
+        font-weight: 600;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--primary);
+        margin: 0 0 14px;
+      }
+      .hero-body h1 {
+        font-family: var(--serif);
+        font-weight: 600;
+        font-size: clamp(1.9rem, 4.6vw, 3rem);
+        line-height: 1.1;
+        letter-spacing: -0.01em;
+        color: var(--ink);
+        margin: 0 0 16px;
+      }
+      .lead {
+        font-size: 1.06rem;
+        color: var(--ink-soft);
+        max-width: 62ch;
+        margin: 0 0 26px;
+      }
+
+      /* Datos clave del manual */
+      .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+      .chip {
+        display: inline-flex; align-items: baseline; gap: 8px;
+        background: var(--surface-2);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 7px 15px;
+        font-size: 0.86rem;
+        color: var(--ink);
+      }
+      .chip b {
+        font-family: var(--mono);
+        font-weight: 600;
+        color: var(--primary);
+      }
+
+      /* ============================ LAYOUT ============================ */
+      .layout {
+        max-width: 1180px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 262px 1fr;
+        gap: 34px;
+        align-items: start;
+      }
+
+      /* ----------------------- ÍNDICE LATERAL ----------------------- */
+      .toc {
+        position: sticky;
+        top: 20px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 20px 18px;
+      }
+      .toc h2 {
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+        margin: 0 0 14px;
+      }
+      .toc-group + .toc-group { margin-top: 18px; }
+      .toc-label {
+        font-family: var(--serif);
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: var(--primary);
+        margin: 0 0 8px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid var(--line);
+      }
+      .toc ul { list-style: none; margin: 0; padding: 0; }
+      .toc li { margin: 0; }
+      .toc a {
+        display: block;
+        text-decoration: none;
+        color: var(--ink-soft);
+        font-size: 0.92rem;
+        line-height: 1.35;
+        padding: 7px 11px;
+        border-radius: var(--radius-sm);
+        border-left: 3px solid transparent;
+      }
+      .toc a:hover { background: var(--surface-2); color: var(--ink); }
+      .toc a.active {
+        background: var(--primary-tint);
+        color: var(--primary-deep);
+        border-left-color: var(--primary);
+        font-weight: 600;
+      }
+
+      /* --------------------------- CONTENIDO --------------------------- */
+      .controls {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+      .btn {
+        font-family: var(--sans);
+        font-size: 0.86rem;
+        font-weight: 600;
+        color: var(--primary-deep);
+        background: var(--surface);
+        border: 1px solid var(--line-strong);
+        border-radius: 999px;
+        padding: 8px 16px;
+        cursor: pointer;
+      }
+      .btn:hover { background: var(--primary-tint); border-color: var(--primary); }
+
+      /* Acordeón de secciones */
+      details.section {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-left: 4px solid var(--line-strong);
+        border-radius: var(--radius);
+        margin-bottom: 14px;
+        overflow: hidden;
+        scroll-margin-top: 16px;
+      }
+      details.section[open] { border-left-color: var(--primary); }
+
+      details.section > summary {
+        list-style: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 18px 22px;
+        font-family: var(--sans);
+        font-size: 1.08rem;
+        font-weight: 600;
+        color: var(--ink);
+        background: var(--surface);
+      }
+      details.section > summary::-webkit-details-marker { display: none; }
+      details.section[open] > summary {
+        background: var(--primary-tint);
+        color: var(--primary-deep);
+      }
+      summary:hover { background: var(--surface-2); }
+      details.section[open] > summary:hover { background: #d9eaeb; }
+
+      /* Numerito de sección (mono) — sirve de referencia, no de adorno */
+      .num {
+        font-family: var(--mono);
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--primary);
+        background: var(--primary-tint);
+        border: 1px solid #bfdde0;
+        border-radius: 6px;
+        padding: 3px 8px;
+        flex-shrink: 0;
+      }
+      details.section[open] > summary .num {
+        background: var(--surface);
+        border-color: #bfdde0;
+      }
+      .summary-text { flex: 1; }
+      /* Marcador +/− */
+      .marker {
+        font-family: var(--mono);
+        font-size: 1.5rem;
+        line-height: 1;
+        color: var(--primary);
+        flex-shrink: 0;
+        transition: transform 0.2s ease;
+      }
+      @media (prefers-reduced-motion: reduce) { .marker { transition: none; } }
+      details.section[open] .marker { transform: rotate(45deg); }
+
+      .dc { padding: 6px 26px 26px; border-top: 1px solid var(--line); }
+      .dc > p:first-child { margin-top: 18px; }
+      .dc p { margin: 0 0 14px; }
+
+      .dc h3 {
+        font-family: var(--serif);
+        font-size: 1.18rem;
+        font-weight: 600;
+        color: var(--ink);
+        margin: 28px 0 12px;
+        padding-bottom: 7px;
+        border-bottom: 2px solid var(--primary);
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+      }
+      .dc h3 .h3-num {
+        font-family: var(--mono);
+        font-size: 0.85rem;
+        color: var(--primary);
+      }
+
+      .dc ul, .dc ol { margin: 8px 0 16px; padding-left: 1.4rem; }
+      .dc li { margin-bottom: 9px; }
+      .dc li p { margin-top: 6px; }
+
+      code {
+        font-family: var(--mono);
+        font-size: 0.88em;
+        background: var(--surface-2);
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        padding: 1px 6px;
+        color: var(--primary-deep);
+      }
+
+      /* ----------------------------- TABLAS ----------------------------- */
+      .table-wrap {
+        border: 1px solid var(--line);
+        border-radius: var(--radius-sm);
+        overflow: hidden;
+        margin: 16px 0 22px;
+      }
+      table { width: 100%; border-collapse: collapse; font-size: 0.94rem; }
+      caption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+      thead th {
+        background: var(--primary);
+        color: #ffffff;
+        font-weight: 600;
+        text-align: left;
+        padding: 12px 14px;
+        font-size: 0.86rem;
+        letter-spacing: 0.01em;
+      }
+      tbody td {
+        border-top: 1px solid var(--line);
+        padding: 12px 14px;
+        text-align: left;
+        vertical-align: top;
+        color: var(--ink);
+      }
+      tbody tr:nth-child(even) { background: var(--surface-2); }
+      td.centrar { text-align: center; vertical-align: middle; }
+
+      /* Imágenes / capturas */
+      .dc img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 12px auto 4px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-sm);
+        padding: 6px;
+      }
+      td.centrar img { margin: 0 auto; }
+
+      /* --------------------------- AVISOS --------------------------- */
+      .nota, .info {
+        border-radius: var(--radius-sm);
+        padding: 14px 16px 14px 18px;
+        margin: 14px 0;
+        font-size: 0.95rem;
+      }
+      .nota {
+        background: var(--accent-tint);
+        border: 1px solid #f0d9ad;
+        border-left: 4px solid var(--accent-line);
+        color: var(--accent-ink);
+      }
+      .info {
+        background: var(--primary-tint);
+        border: 1px solid #bfdde0;
+        border-left: 4px solid var(--primary);
+        color: var(--primary-deep);
+      }
+      .nota .tag, .info .tag {
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 4px;
+      }
+      .nota p, .info p { margin: 0; }
+
+      /* --------------------------- PIE --------------------------- */
+      footer {
+        max-width: 1180px;
+        margin: 40px auto 0;
+        padding: 22px 26px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        font-size: 0.84rem;
+        color: var(--ink-soft);
+        line-height: 1.55;
+      }
+      footer a { color: var(--primary); }
+      footer .author { font-weight: 600; color: var(--ink); }
+
+      /* --------------------------- RESPONSIVE --------------------------- */
+      @media (max-width: 940px) {
+        .layout { grid-template-columns: 1fr; gap: 22px; }
+        .toc { position: static; top: auto; }
+        .toc ul { display: flex; flex-wrap: wrap; gap: 6px; }
+        .toc li { flex: 1 1 auto; }
+        .toc a { white-space: nowrap; }
+        .hero-body { padding: 26px 22px 28px; }
+        .dc { padding: 6px 18px 22px; }
+      }
+      @media (max-width: 560px) {
+        body { padding: 16px 12px 48px; }
+        .chrome { padding: 10px 14px; }
+        details.section > summary { padding: 15px 16px; font-size: 1rem; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- ============================ ENCABEZADO ============================ -->
+    <header class="hero">
+      <div class="chrome">
+        <span class="chrome-id"><span class="dot" aria-hidden="true"></span>Brightspace · Editor HTML</span>
+        <div class="toolbar" aria-hidden="true">
+          <span class="tbtn">B</span>
+          <span class="tbtn it">I</span>
+          <span class="tbtn un">U</span>
+          <span class="tbtn st">S</span>
+          <span class="tbtn">&#8801;</span>
+          <span class="tbtn">&#9744;</span>
+          <span class="tbtn">&Sigma;</span>
+        </div>
+      </div>
+      <div class="hero-body">
+        <p class="eyebrow">Guía de referencia · City Colleges of Chicago</p>
+        <h1>Manual del Editor de Brightspace</h1>
+        <p class="lead">
+          Recorrido visual por las herramientas del editor HTML de Brightspace: las vistas de contenido, el formato de texto, la
+          inserción de elementos, las opciones de accesibilidad y el editor gráfico de ecuaciones matemáticas y de química.
+        </p>
+        <div class="chips">
+          <span class="chip"><b>2.5 M</b> de caracteres por archivo</span>
+          <span class="chip"><b>3</b> vistas de contenido</span>
+          <span class="chip"><b>4</b> formatos de ecuación</span>
+          <span class="chip"><b>10</b> pestañas de símbolos</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <!-- ============================ ÍNDICE ============================ -->
+      <aside class="toc" aria-label="Índice del manual">
+        <h2>En este manual</h2>
+        <nav class="toc-group">
+          <p class="toc-label">El editor</p>
+          <ul>
+            <li><a href="#introduccion">Introducción</a></li>
+            <li><a href="#visualizacion">Vistas de contenido</a></li>
+            <li><a href="#menu">Opciones del menú</a></li>
+          </ul>
+        </nav>
+        <nav class="toc-group">
+          <p class="toc-label">Editor de ecuaciones</p>
+          <ul>
+            <li><a href="#ecuaciones">El editor gráfico</a></li>
+            <li><a href="#formatos">Formatos soportados</a></li>
+            <li><a href="#pestanas">Pestañas de símbolos</a></li>
+            <li><a href="#creacion">Crear y editar</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- ============================ SECCIONES ============================ -->
+      <main>
+        <div class="controls">
+          <button type="button" class="btn" id="open-all">Abrir todo</button>
+          <button type="button" class="btn" id="close-all">Cerrar todo</button>
+        </div>
+
+        <!-- 1 · Introducción -->
+        <details class="section" id="introduccion" open>
+          <summary>
+            <span class="num">01</span>
+            <span class="summary-text">Introducción al Editor de Brightspace</span>
+            <span class="marker" aria-hidden="true">+</span>
+          </summary>
+          <div class="dc">
+            <p>
+              El Editor de Brightspace permite crear e insertar contenido dentro de Brightspace. Se integra con todas las
+              herramientas del entorno de aprendizaje que tienen capacidades de creación de contenido HTML, como los temas de
+              discusión, las instrucciones personalizadas para carpetas de tareas, los temas de contenido y más.
+            </p>
+            <div class="info">
+              <span class="tag">Bueno saberlo</span>
+              <p>Al crear o editar archivos de contenido con el editor existe un límite de <strong>2.5 millones de caracteres</strong> por archivo.</p>
+            </div>
+          </div>
+        </details>
+
+        <!-- 2 · Vistas de contenido -->
+        <details class="section" id="visualizacion">
+          <summary>
+            <span class="num">02</span>
+            <span class="summary-text">Opciones de visualización de contenido</span>
+            <span class="marker" aria-hidden="true">+</span>
+          </summary>
+          <div class="dc">
+            <p>El Editor de Brightspace ofrece tres maneras de ver y trabajar con tu contenido:</p>
+            <div class="table-wrap">
+              <table>
+                <caption>Opciones de visualización del editor y su uso recomendado.</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Opción de vista</th>
+                    <th scope="col">Uso</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Vista de Diseño</td>
+                    <td>
+                      Se carga automáticamente al acceder al editor. Úsala para crear y dar formato al contenido con rapidez, sin
+                      necesidad de conocer HTML. Permite escribir, aplicar formato, insertar imágenes y tablas, y crear enlaces con
+                      los controles disponibles.
+                      <img src="b10.png" alt="Captura de la Vista de Diseño del Editor de Brightspace" loading="lazy" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Editor de Fuente (código HTML)</td>
+                    <td>
+                      Se accede con el ícono del Editor de fuente de HTML. Muestra el código HTML que estructura y formatea el
+                      contenido. Es ideal si tienes experiencia con HTML o deseas aplicar estilos de una hoja de estilo en cascada
+                      (CSS). También puedes copiar y pegar código HTML de otra aplicación.
+                      <img src="b11.png" alt="Captura del Editor de fuente de HTML de Brightspace" loading="lazy" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Vista Previa</td>
+                    <td>
+                      Muestra cómo aparecerá el contenido para los usuarios una vez publicado, lo que permite verificar que se vea
+                      como esperas antes de guardar los cambios.
+                      <img src="b12.png" alt="Captura de la Vista Previa del contenido en Brightspace" loading="lazy" />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
+        <!-- 3 · Opciones del menú -->
+        <details class="section" id="menu">
+          <summary>
+            <span class="num">03</span>
+            <span class="summary-text">Opciones del menú y su uso</span>
+            <span class="marker" aria-hidden="true">+</span>
+          </summary>
+          <div class="dc">
+            <p>Las herramientas del Editor de Brightspace se agrupan en tres familias de acciones:</p>
+
+            <h3><span class="h3-num">3.1</span> Formato de texto</h3>
+            <div class="table-wrap">
+              <table>
+                <caption>Herramientas de formato de texto del editor.</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Opción</th>
+                    <th scope="col">Uso</th>
+                    <th scope="col">Ícono</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Formato (Paragraph Styling)</td>
+                    <td>Cambia el formato del texto a párrafo, encabezado (Heading), blockquote o código. Aplica una apariencia consistente y predefinida (fuentes, alineación, etc.) a cada párrafo.</td>
+                    <td class="centrar"><img src="b09.png" alt="Ícono de Formato (Paragraph Styling)" width="70%" loading="lazy" /></td>
+                  </tr>
+                  <tr>
+                    <td>Fuente</td>
+                    <td>Cambia la fuente del texto.</td>
+                    <td class="centrar"><img src="b07.png" alt="Ícono de Fuente" width="70%" loading="lazy" /></td>
+                  </tr>
+                  <tr>
+                    <td>Tamaño de fuente</td>
+                    <td>Cambia el tamaño del texto.</td>
+                    <td class="centrar"><img src="b08.png" alt="Ícono de Tamaño de fuente" width="70%" loading="lazy" /></td>
+                  </tr>
+                  <tr>
+                    <td>Negrita</td>
+                    <td>Pone el texto en negrita. <em>Atajo:</em> dos asteriscos <code>**ejemplo**</code> generan negrita automáticamente al presionar Intro.</td>
+                    <td class="centrar"><img src="b15.png" alt="Ícono de Negrita" width="50%" loading="lazy" /></td>
+                  </tr>
+                  <tr>
+                    <td>Cursiva</td>
+                    <td>Pone el texto en cursiva. <em>Atajo:</em> un asterisco <code>*ejemplo*</code> genera cursiva automáticamente al presionar Intro.</td>
+                    <td class="centrar"><img src="b14.png" alt="Ícono de Cursiva" width="50%" loading="lazy" /></td>
+                  </tr>
+                  <tr>
+                    <td>Formatos en línea</td>
+                    <td>Cambia el texto a subrayado, tachado, superíndice o subíndice.</td>
+                    <td class="centrar"><img src="b03.png" alt="Ícono de Formatos en línea" width="70%" loading="lazy" /></td>
+                  </tr>
+                  <tr>
+                    <td>Seleccionar color (color de fuente)</td>
+                    <td>Cambia el color del texto mediante el selector de color.</td>
+                    <td class="centrar"><img src="b13.png" alt="Ícono de Seleccionar color de fuente" width="50%" loading="lazy" /></td>
+                  </tr>
+                  <tr>
+                    <td>Alineación</td>
+                    <td>Cambia la alineación del texto.</td>
+                    <td class="centrar"><img src="b02.png" alt="Ícono de Alineación" width="70%" loading="lazy" /></td>
+                  </tr>
+                  <tr>
+                    <td>Lista</td>
+                    <td>Permite elegir entre listas con viñetas o numeradas y ajustar la indentación (aumentar o disminuir).</td>
+                    <td class="centrar"><img src="b02.png" alt="Ícono de Lista" width="70%" loading="lazy" /></td>
+                  </tr>
+                  <tr>
+                    <td>Pintura de formato</td>
+                    <td>Resalta el texto para aplicar su formato o insertar un enlace.</td>
+                    <td class="centrar"><img src="b16.png" alt="Ícono de Pintura de formato" width="50%" loading="lazy" /></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3><span class="h3-num">3.2</span> Inserción de contenido</h3>
+            <div class="table-wrap">
+              <table>
+                <caption>Herramientas para insertar contenido en el editor.</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Opción</th>
+                    <th scope="col">Uso</th>
+                    <th scope="col">Ícono</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Insertar objetos (Insert Stuff)</td>
+                    <td>Herramienta clave para agregar contenido: archivos, videos, enlaces, código incrustado, contenido desde Brightspace, desde tu dispositivo o desde herramientas de terceros (imágenes, videos, notas de video, documentos y mucho más). Los archivos cargados aquí se guardan en el área de Administrar archivos.</td>
+                    <td class="centrar"><img src="b22.png" alt="Ícono de Insertar objetos (Insert Stuff)" width="50%" loading="lazy" /></td>
+                  </tr>
+                  <tr>
+                    <td>Insertar enlace rápido (Quicklink)</td>
+                    <td>Agrega enlaces a materiales del curso, actividades (como rúbricas) y contenido de terceros (URL externas).</td>
+                    <td class="centrar"><img src="b25.png" alt="Ícono de Insertar enlace rápido (Quicklink)" width="50%" loading="lazy" /></td>
+                  </tr>
+                  <tr>
+                    <td>Insertar imagen</td>
+                    <td>Agrega una imagen desde tu dispositivo, desde los archivos del curso o mediante una URL. El editor solicita automáticamente el texto alternativo (<em>alt text</em>) para garantizar la accesibilidad.</td>
+                    <td class="centrar"><img src="b24.png" alt="Ícono de Insertar imagen" width="50%" loading="lazy" /></td>
+                  </tr>
+                  <tr>
+                    <td>Otras opciones de inserción (botón +)</td>
+                    <td>Agrega elementos adicionales como ecuaciones, tablas, atributos, divisores, emoji, símbolos y códigos. También expande la barra de herramientas para ver opciones que no caben por el ancho de la pantalla.</td>
+                    <td class="centrar"><img src="b26.png" alt="Ícono de Otras opciones de inserción" width="100%" loading="lazy" /></td>
+                  </tr>
+                  <tr>
+                    <td>Insertar tabla</td>
+                    <td>Permite añadir o modificar una tabla. Su uso asegura que las tablas se formateen de manera accesible.</td>
+                    <td class="centrar"><img src="b28.png" alt="Ícono de Insertar tabla" width="100%" loading="lazy" /></td>
+                  </tr>
+                  <tr>
+                    <td>Atributos</td>
+                    <td>Permite agregar o editar atributos como la orientación del texto, el título de la página y el idioma, desde <em>Otras opciones de inserción &gt; Atributos</em>.</td>
+                    <td class="centrar"><img src="b29.png" alt="Ícono de Atributos" width="100%" loading="lazy" /></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3><span class="h3-num">3.3</span> Herramientas de edición y accesibilidad</h3>
+            <div class="table-wrap">
+              <table>
+                <caption>Herramientas de edición y accesibilidad del editor.</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Opción</th>
+                    <th scope="col">Uso</th>
+                    <th scope="col">Ícono</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Más acciones (puntos suspensivos)</td>
+                    <td>Expande la barra de herramientas y muestra opciones que podrían no verse de inmediato según el ancho de la ventana.</td>
+                    <td class="centrar"><img src="b20.png" alt="Ícono de Más acciones (puntos suspensivos)" width="50%" loading="lazy" /></td>
+                  </tr>
+                  <tr>
+                    <td>Pantalla completa</td>
+                    <td>Activa el modo de pantalla completa para disponer de una mayor área de trabajo.</td>
+                    <td class="centrar"><img src="b21.png" alt="Ícono de Pantalla completa" width="50%" loading="lazy" /></td>
+                  </tr>
+                  <tr>
+                    <td>Verificador de accesibilidad</td>
+                    <td>Comprueba si el contenido cumple los estándares de accesibilidad (WCAG y Sección 508) y ofrece sugerencias para corregir problemas como el contraste de color o la estructura de las listas.</td>
+                    <td class="centrar"><img src="b17.png" alt="Ícono del Verificador de accesibilidad" width="50%" loading="lazy" /></td>
+                  </tr>
+                  <tr>
+                    <td>Recuento de palabras</td>
+                    <td>Muestra el conteo de palabras del contenido.</td>
+                    <td class="centrar"><img src="b18.png" alt="Ícono de Recuento de palabras" width="50%" loading="lazy" /></td>
+                  </tr>
+                  <tr>
+                    <td>Deshacer / Rehacer</td>
+                    <td>Permite revertir o rehacer una acción.</td>
+                    <td class="centrar"><img src="b23.png" alt="Ícono de Deshacer y Rehacer" width="50%" loading="lazy" /></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
+        <!-- 4 · Editor de ecuaciones -->
+        <details class="section" id="ecuaciones">
+          <summary>
+            <span class="num">04</span>
+            <span class="summary-text">Editor de ecuaciones matemáticas y de química</span>
+            <span class="marker" aria-hidden="true">+</span>
+          </summary>
+          <div class="dc">
+            <p>
+              El Editor Gráfico de Ecuaciones (<em>Graphical Equation Editor</em>), accesible desde <em>Otras opciones de
+              inserción</em>, permite añadir ecuaciones matemáticas dentro del Editor de Brightspace.
+            </p>
+            <p><img src="b01.png" alt="Ícono del Editor Gráfico de Ecuaciones (sigma) en Brightspace" width="30%" loading="lazy" /></p>
+          </div>
+        </details>
+
+        <!-- 5 · Formatos soportados -->
+        <details class="section" id="formatos">
+          <summary>
+            <span class="num">05</span>
+            <span class="summary-text">Formatos soportados</span>
+            <span class="marker" aria-hidden="true">+</span>
+          </summary>
+          <div class="dc">
+            <p>El editor admite la entrada de cuatro tipos principales de ecuaciones:</p>
+            <ul>
+              <li>
+                <strong>Ecuación MathML:</strong>
+                MathML es un estándar del W3C que utiliza XML para describir la notación matemática, capturando tanto su estructura
+                como su contenido. Esto asegura su correcta visualización y el acceso por tecnologías de asistencia.
+                <div class="nota">
+                  <span class="tag">Nota importante</span>
+                  <p>Brightspace almacena y muestra <strong>todas</strong> las ecuaciones en formato MathML, sin importar el formato con que las ingreses, y emplea el motor JavaScript MathJax para mostrarlas.</p>
+                </div>
+              </li>
+              <li>
+                <strong>Ecuación LaTeX:</strong>
+                LaTeX es un sistema de composición tipográfica basado en TeX que ofrece una sintaxis de texto para fórmulas
+                matemáticas complejas. Brightspace guarda estas ecuaciones como MathML para mantener la consistencia y la
+                accesibilidad.
+                <div class="info">
+                  <span class="tag">Nota</span>
+                  <p>LaTeX está disponible en la nueva experiencia de cuestionarios.</p>
+                </div>
+              </li>
+              <li>
+                <strong>Ecuación gráfica (Graphical equation):</strong>
+                Ofrece 10 pestañas de símbolos y diseños para construir ecuaciones matemáticas.
+              </li>
+              <li>
+                <strong>Ecuación química (Chemistry equation):</strong>
+                Ofrece símbolos especializados para fórmulas de química inorgánica.
+              </li>
+            </ul>
+          </div>
+        </details>
+
+        <!-- 6 · Pestañas -->
+        <details class="section" id="pestanas">
+          <summary>
+            <span class="num">06</span>
+            <span class="summary-text">Pestañas en el editor gráfico de ecuaciones</span>
+            <span class="marker" aria-hidden="true">+</span>
+          </summary>
+          <div class="dc">
+            <p>La opción de Ecuación gráfica ofrece diez pestañas (o categorías de elementos):</p>
+            <div class="table-wrap">
+              <table>
+                <caption>Pestañas del editor gráfico de ecuaciones y su descripción.</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Pestaña</th>
+                    <th scope="col">Icono</th>
+                    <th scope="col">Descripción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Química</td>
+                    <td class="centrar"><img src="b30.png" alt="Vista de la pestaña Química del editor gráfico de ecuaciones" width="100%" loading="lazy" /></td>
+                    <td>Añade símbolos especializados para ecuaciones de química inorgánica. <em>Nota:</em> esta pestaña solo aparece al seleccionar la opción de ecuación de Química.</td>
+                  </tr>
+                  <tr>
+                    <td>General</td>
+                    <td class="centrar"><img src="b31.png" alt="Vista de la pestaña General del editor gráfico de ecuaciones" width="100%" loading="lazy" /></td>
+                    <td>Aporta una plantilla para construir ecuaciones. Permite añadir y editar texto con funciones como Cortar, Copiar, Pegar, Deshacer y Color.</td>
+                  </tr>
+                  <tr>
+                    <td>Símbolos</td>
+                    <td class="centrar"><img src="b32.png" alt="Vista de la pestaña Símbolos del editor gráfico de ecuaciones" width="100%" loading="lazy" /></td>
+                    <td>Añade símbolos matemáticos a las ecuaciones.</td>
+                  </tr>
+                  <tr>
+                    <td>Flechas</td>
+                    <td class="centrar"><img src="b33.png" alt="Vista de la pestaña Flechas del editor gráfico de ecuaciones" width="100%" loading="lazy" /></td>
+                    <td>Actualiza o añade flechas a las ecuaciones.</td>
+                  </tr>
+                  <tr>
+                    <td>Griego y letras</td>
+                    <td class="centrar"><img src="b34.png" alt="Vista de la pestaña Griego y letras del editor gráfico de ecuaciones" width="100%" loading="lazy" /></td>
+                    <td>Actualiza o añade caracteres griegos en mayúsculas y minúsculas a las ecuaciones.</td>
+                  </tr>
+                  <tr>
+                    <td>Matrices</td>
+                    <td class="centrar"><img src="b35.png" alt="Vista de la pestaña Matrices del editor gráfico de ecuaciones" width="100%" loading="lazy" /></td>
+                    <td>Actualiza o añade matrices a las ecuaciones.</td>
+                  </tr>
+                  <tr>
+                    <td>Scripts y diseño</td>
+                    <td class="centrar"><img src="b36.png" alt="Vista de la pestaña Scripts y diseño del editor gráfico de ecuaciones" width="100%" loading="lazy" /></td>
+                    <td>Añade scripts o diseños para construir ecuaciones.</td>
+                  </tr>
+                  <tr>
+                    <td>Decoraciones</td>
+                    <td class="centrar"><img src="b37.png" alt="Vista de la pestaña Decoraciones del editor gráfico de ecuaciones" width="100%" loading="lazy" /></td>
+                    <td>Añade límites (<em>fences</em>), como corchetes y barras verticales, alrededor de los campos de texto.</td>
+                  </tr>
+                  <tr>
+                    <td>Operadores grandes</td>
+                    <td class="centrar"><img src="b38.png" alt="Vista de la pestaña Operadores grandes del editor gráfico de ecuaciones" width="100%" loading="lazy" /></td>
+                    <td>Actualiza o añade operadores grandes a las ecuaciones.</td>
+                  </tr>
+                  <tr>
+                    <td>Cálculo</td>
+                    <td class="centrar"><img src="b39.png" alt="Vista de la pestaña Cálculo del editor gráfico de ecuaciones" width="100%" loading="lazy" /></td>
+                    <td>Aporta una plantilla para construir ecuaciones de cálculo.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
+        <!-- 7 · Crear y editar -->
+        <details class="section" id="creacion">
+          <summary>
+            <span class="num">07</span>
+            <span class="summary-text">Creación y edición de ecuaciones</span>
+            <span class="marker" aria-hidden="true">+</span>
+          </summary>
+          <div class="dc">
+            <h3><span class="h3-num">7.1</span> Crear una ecuación (modo clásico)</h3>
+            <ol>
+              <li>Accede al Editor de Brightspace en la herramienta donde deseas crear una ecuación.</li>
+              <li>En la lista desplegable de <em>Ecuación gráfica</em> (el ícono <strong>&Sigma;</strong>), elige la opción deseada: Ecuación gráfica, Ecuación química, Ecuación MathML o Ecuación LaTeX.</li>
+              <li>En la ventana <em>Insertar ecuación</em>, escribe la fórmula con el teclado o seleccionando símbolos de las pestañas.</li>
+              <li>Haz clic en <strong>Insertar</strong>.</li>
+            </ol>
+
+            <h3><span class="h3-num">7.2</span> Editar una ecuación existente</h3>
+            <ol>
+              <li>Navega hasta el elemento del curso que contiene la ecuación y haz clic en <em>Edit HTML</em> (Editar HTML).</li>
+              <li>Dentro del Editor de Brightspace, haz clic en el recuadro que contiene el ícono sigma.</li>
+              <li>En la lista desplegable de <em>Ecuación gráfica</em>, selecciona el formato que deseas usar para editar (Gráfica, Química, MathML o LaTeX).</li>
+              <li>Realiza los cambios necesarios.</li>
+              <li>Haz clic en <strong>Insertar &gt; Actualizar</strong>.</li>
+            </ol>
+          </div>
+        </details>
+      </main>
+    </div>
+
+    <!-- ============================ PIE / LICENCIA ============================ -->
+    <footer>
+      <p class="author">José M. Fernández — ABE/ASE Math Master Teacher, Harry S. Truman College, City Colleges of Chicago.</p>
+      <p>
+        Este material se distribuye bajo licencia
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="license" target="_blank">Creative Commons Atribución-NoComercial-CompartirIgual 4.0 (CC BY-NC-SA 4.0)</a>.
+        Última revisión: junio de 2026.
+      </p>
+    </footer>
+
+    <script>
+      (function () {
+        var sections = Array.prototype.slice.call(document.querySelectorAll("details.section"));
+        var tocLinks = Array.prototype.slice.call(document.querySelectorAll(".toc a"));
+        var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        // --- Abrir todo / Cerrar todo ---
+        document.getElementById("open-all").addEventListener("click", function () {
+          sections.forEach(function (s) { s.open = true; });
+        });
+        document.getElementById("close-all").addEventListener("click", function () {
+          sections.forEach(function (s) { s.open = false; });
+        });
+
+        // --- Clic en el índice: abre la sección y desplaza ---
+        function activate(id) {
+          tocLinks.forEach(function (l) {
+            l.classList.toggle("active", l.getAttribute("href") === "#" + id);
+          });
+        }
+
+        tocLinks.forEach(function (link) {
+          link.addEventListener("click", function (e) {
+            var id = link.getAttribute("href").slice(1);
+            var target = document.getElementById(id);
+            if (!target) return;
+            e.preventDefault();
+            target.open = true;
+            history.replaceState(null, "", "#" + id);
+            target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+            activate(id);
+          });
+        });
+
+        // --- Resaltado automático según la sección visible (scroll-spy) ---
+        if ("IntersectionObserver" in window) {
+          var observer = new IntersectionObserver(
+            function (entries) {
+              entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                  activate(entry.target.id);
+                }
+              });
+            },
+            { rootMargin: "-12% 0px -78% 0px", threshold: 0 }
+          );
+          sections.forEach(function (s) { observer.observe(s); });
+        }
+
+        // --- Si la URL trae un ancla, abre esa sección al cargar ---
+        if (window.location.hash) {
+          var initial = document.getElementById(window.location.hash.slice(1));
+          if (initial && initial.classList.contains("section")) {
+            initial.open = true;
+            activate(initial.id);
+            if (!reduceMotion) {
+              setTimeout(function () {
+                initial.scrollIntoView({ behavior: "smooth", block: "start" });
+              }, 60);
+            }
+          }
+        } else {
+          activate("introduccion");
+        }
+      })();
+    </script>
+  </body>
+</html>
