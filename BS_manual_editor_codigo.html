@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual del Editor de Código de Brightspace - Prof. José M. Fernández</title>
+    <style>
+        :root {
+            /* Colores DUA - Alto contraste y accesibles */
+            --primary-color: #1e3a5f;
+            --secondary-color: #2e7d32;
+            --accent-color: #e65100;
+            --warning-color: #d32f2f;
+            --info-color: #0288d1;
+            --success-color: #388e3c;
+            --bg-light: #f5f7fa;
+            --bg-code: #263238;
+            --text-dark: #212529;
+            --text-light: #495057;
+            --border-color: #dee2e6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #2e5a8e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .intro {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 5px solid var(--info-color);
+        }
+
+        details {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        details:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(30, 58, 95, 0.1);
+        }
+
+        details[open] {
+            border-color: var(--primary-color);
+            box-shadow: 0 6px 20px rgba(30, 58, 95, 0.15);
+        }
+
+        summary {
+            padding: 18px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1em;
+            background: linear-gradient(to right, var(--bg-light), white);
+            user-select: none;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-left: 45px;
+        }
+
+        summary:hover {
+            background: linear-gradient(to right, #e8f0fe, white);
+        }
+
+        summary::before {
+            content: "▶";
+            position: absolute;
+            left: 20px;
+            transition: transform 0.3s ease;
+            color: var(--primary-color);
+        }
+
+        details[open] summary::before {
+            transform: rotate(90deg);
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .section-content {
+            padding: 20px;
+            background: white;
+        }
+
+        /* Categorías con colores distintivos */
+        .category-css summary {
+            border-left: 5px solid var(--secondary-color);
+        }
+
+        .category-template summary {
+            border-left: 5px solid var(--accent-color);
+        }
+
+        .category-creator summary {
+            border-left: 5px solid var(--info-color);
+        }
+
+        .category-advanced summary {
+            border-left: 5px solid var(--warning-color);
+        }
+
+        .category-access summary {
+            border-left: 5px solid var(--success-color);
+        }
+
+        h3 {
+            color: var(--primary-color);
+            margin: 20px 0 15px 0;
+            font-size: 1.3em;
+            border-bottom: 2px solid var(--bg-light);
+            padding-bottom: 8px;
+        }
+
+        h4 {
+            color: var(--text-dark);
+            margin: 15px 0 10px 0;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        code {
+            background: var(--bg-light);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            color: var(--accent-color);
+            border: 1px solid var(--border-color);
+        }
+
+        pre {
+            background: var(--bg-code);
+            color: #aed581;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border-left: 4px solid var(--info-color);
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        pre code {
+            background: transparent;
+            color: #aed581;
+            border: none;
+            padding: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        thead {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+
+        tbody tr:hover {
+            background: var(--bg-light);
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin: 8px 0;
+            line-height: 1.8;
+        }
+
+        .tip, .warning, .note {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            position: relative;
+            padding-left: 50px;
+        }
+
+        .tip::before, .warning::before, .note::before {
+            position: absolute;
+            left: 15px;
+            font-size: 1.5em;
+        }
+
+        .tip {
+            background: #e8f5e9;
+            border-left: 5px solid var(--success-color);
+        }
+
+        .tip::before {
+            content: "💡";
+        }
+
+        .warning {
+            background: #fff3e0;
+            border-left: 5px solid var(--warning-color);
+        }
+
+        .warning::before {
+            content: "⚠️";
+        }
+
+        .note {
+            background: #e3f2fd;
+            border-left: 5px solid var(--info-color);
+        }
+
+        .note::before {
+            content: "📌";
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .badge-new {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .badge-deprecated {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .badge-important {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            summary {
+                font-size: 1em;
+            }
+            
+            table {
+                font-size: 0.9em;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            details {
+                border: 1px solid #000;
+            }
+            
+            details[open] {
+                page-break-inside: avoid;
+            }
+        }
+
+        footer {
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Manual del Editor de Código de Brightspace</h1>
+            <p>Guía completa para desarrolladores y educadores - Prof. José M. Fernández</p>
+        </header>
+
+        <div class="content">
+            <div class="intro">
+                <h2>🎯 Introducción</h2>
+                <p>Esta guía recopila todas las características, trucos y mejores prácticas para trabajar con el editor de código de Brightspace. Cada sección está diseñada para ser accesible y práctica, siguiendo los principios del Diseño Universal para el Aprendizaje (DUA).</p>
+            </div>
+
+            <!-- SECCIÓN 1: JERARQUÍA DE ESTILOS CSS -->
+            <details class="category-css">
+                <summary>🎨 Jerarquía de Estilos CSS en Brightspace</summary>
+                <div class="section-content">
+                    <h3>Niveles de Control de Estilos (de Mayor a Menor Prioridad)</h3>
+                    
+                    <h4>Nivel 1: Estilos en Línea</h4>
+                    <p>Los estilos más específicos aplicados directamente a elementos individuales.</p>
+                    <ul>
+                        <li><strong>Acceso:</strong> Seleccionar elemento → Clic en ícono + → "Attributes" → Campo "Style"</li>
+                        <li><strong>Ejemplo:</strong> <code>margin-left: 50px;</code></li>
+                        <li><strong>Ventaja:</strong> Cambios inmediatos y específicos</li>
+                        <li><strong>Desventaja:</strong> Difícil mantenimiento, no escalable</li>
+                    </ul>
+                    <div class="warning">
+                        <strong>Precaución:</strong> Evitar el uso excesivo. Cada cambio futuro requiere edición manual página por página.
+                    </div>
+
+                    <h4>Nivel 2: Etiqueta &lt;style&gt; en Página</h4>
+                    <p>Estilos que afectan a toda una página HTML específica.</p>
+                    <pre><code>&lt;style&gt;
+    .courseware-video-wrapper {
+        background-color: transparent !important;
+        border: none;
+    }
+&lt;/style&gt;</code></pre>
+                    <ul>
+                        <li><strong>Acceso:</strong> Editor de código fuente (&lt;/&gt;)</li>
+                        <li><strong>Ubicación:</strong> Dentro del &lt;head&gt; del documento</li>
+                        <li><strong>Uso ideal:</strong> Anulaciones específicas de una sola página</li>
+                    </ul>
+
+                    <h4>Nivel 3: Archivo custom.css (Plantilla)</h4>
+                    <p>El método más potente y recomendado para estilos a nivel de curso.</p>
+                    <ul>
+                        <li><strong>Ubicación:</strong> Dentro del paquete de plantilla HTML (.zip)</li>
+                        <li><strong>Alcance:</strong> Todo el curso que use la plantilla</li>
+                        <li><strong>Ventaja:</strong> Consistencia total, fácil mantenimiento</li>
+                        <li><strong>Implementación:</strong> Subir plantilla → Descomprimir → Activar en Settings</li>
+                    </ul>
+
+                    <h4>Nivel 4: Variables de Configuración Organizacional</h4>
+                    <p>Control administrativo a nivel institucional.</p>
+                    <ul>
+                        <li><strong>Variable clave:</strong> <code>d2l.Tools.ContentStyler.CssOverride</code></li>
+                        <li><strong>Controlado por:</strong> Administradores de plataforma</li>
+                        <li><strong>Alcance:</strong> Toda la unidad organizativa</li>
+                        <li><strong>Prioridad:</strong> Puede anular personalizaciones de curso</li>
+                    </ul>
+
+                    <div class="tip">
+                        <strong>Consejo de Depuración:</strong> Si un estilo no se aplica como esperabas, verifica la jerarquía completa. Un estilo de nivel superior podría estar anulando tu código.
+                    </div>
+
+                    <h3>Tabla Comparativa de Métodos</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Método</th>
+                                <th>Ámbito</th>
+                                <th>Implementación</th>
+                                <th>Mantenibilidad</th>
+                                <th>Recomendado para</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Estilo en Línea</td>
+                                <td>Elemento único</td>
+                                <td>Menú Atributos (+)</td>
+                                <td>❌ Baja</td>
+                                <td>Arreglos rápidos temporales</td>
+                            </tr>
+                            <tr>
+                                <td>&lt;style&gt; en página</td>
+                                <td>Página completa</td>
+                                <td>Editor código (&lt;/&gt;)</td>
+                                <td>⚠️ Media</td>
+                                <td>Anulaciones específicas</td>
+                            </tr>
+                            <tr>
+                                <td>custom.css</td>
+                                <td>Curso completo</td>
+                                <td>Gestión de archivos</td>
+                                <td>✅ Alta</td>
+                                <td>Diseño consistente del curso</td>
+                            </tr>
+                            <tr>
+                                <td>Config. Org.</td>
+                                <td>Institución</td>
+                                <td>Admin tools</td>
+                                <td>✅ Muy Alta</td>
+                                <td>Marca institucional</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </details>
+
+            <!-- SECCIÓN 2: PLANTILLAS HTML -->
+            <details class="category-template">
+                <summary>📦 Sistema de Plantillas HTML</summary>
+                <div class="section-content">
+                    <h3>Implementación de Plantillas</h3>
+                    
+                    <h4>Proceso de Instalación</h4>
+                    <ol>
+                        <li>Descargar archivo .zip de la plantilla</li>
+                        <li>Ir a <strong>Manage Files</strong> en el curso</li>
+                        <li>Cargar el archivo .zip</li>
+                        <li>Descomprimir directamente en Brightspace</li>
+                        <li>Navegar a <strong>Content → Settings</strong></li>
+                        <li>Activar checkbox: <strong>"Enable HTML Templates"</strong></li>
+                    </ol>
+
+                    <h3>Versiones de Plantillas: V3 vs V5</h3>
+                    
+                    <h4>Plantillas V3 (Legacy) <span class="badge badge-deprecated">DEPRECADO</span></h4>
+                    <ul>
+                        <li><strong>Base tecnológica:</strong> Bootstrap + jQuery</li>
+                        <li><strong>Ventaja:</strong> Conocimiento transferible de Bootstrap</li>
+                        <li><strong>Clases útiles de Bootstrap:</strong></li>
+                        <ul>
+                            <li><code>rounded-lg</code> - Esquinas redondeadas</li>
+                            <li><code>rounded-circle</code> - Imagen circular</li>
+                            <li><code>img-thumbnail</code> - Borde con padding</li>
+                            <li><code>embed-responsive embed-responsive-16by9</code> - Videos responsivos</li>
+                        </ul>
+                    </ul>
+
+                    <pre><code>&lt;!-- Video responsivo V3 --&gt;
+&lt;div class="embed-responsive embed-responsive-16by9"&gt;
+    &lt;iframe class="embed-responsive-item" src="..."&gt;&lt;/iframe&gt;
+&lt;/div&gt;</code></pre>
+
+                    <h4>Plantillas V5 (Modernas) <span class="badge badge-new">RECOMENDADO</span></h4>
+                    <ul>
+                        <li><strong>Base tecnológica:</strong> Framework propietario D2L</li>
+                        <li><strong>Integración:</strong> Creator+ friendly</li>
+                        <li><strong>Estructura de archivos:</strong> Requiere ruta <code>/shared/</code> en Public Files</li>
+                        <li><strong>Ventajas:</strong></li>
+                        <ul>
+                            <li>Optimización específica para Brightspace</li>
+                            <li>Mejor integración con Content Styler</li>
+                            <li>Actualizaciones automáticas de D2L</li>
+                        </ul>
+                    </ul>
+
+                    <div class="warning">
+                        <strong>Error común V5:</strong> Si los estilos aparecen "rotos", verifica que la ruta a /shared/ sea correcta en los archivos CSS/JS.
+                    </div>
+
+                    <h3>Estructura del custom.css</h3>
+                    <pre><code>/* Variables CSS personalizadas */
+:root {
+    --primary-color: #003366;
+    --secondary-color: #0066cc;
+    --font-family-main: 'Arial', sans-serif;
+    --spacing-unit: 1rem;
+}
+
+/* Anulaciones globales */
+body {
+    font-family: var(--font-family-main);
+    line-height: 1.6;
+}
+
+/* Componentes específicos */
+.d2l-htmlblock h1 {
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .custom-container {
+        padding: var(--spacing-unit);
+    }
+}</code></pre>
+
+                    <div class="tip">
+                        <strong>Mejores prácticas:</strong> Usa variables CSS para mantener consistencia y facilitar cambios globales de tema.
+                    </div>
+                </div>
+            </details>
+
+            <!-- SECCIÓN 3: CREATOR+ FRAMEWORK -->
+            <details class="category-creator">
+                <summary>🚀 Creator+ Framework y Content Styler</summary>
+                <div class="section-content">
+                    <h3>Content Styler: El Corazón de Creator+</h3>
+                    
+                    <h4>Variables CSS del Sistema</h4>
+                    <p>Content Styler proporciona un conjunto robusto de variables CSS predefinidas:</p>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Variable</th>
+                                <th>Propósito</th>
+                                <th>Ejemplo de Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>--d2l-color-primary</code></td>
+                                <td>Color principal del tema</td>
+                                <td>#006fbf</td>
+                            </tr>
+                            <tr>
+                                <td><code>--d2l-color-secondary</code></td>
+                                <td>Color secundario/acento</td>
+                                <td>#e87511</td>
+                            </tr>
+                            <tr>
+                                <td><code>--d2l-typography-heading-1</code></td>
+                                <td>Estilo de encabezado H1</td>
+                                <td>2.5rem bold</td>
+                            </tr>
+                            <tr>
+                                <td><code>--d2l-spacing-1</code></td>
+                                <td>Unidad base de espaciado</td>
+                                <td>0.5rem</td>
+                            </tr>
+                            <tr>
+                                <td><code>--d2l-border-radius</code></td>
+                                <td>Radio de borde estándar</td>
+                                <td>0.3rem</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>Uso Avanzado de Variables</h4>
+                    <pre><code>/* Aplicar tema consistente usando variables Creator+ */
+.custom-card {
+    background: var(--d2l-color-celestine-light-2);
+    border: 1px solid var(--d2l-color-galena);
+    border-radius: var(--d2l-border-radius);
+    padding: var(--d2l-spacing-2);
+    margin-bottom: var(--d2l-spacing-4);
+}
+
+/* Anular con fallbacks seguros */
+.highlight-box {
+    background: var(--d2l-color-primary, #006fbf);
+    color: var(--d2l-color-white, #ffffff);
+}</code></pre>
+
+                    <h3>Herramientas de Creator+</h3>
+                    
+                    <h4>Layout Tools</h4>
+                    <ul>
+                        <li><strong>Grid System:</strong> Sistema de cuadrícula responsivo</li>
+                        <li><strong>Columns:</strong> 2, 3, o 4 columnas auto-ajustables</li>
+                        <li><strong>Spacers:</strong> Elementos de espaciado vertical</li>
+                    </ul>
+
+                    <h4>Media Tools</h4>
+                    <ul>
+                        <li><strong>Image Carousel:</strong> Galería de imágenes deslizante</li>
+                        <li><strong>Video Container:</strong> Wrapper responsivo para videos</li>
+                        <li><strong>Audio Player:</strong> Reproductor de audio personalizado</li>
+                    </ul>
+
+                    <div class="note">
+                        <strong>Nota:</strong> Creator+ está disponible solo con licencia institucional. Verifica con tu administrador si está activado.
+                    </div>
+                </div>
+            </details>
+
+            <!-- SECCIÓN 4: COMPONENTES INTERACTIVOS -->
+            <details class="category-creator">
+                <summary>🔧 Componentes Interactivos y Widgets</summary>
+                <div class="section-content">
+                    <h3>Componentes Disponibles en Creator+</h3>
+                    
+                    <h4>Acordeón (Accordion)</h4>
+                    <pre><code>&lt;div class="accordion"&gt;
+    &lt;div class="card"&gt;
+        &lt;div class="card-header"&gt;
+            &lt;button data-toggle="collapse" data-target="#panel1"&gt;
+                Título del Panel
+            &lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div id="panel1" class="collapse show"&gt; &lt;!-- 'show' = abierto por defecto --&gt;
+            &lt;div class="card-body"&gt;
+                Contenido del panel
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                    
+                    <div class="tip">
+                        <strong>Truco:</strong> Añade la clase <code>show</code> al div con clase <code>collapse</code> para que un panel esté abierto al cargar.
+                    </div>
+
+                    <h4>Tabs (Pestañas)</h4>
+                    <ul>
+                        <li><strong>Horizontales:</strong> Navegación superior</li>
+                        <li><strong>Verticales:</strong> Navegación lateral</li>
+                        <li><strong>Pills:</strong> Estilo de botones redondeados</li>
+                    </ul>
+
+                    <h4>Callouts (Destacados)</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Uso</th>
+                                <th>Icono</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Standard</td>
+                                <td>Información general</td>
+                                <td>Sin icono</td>
+                            </tr>
+                            <tr>
+                                <td>Question</td>
+                                <td>Preguntas de reflexión</td>
+                                <td>❓</td>
+                            </tr>
+                            <tr>
+                                <td>Attention</td>
+                                <td>Avisos importantes</td>
+                                <td>⚠️</td>
+                            </tr>
+                            <tr>
+                                <td>Jumbo</td>
+                                <td>Destacado principal</td>
+                                <td>Gran formato</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>Flip Cards (Tarjetas Interactivas)</h4>
+                    <pre><code>&lt;div class="flip-card"&gt;
+    &lt;div class="flip-card-inner"&gt;
+        &lt;div class="flip-card-front"&gt;
+            &lt;h3&gt;Pregunta o Concepto&lt;/h3&gt;
+        &lt;/div&gt;
+        &lt;div class="flip-card-back"&gt;
+            &lt;p&gt;Respuesta o Definición&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+                    <h4>Timeline (Línea de Tiempo)</h4>
+                    <ul>
+                        <li>Ideal para procesos secuenciales</li>
+                        <li>Eventos históricos</li>
+                        <li>Pasos de procedimientos</li>
+                    </ul>
+
+                    <h4>Stylized Quote (Citas Estilizadas)</h4>
+                    <pre><code>&lt;blockquote class="stylized-quote"&gt;
+    &lt;p&gt;"El contenido de la cita aquí"&lt;/p&gt;
+    &lt;footer&gt;— Autor de la cita&lt;/footer&gt;
+&lt;/blockquote&gt;</code></pre>
+                </div>
+            </details>
+
+            <!-- SECCIÓN 5: TÉCNICAS AVANZADAS CSS -->
+            <details class="category-advanced">
+                <summary>⚡ Técnicas Avanzadas de CSS</summary>
+                <div class="section-content">
+                    <h3>Efectos Visuales Especiales</h3>
+                    
+                    <h4>Texto con Fondo de Imagen</h4>
+                    <pre><code>/* Efecto de texto con textura de imagen */
+.texto-imagen {
+    background: url('URL_DE_TU_IMAGEN');
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    font-size: 4em;
+    font-weight: bold;
+}</code></pre>
+
+                    <h4>Filtros de Imagen</h4>
+                    <pre><code>/* Conversión a escala de grises */
+.imagen-bn {
+    filter: grayscale(100%);
+}
+
+/* Efecto sepia vintage */
+.imagen-sepia {
+    filter: sepia(80%);
+}
+
+/* Desenfoque suave */
+.imagen-blur {
+    filter: blur(2px);
+}
+
+/* Ajuste de brillo y contraste */
+.imagen-ajustada {
+    filter: brightness(1.2) contrast(1.1);
+}</code></pre>
+
+                    <h4>Animaciones y Transiciones</h4>
+                    <pre><code>/* Animación de entrada suave */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.elemento-animado {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Hover interactivo */
+.card-interactiva {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card-interactiva:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}</code></pre>
+
+                    <h4>Gradientes Avanzados</h4>
+                    <pre><code>/* Gradiente de texto */
+.texto-gradiente {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Borde gradiente */
+.borde-gradiente {
+    border: 3px solid;
+    border-image: linear-gradient(45deg, #f093fb, #f5576c) 1;
+}</code></pre>
+
+                    <h4>Grid Layout Personalizado</h4>
+                    <pre><code>/* Sistema de grid responsivo */
+.grid-personalizado {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Grid asimétrico */
+.grid-asimetrico {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: auto;
+    gap: 30px;
+}
+
+@media (max-width: 768px) {
+    .grid-asimetrico {
+        grid-template-columns: 1fr;
+    }
+}</code></pre>
+
+                    <div class="warning">
+                        <strong>Importante:</strong> Siempre prueba estos efectos en diferentes navegadores y dispositivos para garantizar compatibilidad.
+                    </div>
+                </div>
+            </details>
+
+            <!-- SECCIÓN 6: ACCESIBILIDAD -->
+            <details class="category-access">
+                <summary>♿ Accesibilidad y Estándares WCAG</summary>
+                <div class="section-content">
+                    <h3>Principios Fundamentales de Accesibilidad</h3>
+                    
+                    <h4>1. Estructura Semántica</h4>
+                    <ul>
+                        <li><strong>Jerarquía de Encabezados:</strong></li>
+                        <ul>
+                            <li>Un solo H1 por página (título principal)</li>
+                            <li>No saltar niveles (H1 → H3 ❌)</li>
+                            <li>Orden lógico: H1 → H2 → H3 → H4</li>
+                        </ul>
+                        <li><strong>Listas Correctas:</strong></li>
+                        <ul>
+                            <li>Usar herramientas del editor, no guiones manuales</li>
+                            <li>UL para listas no ordenadas</li>
+                            <li>OL para listas numeradas</li>
+                        </ul>
+                    </ul>
+
+                    <h4>2. Contraste de Color</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tipo de Contenido</th>
+                                <th>Ratio Mínimo</th>
+                                <th>Nivel WCAG</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Texto normal</td>
+                                <td>4.5:1</td>
+                                <td>AA</td>
+                            </tr>
+                            <tr>
+                                <td>Texto grande (18pt+)</td>
+                                <td>3:1</td>
+                                <td>AA</td>
+                            </tr>
+                            <tr>
+                                <td>Texto normal (mejorado)</td>
+                                <td>7:1</td>
+                                <td>AAA</td>
+                            </tr>
+                            <tr>
+                                <td>Texto grande (mejorado)</td>
+                                <td>4.5:1</td>
+                                <td>AAA</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>3. Enlaces Descriptivos</h4>
+                    <div class="warning">
+                        <strong>Evitar:</strong>
+                        <ul>
+                            <li>"Haga clic aquí"</li>
+                            <li>"Más información"</li>
+                            <li>"Ver más"</li>
+                            <li>URLs sin contexto</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tip">
+                        <strong>Usar en su lugar:</strong>
+                        <ul>
+                            <li>"Descarga el programa del curso (PDF)"</li>
+                            <li>"Visita la biblioteca universitaria"</li>
+                            <li>"Lee el artículo sobre metodología"</li>
+                        </ul>
+                    </div>
+
+                    <h4>4. Texto Alternativo para Imágenes</h4>
+                    <pre><code>&lt;!-- Imagen informativa --&gt;
+&lt;img src="grafico.jpg" 
+     alt="Gráfico mostrando aumento del 30% en matriculaciones 2020-2024"&gt;
+
+&lt;!-- Imagen decorativa --&gt;
+&lt;img src="decoracion.jpg" alt=""&gt;
+
+&lt;!-- Imagen compleja --&gt;
+&lt;img src="diagrama.jpg" 
+     alt="Diagrama del ciclo del agua" 
+     longdesc="#descripcion-detallada"&gt;</code></pre>
+
+                    <h4>5. Formularios Accesibles</h4>
+                    <pre><code>&lt;label for="nombre"&gt;Nombre completo:&lt;/label&gt;
+&lt;input type="text" id="nombre" name="nombre" required&gt;
+
+&lt;fieldset&gt;
+    &lt;legend&gt;Selecciona tu programa:&lt;/legend&gt;
+    &lt;input type="radio" id="grado" name="programa" value="grado"&gt;
+    &lt;label for="grado"&gt;Grado&lt;/label&gt;
+    &lt;input type="radio" id="master" name="programa" value="master"&gt;
+    &lt;label for="master"&gt;Máster&lt;/label&gt;
+&lt;/fieldset&gt;</code></pre>
+
+                    <h3>Herramientas de Validación</h3>
+                    <ul>
+                        <li><strong>Brightspace Accessibility Checker:</strong> Integrado en el editor</li>
+                        <li><strong>WAVE:</strong> Extensión del navegador</li>
+                        <li><strong>axe DevTools:</strong> Para desarrolladores</li>
+                        <li><strong>Contrast Ratio Checker:</strong> Para validar colores</li>
+                    </ul>
+
+                    <div class="note">
+                        <strong>Recordatorio:</strong> La accesibilidad no es opcional. Es un requisito legal en muchas jurisdicciones y fundamental para la inclusión educativa.
+                    </div>
+                </div>
+            </details>
+
+            <!-- SECCIÓN 7: SOLUCIÓN DE PROBLEMAS -->
+            <details class="category-advanced">
+                <summary>🔍 Solución de Problemas Comunes</summary>
+                <div class="section-content">
+                    <h3>Problemas Frecuentes y Soluciones</h3>
+                    
+                    <h4>1. Los estilos CSS no se aplican</h4>
+                    <ul>
+                        <li><strong>Causa:</strong> Conflicto con estilos de mayor prioridad</li>
+                        <li><strong>Solución:</strong></li>
+                        <ul>
+                            <li>Verificar la jerarquía de estilos</li>
+                            <li>Usar <code>!important</code> con moderación</li>
+                            <li>Aumentar la especificidad del selector</li>
+                        </ul>
+                    </ul>
+                    <pre><code>/* Aumentar especificidad */
+.d2l-htmlblock .mi-clase { /* Más específico */
+    color: blue;
+}
+
+/* Último recurso */
+.mi-clase {
+    color: blue !important;
+}</code></pre>
+
+                    <h4>2. Plantilla V5 aparece "rota"</h4>
+                    <ul>
+                        <li><strong>Causa:</strong> Ruta incorrecta a archivos CSS/JS</li>
+                        <li><strong>Solución:</strong></li>
+                        <ol>
+                            <li>Verificar que existe la carpeta <code>/shared/</code></li>
+                            <li>Comprobar rutas en el HTML de la plantilla</li>
+                            <li>Asegurarse de que los archivos están en Public Files</li>
+                        </ol>
+                    </ul>
+
+                    <h4>3. Videos no responsivos</h4>
+                    <pre><code>&lt;!-- Solución para V3 --&gt;
+&lt;div class="embed-responsive embed-responsive-16by9"&gt;
+    &lt;iframe class="embed-responsive-item" src="..."&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;!-- Solución universal --&gt;
+&lt;style&gt;
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    height: 0;
+    overflow: hidden;
+}
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+&lt;/style&gt;</code></pre>
+
+                    <h4>4. Imágenes muy grandes</h4>
+                    <pre><code>/* CSS para controlar tamaño máximo */
+.d2l-htmlblock img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Tamaño específico manteniendo proporción */
+.imagen-mediana {
+    width: 500px;
+    max-width: 100%;
+    height: auto;
+}</code></pre>
+
+                    <h4>5. Acordeón no se abre/cierra</h4>
+                    <ul>
+                        <li><strong>Verificar:</strong> JavaScript de la plantilla cargado</li>
+                        <li><strong>Comprobar:</strong> IDs únicos en cada panel</li>
+                        <li><strong>Solución CSS pura:</strong></li>
+                    </ul>
+                    <pre><code>&lt;details&gt;
+    &lt;summary&gt;Título del acordeón&lt;/summary&gt;
+    &lt;p&gt;Contenido que se expande/colapsa&lt;/p&gt;
+&lt;/details&gt;</code></pre>
+
+                    <h4>6. Problemas de caché</h4>
+                    <div class="tip">
+                        <strong>Forzar recarga sin caché:</strong>
+                        <ul>
+                            <li>Windows/Linux: Ctrl + Shift + R</li>
+                            <li>Mac: Cmd + Shift + R</li>
+                            <li>Añadir versión a archivos: <code>custom.css?v=2</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </details>
+
+            <!-- SECCIÓN 8: MIGRACIÓN Y COMPATIBILIDAD -->
+            <details class="category-template">
+                <summary>🔄 Migración y Compatibilidad de Versiones</summary>
+                <div class="section-content">
+                    <h3>Estrategias de Migración V3 → V5</h3>
+                    
+                    <h4>Enfoque Recomendado: Migración Gradual</h4>
+                    <ol>
+                        <li><strong>Evaluación inicial:</strong></li>
+                        <ul>
+                            <li>Inventariar páginas con V3</li>
+                            <li>Identificar componentes críticos de Bootstrap/jQuery</li>
+                            <li>Documentar personalizaciones existentes</li>
+                        </ul>
+                        
+                        <li><strong>Estrategia dual:</strong></li>
+                        <ul>
+                            <li>Mantener contenido V3 existente funcionando</li>
+                            <li>Crear todo contenido nuevo en V5</li>
+                            <li>Migrar páginas críticas primero</li>
+                        </ul>
+                        
+                        <li><strong>Conversión de componentes:</strong></li>
+                    </ol>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Componente V3</th>
+                                <th>Equivalente V5</th>
+                                <th>Notas de Migración</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>.container-fluid</code></td>
+                                <td><code>.d2l-container</code></td>
+                                <td>Cambiar clase en HTML</td>
+                            </tr>
+                            <tr>
+                                <td><code>.row / .col-md-*</code></td>
+                                <td>Grid Creator+</td>
+                                <td>Usar herramienta visual</td>
+                            </tr>
+                            <tr>
+                                <td><code>.btn-primary</code></td>
+                                <td><code>.d2l-button-primary</code></td>
+                                <td>Actualizar clases</td>
+                            </tr>
+                            <tr>
+                                <td><code>.alert-info</code></td>
+                                <td>Callout Component</td>
+                                <td>Recrear con Creator+</td>
+                            </tr>
+                            <tr>
+                                <td>jQuery animations</td>
+                                <td>CSS transitions</td>
+                                <td>Reescribir en CSS puro</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>Script de Compatibilidad Temporal</h4>
+                    <pre><code>/* Polyfill para mantener clases Bootstrap en V5 */
+&lt;style&gt;
+/* Mapeo de clases Bootstrap a equivalentes */
+.container-fluid { 
+    max-width: 100%; 
+    padding: 0 15px; 
+}
+
+.row { 
+    display: flex; 
+    flex-wrap: wrap; 
+    margin: 0 -15px; 
+}
+
+.col-md-6 { 
+    flex: 0 0 50%; 
+    padding: 0 15px; 
+}
+
+.btn-primary {
+    background: var(--d2l-color-primary);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
+/* Mantener videos responsivos */
+.embed-responsive {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+}
+
+.embed-responsive-16by9::before {
+    padding-top: 56.25%;
+    display: block;
+    content: "";
+}
+
+.embed-responsive-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+&lt;/style&gt;</code></pre>
+
+                    <div class="warning">
+                        <strong>Advertencia:</strong> Este código es una solución temporal. Planifica la migración completa a V5 nativo.
+                    </div>
+
+                    <h3>Checklist de Migración</h3>
+                    <ul>
+                        <li>☐ Backup completo del curso</li>
+                        <li>☐ Instalar plantilla V5</li>
+                        <li>☐ Mapear clases CSS personalizadas</li>
+                        <li>☐ Convertir componentes Bootstrap</li>
+                        <li>☐ Eliminar dependencias jQuery</li>
+                        <li>☐ Probar en múltiples dispositivos</li>
+                        <li>☐ Validar accesibilidad</li>
+                        <li>☐ Documentar cambios realizados</li>
+                    </ul>
+                </div>
+            </details>
+
+            <!-- SECCIÓN 9: RECURSOS RÁPIDOS -->
+            <details class="category-css">
+                <summary>📋 Referencia Rápida y Snippets</summary>
+                <div class="section-content">
+                    <h3>Snippets CSS Más Útiles</h3>
+                    
+                    <h4>Reset Básico Brightspace</h4>
+                    <pre><code>/* Reset para contenido Brightspace */
+.d2l-htmlblock {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+.d2l-htmlblock * {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.d2l-htmlblock img {
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}</code></pre>
+
+                    <h4>Clases Utility Personalizadas</h4>
+                    <pre><code>/* Espaciado rápido */
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+
+/* Alineación de texto */
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-justify { text-align: justify; }
+
+/* Visibilidad */
+.d-none { display: none; }
+.d-block { display: block; }
+.d-inline { display: inline; }
+.d-flex { display: flex; }
+
+/* Colores de fondo */
+.bg-light { background: #f8f9fa; }
+.bg-info { background: #e3f2fd; }
+.bg-warning { background: #fff3e0; }
+.bg-success { background: #e8f5e9; }</code></pre>
+
+                    <h4>Tabla Responsiva</h4>
+                    <pre><code>&lt;div class="table-responsive"&gt;
+    &lt;table class="custom-table"&gt;
+        &lt;thead&gt;
+            &lt;tr&gt;
+                &lt;th&gt;Columna 1&lt;/th&gt;
+                &lt;th&gt;Columna 2&lt;/th&gt;
+            &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+            &lt;tr&gt;
+                &lt;td&gt;Dato 1&lt;/td&gt;
+                &lt;td&gt;Dato 2&lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+&lt;/div&gt;
+
+&lt;style&gt;
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.custom-table th,
+.custom-table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.custom-table thead {
+    background: #f8f9fa;
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+    .custom-table {
+        font-size: 14px;
+    }
+    
+    .custom-table th,
+    .custom-table td {
+        padding: 8px;
+    }
+}
+&lt;/style&gt;</code></pre>
+
+                    <h4>Card Moderno</h4>
+                    <pre><code>&lt;div class="modern-card"&gt;
+    &lt;img src="imagen.jpg" alt="Descripción"&gt;
+    &lt;div class="card-content"&gt;
+        &lt;h3&gt;Título de la Card&lt;/h3&gt;
+        &lt;p&gt;Contenido de la tarjeta...&lt;/p&gt;
+        &lt;a href="#" class="card-link"&gt;Leer más&lt;/a&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;style&gt;
+.modern-card {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    margin: 20px 0;
+}
+
+.modern-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+}
+
+.modern-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 20px;
+}
+
+.card-link {
+    display: inline-block;
+    margin-top: 10px;
+    color: var(--d2l-color-primary, #0066cc);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.card-link:hover {
+    text-decoration: underline;
+}
+&lt;/style&gt;</code></pre>
+
+                    <h3>Atajos de Teclado del Editor</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Acción</th>
+                                <th>Windows/Linux</th>
+                                <th>Mac</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Negrita</td>
+                                <td>Ctrl + B</td>
+                                <td>Cmd + B</td>
+                            </tr>
+                            <tr>
+                                <td>Cursiva</td>
+                                <td>Ctrl + I</td>
+                                <td>Cmd + I</td>
+                            </tr>
+                            <tr>
+                                <td>Subrayado</td>
+                                <td>Ctrl + U</td>
+                                <td>Cmd + U</td>
+                            </tr>
+                            <tr>
+                                <td>Enlace</td>
+                                <td>Ctrl + K</td>
+                                <td>Cmd + K</td>
+                            </tr>
+                            <tr>
+                                <td>Código fuente</td>
+                                <td>Shift + Alt + F11</td>
+                                <td>Shift + Option + F11</td>
+                            </tr>
+                            <tr>
+                                <td>Pantalla completa</td>
+                                <td>F11</td>
+                                <td>Cmd + Ctrl + F</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </details>
+
+            <!-- SECCIÓN 10: CARACTERÍSTICAS ESPECIALES DE BRIGHTSPACE -->
+            <details class="category-creator">
+                <summary>✨ Características Especiales de Brightspace</summary>
+                <div class="section-content">
+                    <h3>Replace Strings (Cadenas de Reemplazo)</h3>
+                    <p>Variables dinámicas que se actualizan automáticamente:</p>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Variable</th>
+                                <th>Descripción</th>
+                                <th>Ejemplo de Salida</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>{OrgUnitName}</code></td>
+                                <td>Nombre del curso</td>
+                                <td>Matemáticas 101</td>
+                            </tr>
+                            <tr>
+                                <td><code>{OrgUnitCode}</code></td>
+                                <td>Código del curso</td>
+                                <td>MAT101-2024</td>
+                            </tr>
+                            <tr>
+                                <td><code>{UserName}</code></td>
+                                <td>Nombre del usuario</td>
+                                <td>María García</td>
+                            </tr>
+                            <tr>
+                                <td><code>{FirstName}</code></td>
+                                <td>Nombre de pila</td>
+                                <td>María</td>
+                            </tr>
+                            <tr>
+                                <td><code>{LastName}</code></td>
+                                <td>Apellido</td>
+                                <td>García</td>
+                            </tr>
+                            <tr>
+                                <td><code>{Email}</code></td>
+                                <td>Correo electrónico</td>
+                                <td>maria@universidad.edu</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <pre><code>&lt;!-- Ejemplo de uso --&gt;
+&lt;h1&gt;Bienvenido a {OrgUnitName}&lt;/h1&gt;
+&lt;p&gt;Hola {FirstName}, tu progreso en {OrgUnitCode} es excelente.&lt;/p&gt;</code></pre>
+
+                    <h3>Condiciones de Liberación (Release Conditions)</h3>
+                    <p>Aunque no son CSS, interactúan con el contenido visual:</p>
+                    <ul>
+                        <li>Mostrar/ocultar contenido basado en criterios</li>
+                        <li>Fechas de disponibilidad</li>
+                        <li>Progreso del estudiante</li>
+                        <li>Calificaciones obtenidas</li>
+                    </ul>
+
+                    <h3>Intelligent Agents (Agentes Inteligentes)</h3>
+                    <p>Pueden modificar la experiencia visual mediante:</p>
+                    <ul>
+                        <li>Notificaciones personalizadas</li>
+                        <li>Cambios de estado visual</li>
+                        <li>Badges y reconocimientos</li>
+                    </ul>
+
+                    <h3>Widget de Ecuaciones Matemáticas</h3>
+                    <pre><code>&lt;!-- MathML directo --&gt;
+&lt;math&gt;
+    &lt;mfrac&gt;
+        &lt;mn&gt;1&lt;/mn&gt;
+        &lt;mn&gt;2&lt;/mn&gt;
+    &lt;/mfrac&gt;
+&lt;/math&gt;
+
+&lt;!-- LaTeX con MathJax --&gt;
+&lt;script src="https://polyfill.io/v3/polyfill.min.js?features=es6"&gt;&lt;/script&gt;
+&lt;script id="MathJax-script" async 
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"&gt;
+&lt;/script&gt;
+
+&lt;p&gt;Ecuación inline: \( x = \frac{-b \pm \sqrt{b^2-4ac}}{2a} \)&lt;/p&gt;
+
+&lt;p&gt;Ecuación en bloque: 
+\[ \int_{a}^{b} f(x) dx = F(b) - F(a) \]&lt;/p&gt;</code></pre>
+
+                    <h3>Responsive Design Points</h3>
+                    <p>Breakpoints específicos de Brightspace:</p>
+                    <pre><code>/* Breakpoints de Brightspace */
+/* Móvil */
+@media (max-width: 615px) {
+    /* Estilos para móvil */
+}
+
+/* Tablet */
+@media (min-width: 616px) and (max-width: 991px) {
+    /* Estilos para tablet */
+}
+
+/* Desktop */
+@media (min-width: 992px) {
+    /* Estilos para escritorio */
+}
+
+/* Panel lateral colapsado */
+@media (max-width: 768px) {
+    .d2l-page-main {
+        margin-left: 0 !important;
+    }
+}</code></pre>
+
+                    <h3>Integración con LTI Tools</h3>
+                    <p>Consideraciones para herramientas externas:</p>
+                    <ul>
+                        <li>Los iframes LTI heredan algunos estilos del curso</li>
+                        <li>Usar <code>sandbox</code> attributes para aislar estilos</li>
+                        <li>Configurar altura dinámica con JavaScript</li>
+                    </ul>
+
+                    <pre><code>&lt;!-- iframe LTI responsivo --&gt;
+&lt;div class="lti-container"&gt;
+    &lt;iframe src="lti-tool-url" 
+            style="width: 100%; min-height: 600px;"
+            frameborder="0"
+            allowfullscreen&gt;
+    &lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;style&gt;
+.lti-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+&lt;/style&gt;</code></pre>
+                </div>
+            </details>
+
+        </div>
+
+        <footer>
+            <p>Manual creado para el Prof. José M. Fernández | Actualizado: 2024</p>
+            <p>Basado en las mejores prácticas de Brightspace y principios DUA</p>
+        </footer>
+    </div>
+</body>
+</html>
