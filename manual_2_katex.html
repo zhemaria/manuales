@@ -1,0 +1,1612 @@
+<!doctype html>
+<!--
+  Manual del Editor de KaTek
+  © José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago
+  Licencia: CC BY-NC-SA 4.0  ·  https://creativecommons.org/licenses/by-nc-sa/4.0/
+-->
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago" />
+    <meta name="license" content="CC BY-NC-SA 4.0" />
+    <link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" />
+
+    <title>Manual de Referencia KaTeX</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+      }
+
+      header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .subtitle {
+        font-size: 1.1em;
+        opacity: 0.9;
+      }
+
+      .accordion-container {
+        padding: 20px;
+      }
+
+      .accordion-item {
+        margin-bottom: 15px;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s;
+      }
+
+      .accordion-item:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .accordion-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 18px 25px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s;
+        user-select: none;
+      }
+
+      .accordion-header:hover {
+        background: linear-gradient(135deg, #5a67d8 0%, #6b4199 100%);
+      }
+
+      .accordion-header h3 {
+        font-size: 1.2em;
+        font-weight: 600;
+      }
+
+      .accordion-icon {
+        font-size: 1.5em;
+        transition: transform 0.3s;
+      }
+
+      .accordion-item.active .accordion-icon {
+        transform: rotate(180deg);
+      }
+
+      .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease-out;
+        background: white;
+      }
+
+      .accordion-item.active .accordion-content {
+        max-height: 5000px; /* Aumentado para listas largas */
+        transition: max-height 0.6s ease-in;
+      }
+
+      .content-list {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .symbol-card {
+        background: #f8f9fa;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 10px 15px;
+        transition: all 0.3s;
+        cursor: pointer;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+      }
+
+      .symbol-card:hover {
+        background: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .symbol-name {
+        flex-basis: 25%;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 1em;
+        font-weight: 500;
+        color: #333;
+        word-break: break-all;
+      }
+
+      .symbol-code {
+        flex-grow: 1;
+        background: #282c34;
+        color: #fbfb61;
+        padding: 8px;
+        border-radius: 4px;
+        font-family: 'Courier New', monospace;
+        font-size: 1em;
+        text-align: left;
+        word-break: break-all;
+      }
+
+      .symbol-display {
+        flex-basis: 15%;
+        font-size: 1.5em;
+        text-align: right;
+        margin-bottom: 0;
+        min-height: 30px; /* Asegura altura mínima para el renderizado */
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+      }
+
+      .copy-notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #4caf50;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: all 0.3s;
+        z-index: 1000;
+      }
+
+      .copy-notification.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (max-width: 768px) {
+        .symbol-card {
+          flex-wrap: wrap;
+          padding: 12px;
+        }
+        .symbol-name {
+          flex-basis: 100%;
+          text-align: left;
+          font-weight: 600;
+          margin-bottom: 5px;
+        }
+        .symbol-code {
+          flex-basis: 60%;
+          font-size: 0.9em;
+        }
+        .symbol-display {
+          flex-basis: 30%;
+          font-size: 1.3em;
+          justify-content: flex-end;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Manual de Referencia 📐 KaTeX</h1>
+        <p class="subtitle">Encuentra rápidamente símbolos y funciones matemáticas</p>
+      </header>
+
+      <div class="accordion-container">
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>Letras Griegas</h3>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="content-list">
+              <div class="symbol-card" onclick="copyToClipboard('\\alpha')">
+                <div class="symbol-name">alpha</div>
+                <div class="symbol-code">\\alpha</div>
+                <div class="symbol-display katex-render">\\alpha</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\beta')">
+                <div class="symbol-name">beta</div>
+                <div class="symbol-code">\\beta</div>
+                <div class="symbol-display katex-render">\\beta</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\gamma')">
+                <div class="symbol-name">gamma</div>
+                <div class="symbol-code">\\gamma</div>
+                <div class="symbol-display katex-render">\\gamma</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\delta')">
+                <div class="symbol-name">delta</div>
+                <div class="symbol-code">\\delta</div>
+                <div class="symbol-display katex-render">\\delta</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\epsilon')">
+                <div class="symbol-name">epsilon</div>
+                <div class="symbol-code">\\epsilon</div>
+                <div class="symbol-display katex-render">\\epsilon</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\zeta')">
+                <div class="symbol-name">zeta</div>
+                <div class="symbol-code">\\zeta</div>
+                <div class="symbol-display katex-render">\\zeta</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\eta')">
+                <div class="symbol-name">eta</div>
+                <div class="symbol-code">\\eta</div>
+                <div class="symbol-display katex-render">\\eta</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\theta')">
+                <div class="symbol-name">theta</div>
+                <div class="symbol-code">\\theta</div>
+                <div class="symbol-display katex-render">\\theta</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\iota')">
+                <div class="symbol-name">iota</div>
+                <div class="symbol-code">\\iota</div>
+                <div class="symbol-display katex-render">\\iota</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\kappa')">
+                <div class="symbol-name">kappa</div>
+                <div class="symbol-code">\\kappa</div>
+                <div class="symbol-display katex-render">\\kappa</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\lambda')">
+                <div class="symbol-name">lambda</div>
+                <div class="symbol-code">\\lambda</div>
+                <div class="symbol-display katex-render">\\lambda</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\mu')">
+                <div class="symbol-name">mu</div>
+                <div class="symbol-code">\\mu</div>
+                <div class="symbol-display katex-render">\\mu</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\nu')">
+                <div class="symbol-name">nu</div>
+                <div class="symbol-code">\\nu</div>
+                <div class="symbol-display katex-render">\\nu</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\xi')">
+                <div class="symbol-name">xi</div>
+                <div class="symbol-code">\\xi</div>
+                <div class="symbol-display katex-render">\\xi</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\pi')">
+                <div class="symbol-name">pi</div>
+                <div class="symbol-code">\\pi</div>
+                <div class="symbol-display katex-render">\\pi</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\rho')">
+                <div class="symbol-name">rho</div>
+                <div class="symbol-code">\\rho</div>
+                <div class="symbol-display katex-render">\\rho</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\sigma')">
+                <div class="symbol-name">sigma</div>
+                <div class="symbol-code">\\sigma</div>
+                <div class="symbol-display katex-render">\\sigma</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\tau')">
+                <div class="symbol-name">tau</div>
+                <div class="symbol-code">\\tau</div>
+                <div class="symbol-display katex-render">\\tau</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\phi')">
+                <div class="symbol-name">phi</div>
+                <div class="symbol-code">\\phi</div>
+                <div class="symbol-display katex-render">\\phi</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\chi')">
+                <div class="symbol-name">chi</div>
+                <div class="symbol-code">\\chi</div>
+                <div class="symbol-display katex-render">\\chi</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\psi')">
+                <div class="symbol-name">psi</div>
+                <div class="symbol-code">\\psi</div>
+                <div class="symbol-display katex-render">\\psi</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\omega')">
+                <div class="symbol-name">omega</div>
+                <div class="symbol-code">\\omega</div>
+                <div class="symbol-display katex-render">\\omega</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\Gamma')">
+                <div class="symbol-name">Gamma</div>
+                <div class="symbol-code">\\Gamma</div>
+                <div class="symbol-display katex-render">\\Gamma</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\Delta')">
+                <div class="symbol-name">Delta</div>
+                <div class="symbol-code">\\Delta</div>
+                <div class="symbol-display katex-render">\\Delta</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\Theta')">
+                <div class="symbol-name">Theta</div>
+                <div class="symbol-code">\\Theta</div>
+                <div class="symbol-display katex-render">\\Theta</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\Lambda')">
+                <div class="symbol-name">Lambda</div>
+                <div class="symbol-code">\\Lambda</div>
+                <div class="symbol-display katex-render">\\Lambda</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\Xi')">
+                <div class="symbol-name">Xi</div>
+                <div class="symbol-code">\\Xi</div>
+                <div class="symbol-display katex-render">\\Xi</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\Pi')">
+                <div class="symbol-name">Pi</div>
+                <div class="symbol-code">\\Pi</div>
+                <div class="symbol-display katex-render">\\Pi</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\Sigma')">
+                <div class="symbol-name">Sigma</div>
+                <div class="symbol-code">\\Sigma</div>
+                <div class="symbol-display katex-render">\\Sigma</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\Phi')">
+                <div class="symbol-name">Phi</div>
+                <div class="symbol-code">\\Phi</div>
+                <div class="symbol-display katex-render">\\Phi</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\Psi')">
+                <div class="symbol-name">Psi</div>
+                <div class="symbol-code">\\Psi</div>
+                <div class="symbol-display katex-render">\\Psi</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\Omega')">
+                <div class="symbol-name">Omega</div>
+                <div class="symbol-code">\\Omega</div>
+                <div class="symbol-display katex-render">\\Omega</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>Operadores Básicos</h3>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="content-list">
+              <div class="symbol-card" onclick="copyToClipboard('+')">
+                <div class="symbol-name">+</div>
+                <div class="symbol-code">+</div>
+                <div class="symbol-display katex-render">+</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('-')">
+                <div class="symbol-name">-</div>
+                <div class="symbol-code">-</div>
+                <div class="symbol-display katex-render">-</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\times')">
+                <div class="symbol-name">times</div>
+                <div class="symbol-code">\\times</div>
+                <div class="symbol-display katex-render">\\times</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\div')">
+                <div class="symbol-name">div</div>
+                <div class="symbol-code">\\div</div>
+                <div class="symbol-display katex-render">\\div</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\pm')">
+                <div class="symbol-name">pm</div>
+                <div class="symbol-code">\\pm</div>
+                <div class="symbol-display katex-render">\\pm</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\mp')">
+                <div class="symbol-name">mp</div>
+                <div class="symbol-code">\\mp</div>
+                <div class="symbol-display katex-render">\\mp</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\cdot')">
+                <div class="symbol-name">cdot</div>
+                <div class="symbol-code">\\cdot</div>
+                <div class="symbol-display katex-render">\\cdot</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\ast')">
+                <div class="symbol-name">ast</div>
+                <div class="symbol-code">\\ast</div>
+                <div class="symbol-display katex-render">\\ast</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\star')">
+                <div class="symbol-name">star</div>
+                <div class="symbol-code">\\star</div>
+                <div class="symbol-display katex-render">\\star</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\circ')">
+                <div class="symbol-name">circ</div>
+                <div class="symbol-code">\\circ</div>
+                <div class="symbol-display katex-render">\\circ</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\bullet')">
+                <div class="symbol-name">bullet</div>
+                <div class="symbol-code">\\bullet</div>
+                <div class="symbol-display katex-render">\\bullet</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\oplus')">
+                <div class="symbol-name">oplus</div>
+                <div class="symbol-code">\\oplus</div>
+                <div class="symbol-display katex-render">\\oplus</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\ominus')">
+                <div class="symbol-name">ominus</div>
+                <div class="symbol-code">\\ominus</div>
+                <div class="symbol-display katex-render">\\ominus</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\otimes')">
+                <div class="symbol-name">otimes</div>
+                <div class="symbol-code">\\otimes</div>
+                <div class="symbol-display katex-render">\\otimes</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\oslash')">
+                <div class="symbol-name">oslash</div>
+                <div class="symbol-code">\\oslash</div>
+                <div class="symbol-display katex-render">\\oslash</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\odot')">
+                <div class="symbol-name">odot</div>
+                <div class="symbol-code">\\odot</div>
+                <div class="symbol-display katex-render">\\odot</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>Símbolos de Relación</h3>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="content-list">
+              <div class="symbol-card" onclick="copyToClipboard('=')">
+                <div class="symbol-name">=</div>
+                <div class="symbol-code">=</div>
+                <div class="symbol-display katex-render">=</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\neq')">
+                <div class="symbol-name">neq</div>
+                <div class="symbol-code">\\neq</div>
+                <div class="symbol-display katex-render">\\neq</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\approx')">
+                <div class="symbol-name">approx</div>
+                <div class="symbol-code">\\approx</div>
+                <div class="symbol-display katex-render">\\approx</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\sim')">
+                <div class="symbol-name">sim</div>
+                <div class="symbol-code">\\sim</div>
+                <div class="symbol-display katex-render">\\sim</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\simeq')">
+                <div class="symbol-name">simeq</div>
+                <div class="symbol-code">\\simeq</div>
+                <div class="symbol-display katex-render">\\simeq</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\cong')">
+                <div class="symbol-name">cong</div>
+                <div class="symbol-code">\\cong</div>
+                <div class="symbol-display katex-render">\\cong</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\equiv')">
+                <div class="symbol-name">equiv</div>
+                <div class="symbol-code">\\equiv</div>
+                <div class="symbol-display katex-render">\\equiv</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\lt')">
+                <div class="symbol-name">lt</div>
+                <div class="symbol-code">\\lt</div>
+                <div class="symbol-display katex-render">\\lt</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\gt')">
+                <div class="symbol-name">gt</div>
+                <div class="symbol-code">\\gt</div>
+                <div class="symbol-display katex-render">\\gt</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\leq')">
+                <div class="symbol-name">leq</div>
+                <div class="symbol-code">\\leq</div>
+                <div class="symbol-display katex-render">\\leq</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\geq')">
+                <div class="symbol-name">geq</div>
+                <div class="symbol-code">\\geq</div>
+                <div class="symbol-display katex-render">\\geq</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\ll')">
+                <div class="symbol-name">ll</div>
+                <div class="symbol-code">\\ll</div>
+                <div class="symbol-display katex-render">\\ll</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\gg')">
+                <div class="symbol-name">gg</div>
+                <div class="symbol-code">\\gg</div>
+                <div class="symbol-display katex-render">\\gg</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\prec')">
+                <div class="symbol-name">prec</div>
+                <div class="symbol-code">\\prec</div>
+                <div class="symbol-display katex-render">\\prec</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\succ')">
+                <div class="symbol-name">succ</div>
+                <div class="symbol-code">\\succ</div>
+                <div class="symbol-display katex-render">\\succ</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\preceq')">
+                <div class="symbol-name">preceq</div>
+                <div class="symbol-code">\\preceq</div>
+                <div class="symbol-display katex-render">\\preceq</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\succeq')">
+                <div class="symbol-name">succeq</div>
+                <div class="symbol-code">\\succeq</div>
+                <div class="symbol-display katex-render">\\succeq</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\propto')">
+                <div class="symbol-name">propto</div>
+                <div class="symbol-code">\\propto</div>
+                <div class="symbol-display katex-render">\\propto</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>Flechas</h3>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="content-list">
+              <div class="symbol-card" onclick="copyToClipboard('\\leftarrow')">
+                <div class="symbol-name">leftarrow</div>
+                <div class="symbol-code">\\leftarrow</div>
+                <div class="symbol-display katex-render">\\leftarrow</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\rightarrow')">
+                <div class="symbol-name">rightarrow</div>
+                <div class="symbol-code">\\rightarrow</div>
+                <div class="symbol-display katex-render">\\rightarrow</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\leftrightarrow')">
+                <div class="symbol-name">leftrightarrow</div>
+                <div class="symbol-code">\\leftrightarrow</div>
+                <div class="symbol-display katex-render">\\leftrightarrow</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\Leftarrow')">
+                <div class="symbol-name">Leftarrow</div>
+                <div class="symbol-code">\\Leftarrow</div>
+                <div class="symbol-display katex-render">\\Leftarrow</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\Rightarrow')">
+                <div class="symbol-name">Rightarrow</div>
+                <div class="symbol-code">\\Rightarrow</div>
+                <div class="symbol-display katex-render">\\Rightarrow</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\Leftrightarrow')">
+                <div class="symbol-name">Leftrightarrow</div>
+                <div class="symbol-code">\\Leftrightarrow</div>
+                <div class="symbol-display katex-render">\\Leftrightarrow</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\uparrow')">
+                <div class="symbol-name">uparrow</div>
+                <div class="symbol-code">\\uparrow</div>
+                <div class="symbol-display katex-render">\\uparrow</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\downarrow')">
+                <div class="symbol-name">downarrow</div>
+                <div class="symbol-code">\\downarrow</div>
+                <div class="symbol-display katex-render">\\downarrow</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\updownarrow')">
+                <div class="symbol-name">updownarrow</div>
+                <div class="symbol-code">\\updownarrow</div>
+                <div class="symbol-display katex-render">\\updownarrow</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\Uparrow')">
+                <div class="symbol-name">Uparrow</div>
+                <div class="symbol-code">\\Uparrow</div>
+                <div class="symbol-display katex-render">\\Uparrow</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\Downarrow')">
+                <div class="symbol-name">Downarrow</div>
+                <div class="symbol-code">\\Downarrow</div>
+                <div class="symbol-display katex-render">\\Downarrow</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\Updownarrow')">
+                <div class="symbol-name">Updownarrow</div>
+                <div class="symbol-code">\\Updownarrow</div>
+                <div class="symbol-display katex-render">\\Updownarrow</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\mapsto')">
+                <div class="symbol-name">mapsto</div>
+                <div class="symbol-code">\\mapsto</div>
+                <div class="symbol-display katex-render">\\mapsto</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\to')">
+                <div class="symbol-name">to</div>
+                <div class="symbol-code">\\to</div>
+                <div class="symbol-display katex-render">\\to</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\gets')">
+                <div class="symbol-name">gets</div>
+                <div class="symbol-code">\\gets</div>
+                <div class="symbol-display katex-render">\\gets</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\iff')">
+                <div class="symbol-name">iff</div>
+                <div class="symbol-code">\\iff</div>
+                <div class="symbol-display katex-render">\\iff</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\implies')">
+                <div class="symbol-name">implies</div>
+                <div class="symbol-code">\\implies</div>
+                <div class="symbol-display katex-render">\\implies</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\impliedby')">
+                <div class="symbol-name">impliedby</div>
+                <div class="symbol-code">\\impliedby</div>
+                <div class="symbol-display katex-render">\\impliedby</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>Funciones Matemáticas</h3>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="content-list">
+              <div class="symbol-card" onclick="copyToClipboard('\\sin')">
+                <div class="symbol-name">sin</div>
+                <div class="symbol-code">\\sin</div>
+                <div class="symbol-display katex-render">\\sin</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\cos')">
+                <div class="symbol-name">cos</div>
+                <div class="symbol-code">\\cos</div>
+                <div class="symbol-display katex-render">\\cos</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\tan')">
+                <div class="symbol-name">tan</div>
+                <div class="symbol-code">\\tan</div>
+                <div class="symbol-display katex-render">\\tan</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\cot')">
+                <div class="symbol-name">cot</div>
+                <div class="symbol-code">\\cot</div>
+                <div class="symbol-display katex-render">\\cot</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\sec')">
+                <div class="symbol-name">sec</div>
+                <div class="symbol-code">\\sec</div>
+                <div class="symbol-display katex-render">\\sec</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\csc')">
+                <div class="symbol-name">csc</div>
+                <div class="symbol-code">\\csc</div>
+                <div class="symbol-display katex-render">\\csc</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\arcsin')">
+                <div class="symbol-name">arcsin</div>
+                <div class="symbol-code">\\arcsin</div>
+                <div class="symbol-display katex-render">\\arcsin</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\arccos')">
+                <div class="symbol-name">arccos</div>
+                <div class="symbol-code">\\arccos</div>
+                <div class="symbol-display katex-render">\\arccos</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\arctan')">
+                <div class="symbol-name">arctan</div>
+                <div class="symbol-code">\\arctan</div>
+                <div class="symbol-display katex-render">\\arctan</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\sinh')">
+                <div class="symbol-name">sinh</div>
+                <div class="symbol-code">\\sinh</div>
+                <div class="symbol-display katex-render">\\sinh</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\cosh')">
+                <div class="symbol-name">cosh</div>
+                <div class="symbol-code">\\cosh</div>
+                <div class="symbol-display katex-render">\\cosh</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\tanh')">
+                <div class="symbol-name">tanh</div>
+                <div class="symbol-code">\\tanh</div>
+                <div class="symbol-display katex-render">\\tanh</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\log')">
+                <div class="symbol-name">log</div>
+                <div class="symbol-code">\\log</div>
+                <div class="symbol-display katex-render">\\log</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\ln')">
+                <div class="symbol-name">ln</div>
+                <div class="symbol-code">\\ln</div>
+                <div class="symbol-display katex-render">\\ln</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\lg')">
+                <div class="symbol-name">lg</div>
+                <div class="symbol-code">\\lg</div>
+                <div class="symbol-display katex-render">\\lg</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\exp')">
+                <div class="symbol-name">exp</div>
+                <div class="symbol-code">\\exp</div>
+                <div class="symbol-display katex-render">\\exp</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\lim')">
+                <div class="symbol-name">lim</div>
+                <div class="symbol-code">\\lim</div>
+                <div class="symbol-display katex-render">\\lim</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\min')">
+                <div class="symbol-name">min</div>
+                <div class="symbol-code">\\min</div>
+                <div class="symbol-display katex-render">\\min</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\max')">
+                <div class="symbol-name">max</div>
+                <div class="symbol-code">\\max</div>
+                <div class="symbol-display katex-render">\\max</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\sup')">
+                <div class="symbol-name">sup</div>
+                <div class="symbol-code">\\sup</div>
+                <div class="symbol-display katex-render">\\sup</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\inf')">
+                <div class="symbol-name">inf</div>
+                <div class="symbol-code">\\inf</div>
+                <div class="symbol-display katex-render">\\inf</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\det')">
+                <div class="symbol-name">det</div>
+                <div class="symbol-code">\\det</div>
+                <div class="symbol-display katex-render">\\det</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\dim')">
+                <div class="symbol-name">dim</div>
+                <div class="symbol-code">\\dim</div>
+                <div class="symbol-display katex-render">\\dim</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\deg')">
+                <div class="symbol-name">deg</div>
+                <div class="symbol-code">\\deg</div>
+                <div class="symbol-display katex-render">\\deg</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\gcd')">
+                <div class="symbol-name">gcd</div>
+                <div class="symbol-code">\\gcd</div>
+                <div class="symbol-display katex-render">\\gcd</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>Fracciones y Raíces</h3>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="content-list">
+              <div class="symbol-card" onclick="copyToClipboard('\\frac{a}{b}')">
+                <div class="symbol-name">frac{a}{b}</div>
+                <div class="symbol-code">\\frac{a}{b}</div>
+                <div class="symbol-display katex-render">\\frac{a}{b}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\dfrac{a}{b}')">
+                <div class="symbol-name">dfrac{a}{b}</div>
+                <div class="symbol-code">\\dfrac{a}{b}</div>
+                <div class="symbol-display katex-render">\\dfrac{a}{b}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\tfrac{a}{b}')">
+                <div class="symbol-name">tfrac{a}{b}</div>
+                <div class="symbol-code">\\tfrac{a}{b}</div>
+                <div class="symbol-display katex-render">\\tfrac{a}{b}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\sqrt{x}')">
+                <div class="symbol-name">sqrt{x}</div>
+                <div class="symbol-code">\\sqrt{x}</div>
+                <div class="symbol-display katex-render">\\sqrt{x}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\sqrt[n]{x}')">
+                <div class="symbol-name">sqrt[n]{x}</div>
+                <div class="symbol-code">\\sqrt[n]{x}</div>
+                <div class="symbol-display katex-render">\\sqrt[n]{x}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\cfrac{a}{b}')">
+                <div class="symbol-name">cfrac{a}{b}</div>
+                <div class="symbol-code">\\cfrac{a}{b}</div>
+                <div class="symbol-display katex-render">\\cfrac{a}{b}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\binom{n}{k}')">
+                <div class="symbol-name">binom{n}{k}</div>
+                <div class="symbol-code">\\binom{n}{k}</div>
+                <div class="symbol-display katex-render">\\binom{n}{k}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>Sumas, Productos e Integrales</h3>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="content-list">
+              <div class="symbol-card" onclick="copyToClipboard('\\sum_{i=1}^{n}')">
+                <div class="symbol-name">sum_{i=1}^{n}</div>
+                <div class="symbol-code">\\sum_{i=1}^{n}</div>
+                <div class="symbol-display katex-render">\\sum_{i=1}^{n}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\prod_{i=1}^{n}')">
+                <div class="symbol-name">prod_{i=1}^{n}</div>
+                <div class="symbol-code">\\prod_{i=1}^{n}</div>
+                <div class="symbol-display katex-render">\\prod_{i=1}^{n}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\int_{a}^{b}')">
+                <div class="symbol-name">int_{a}^{b}</div>
+                <div class="symbol-code">\\int_{a}^{b}</div>
+                <div class="symbol-display katex-render">\\int_{a}^{b}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\oint')">
+                <div class="symbol-name">oint</div>
+                <div class="symbol-code">\\oint</div>
+                <div class="symbol-display katex-render">\\oint</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\iint')">
+                <div class="symbol-name">iint</div>
+                <div class="symbol-code">\\iint</div>
+                <div class="symbol-display katex-render">\\iint</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\iiint')">
+                <div class="symbol-name">iiint</div>
+                <div class="symbol-code">\\iiint</div>
+                <div class="symbol-display katex-render">\\iiint</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\bigcap_{i=1}^{n}')">
+                <div class="symbol-name">bigcap_{i=1}^{n}</div>
+                <div class="symbol-code">\\bigcap_{i=1}^{n}</div>
+                <div class="symbol-display katex-render">\\bigcap_{i=1}^{n}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\bigcup_{i=1}^{n}')">
+                <div class="symbol-name">bigcup_{i=1}^{n}</div>
+                <div class="symbol-code">\\bigcup_{i=1}^{n}</div>
+                <div class="symbol-display katex-render">\\bigcup_{i=1}^{n}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\coprod_{i=1}^{n}')">
+                <div class="symbol-name">coprod_{i=1}^{n}</div>
+                <div class="symbol-code">\\coprod_{i=1}^{n}</div>
+                <div class="symbol-display katex-render">\\coprod_{i=1}^{n}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\bigvee')">
+                <div class="symbol-name">bigvee</div>
+                <div class="symbol-code">\\bigvee</div>
+                <div class="symbol-display katex-render">\\bigvee</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\bigwedge')">
+                <div class="symbol-name">bigwedge</div>
+                <div class="symbol-code">\\bigwedge</div>
+                <div class="symbol-display katex-render">\\bigwedge</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>Paréntesis y Delimitadores</h3>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="content-list">
+              <div class="symbol-card" onclick="copyToClipboard('()')">
+                <div class="symbol-name">Paréntesis</div>
+                <div class="symbol-code">()</div>
+                <div class="symbol-display katex-render">()</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('[]')">
+                <div class="symbol-name">Corchetes</div>
+                <div class="symbol-code">[]</div>
+                <div class="symbol-display katex-render">[]</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\{\\}')">
+                <div class="symbol-name">Llaves</div>
+                <div class="symbol-code">\\{\\}</div>
+                <div class="symbol-display katex-render">\\{\\}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\langle\\rangle')">
+                <div class="symbol-name">Paréntesis angulares</div>
+                <div class="symbol-code">\\langle\\rangle</div>
+                <div class="symbol-display katex-render">\\langle\\rangle</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\lceil\\rceil')">
+                <div class="symbol-name">Techo (Ceil)</div>
+                <div class="symbol-code">\\lceil\\rceil</div>
+                <div class="symbol-display katex-render">\\lceil\\rceil</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\lfloor\\rfloor')">
+                <div class="symbol-name">Piso (Floor)</div>
+                <div class="symbol-code">\\lfloor\\rfloor</div>
+                <div class="symbol-display katex-render">\\lfloor\\rfloor</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\left( \\frac{a}{b} \\right)')">
+                <div class="symbol-name">Ajuste automático</div>
+                <div class="symbol-code">\\left( ... \\right)</div>
+                <div class="symbol-display katex-render">\\left( \\frac{a}{b} \\right)</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\left[ \\frac{a}{b} \\right]')">
+                <div class="symbol-name">Ajuste automático</div>
+                <div class="symbol-code">\\left[ ... \\right]</div>
+                <div class="symbol-display katex-render">\\left[ \\frac{a}{b} \\right]</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\left\\{ \\frac{a}{b} \\right\\}')">
+                <div class="symbol-name">Ajuste automático</div>
+                <div class="symbol-code">\\left\\{ ... \\right\\}</div>
+                <div class="symbol-display katex-render">\\left\\{ \\frac{a}{b} \\right\\}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\left| \\frac{a}{b} \\right|')">
+                <div class="symbol-name">Ajuste automático</div>
+                <div class="symbol-code">\\left| ... \\right|</div>
+                <div class="symbol-display katex-render">\\left| \\frac{a}{b} \\right|</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\left\\| \\frac{a}{b} \\right\\|')">
+                <div class="symbol-name">Ajuste automático</div>
+                <div class="symbol-code">\\left\\| ... \\right\\|</div>
+                <div class="symbol-display katex-render">\\left\\| \\frac{a}{b} \\right\\|</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>Acentos y Decoraciones</h3>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="content-list">
+              <div class="symbol-card" onclick="copyToClipboard('\\hat{a}')">
+                <div class="symbol-name">hat</div>
+                <div class="symbol-code">\\hat{a}</div>
+                <div class="symbol-display katex-render">\\hat{a}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\check{a}')">
+                <div class="symbol-name">check</div>
+                <div class="symbol-code">\\check{a}</div>
+                <div class="symbol-display katex-render">\\check{a}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\tilde{a}')">
+                <div class="symbol-name">tilde</div>
+                <div class="symbol-code">\\tilde{a}</div>
+                <div class="symbol-display katex-render">\\tilde{a}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\acute{a}')">
+                <div class="symbol-name">acute</div>
+                <div class="symbol-code">\\acute{a}</div>
+                <div class="symbol-display katex-render">\\acute{a}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\grave{a}')">
+                <div class="symbol-name">grave</div>
+                <div class="symbol-code">\\grave{a}</div>
+                <div class="symbol-display katex-render">\\grave{a}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\dot{a}')">
+                <div class="symbol-name">dot</div>
+                <div class="symbol-code">\\dot{a}</div>
+                <div class="symbol-display katex-render">\\dot{a}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\ddot{a}')">
+                <div class="symbol-name">ddot</div>
+                <div class="symbol-code">\\ddot{a}</div>
+                <div class="symbol-display katex-render">\\ddot{a}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\breve{a}')">
+                <div class="symbol-name">breve</div>
+                <div class="symbol-code">\\breve{a}</div>
+                <div class="symbol-display katex-render">\\breve{a}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\bar{a}')">
+                <div class="symbol-name">bar</div>
+                <div class="symbol-code">\\bar{a}</div>
+                <div class="symbol-display katex-render">\\bar{a}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\vec{a}')">
+                <div class="symbol-name">vec</div>
+                <div class="symbol-code">\\vec{a}</div>
+                <div class="symbol-display katex-render">\\vec{a}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\overline{abc}')">
+                <div class="symbol-name">overline</div>
+                <div class="symbol-code">\\overline{abc}</div>
+                <div class="symbol-display katex-render">\\overline{abc}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\underline{abc}')">
+                <div class="symbol-name">underline</div>
+                <div class="symbol-code">\\underline{abc}</div>
+                <div class="symbol-display katex-render">\\underline{abc}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\overbrace{abc}')">
+                <div class="symbol-name">overbrace</div>
+                <div class="symbol-code">\\overbrace{abc}</div>
+                <div class="symbol-display katex-render">\\overbrace{abc}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\underbrace{abc}')">
+                <div class="symbol-name">underbrace</div>
+                <div class="symbol-code">\\underbrace{abc}</div>
+                <div class="symbol-display katex-render">\\underbrace{abc}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\widehat{abc}')">
+                <div class="symbol-name">widehat</div>
+                <div class="symbol-code">\\widehat{abc}</div>
+                <div class="symbol-display katex-render">\\widehat{abc}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\widetilde{abc}')">
+                <div class="symbol-name">widetilde</div>
+                <div class="symbol-code">\\widetilde{abc}</div>
+                <div class="symbol-display katex-render">\\widetilde{abc}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>Teoría de Conjuntos y Lógica</h3>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="content-list">
+              <div class="symbol-card" onclick="copyToClipboard('\\in')">
+                <div class="symbol-name">in</div>
+                <div class="symbol-code">\\in</div>
+                <div class="symbol-display katex-render">\\in</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\notin')">
+                <div class="symbol-name">notin</div>
+                <div class="symbol-code">\\notin</div>
+                <div class="symbol-display katex-render">\\notin</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\subset')">
+                <div class="symbol-name">subset</div>
+                <div class="symbol-code">\\subset</div>
+                <div class="symbol-display katex-render">\\subset</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\supset')">
+                <div classs="symbol-name">supset</div>
+                <div class="symbol-code">\\supset</div>
+                <div class="symbol-display katex-render">\\supset</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\subseteq')">
+                <div class="symbol-name">subseteq</div>
+                <div class="symbol-code">\\subseteq</div>
+                <div class="symbol-display katex-render">\\subseteq</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\supseteq')">
+                <div class="symbol-name">supseteq</div>
+                <div class="symbol-code">\\supseteq</div>
+                <div class="symbol-display katex-render">\\supseteq</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\cap')">
+                <div class="symbol-name">cap</div>
+                <div class="symbol-code">\\cap</div>
+                <div class="symbol-display katex-render">\\cap</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\cup')">
+                <div classs="symbol-name">cup</div>
+                <div class="symbol-code">\\cup</div>
+                <div class="symbol-display katex-render">\\cup</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\emptyset')">
+                <div class="symbol-name">emptyset</div>
+                <div class="symbol-code">\\emptyset</div>
+                <div class="symbol-display katex-render">\\emptyset</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\varnothing')">
+                <div classs="symbol-name">varnothing</div>
+                <div class="symbol-code">\\varnothing</div>
+                <div class="symbol-display katex-render">\\varnothing</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\exists')">
+                <div class="symbol-name">exists</div>
+                <div class="symbol-code">\\exists</div>
+                <div class="symbol-display katex-render">\\exists</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\forall')">
+                <div class="symbol-name">forall</div>
+                <div class="symbol-code">\\forall</div>
+                <div class="symbol-display katex-render">\\forall</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\nexists')">
+                <div class="symbol-name">nexists</div>
+                <div class="symbol-code">\\nexists</div>
+                <div class="symbol-display katex-render">\\nexists</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\neg')">
+                <div class="symbol-name">neg</div>
+                <div class="symbol-code">\\neg</div>
+                <div class="symbol-display katex-render">\\neg</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\land')">
+                <div classs="symbol-name">land</div>
+                <div class="symbol-code">\\land</div>
+                <div class="symbol-display katex-render">\\land</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\lor')">
+                <div class="symbol-name">lor</div>
+                <div class="symbol-code">\\lor</div>
+                <div class="symbol-display katex-render">\\lor</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\therefore')">
+                <div class="symbol-name">therefore</div>
+                <div class="symbol-code">\\therefore</div>
+                <div class="symbol-display katex-render">\\therefore</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\because')">
+                <div class="symbol-name">because</div>
+                <div class="symbol-code">\\because</div>
+                <div class="symbol-display katex-render">\\because</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\vee')">
+                <div class="symbol-name">vee</div>
+                <div class="symbol-code">\\vee</div>
+                <div class="symbol-display katex-render">\\vee</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\wedge')">
+                <div class="symbol-name">wedge</div>
+                <div class="symbol-code">\\wedge</div>
+                <div class="symbol-display katex-render">\\wedge</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>Símbolos Especiales</h3>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="content-list">
+              <div class="symbol-card" onclick="copyToClipboard('\\infty')">
+                <div class="symbol-name">infty</div>
+                <div class="symbol-code">\\infty</div>
+                <div class="symbol-display katex-render">\\infty</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\partial')">
+                <div class="symbol-name">partial</div>
+                <div classs="symbol-code">\\partial</div>
+                <div class="symbol-display katex-render">\\partial</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\nabla')">
+                <div class="symbol-name">nabla</div>
+                <div class="symbol-code">\\nabla</div>
+                <div class="symbol-display katex-render">\\nabla</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\triangle')">
+                <div class="symbol-name">triangle</div>
+                <div classs="symbol-code">\\triangle</div>
+                <div class="symbol-display katex-render">\\triangle</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\angle')">
+                <div class="symbol-name">angle</div>
+                <div class="symbol-code">\\angle</div>
+                <div class="symbol-display katex-render">\\angle</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\perp')">
+                <div class="symbol-name">perp</div>
+                <div class="symbol-code">\\perp</div>
+                <div class="symbol-display katex-render">\\perp</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\parallel')">
+                <div class="symbol-name">parallel</div>
+                <div class="symbol-code">\\parallel</div>
+                <div class="symbol-display katex-render">\\parallel</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\square')">
+                <div classs="symbol-name">square</div>
+                <div class="symbol-code">\\square</div>
+                <div class="symbol-display katex-render">\\square</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\blacksquare')">
+                <div classs="symbol-name">blacksquare</div>
+                <div class="symbol-code">\\blacksquare</div>
+                <div class="symbol-display katex-render">\\blacksquare</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\diamond')">
+                <div classs="symbol-name">diamond</div>
+                <div class="symbol-code">\\diamond</div>
+                <div class="symbol-display katex-render">\\diamond</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\clubsuit')">
+                <div classs="symbol-name">clubsuit</div>
+                <div class="symbol-code">\\clubsuit</div>
+                <div class="symbol-display katex-render">\\clubsuit</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\diamondsuit')">
+                <div classs="symbol-name">diamondsuit</div>
+                <div class="symbol-code">\\diamondsuit</div>
+                <div class="symbol-display katex-render">\\diamondsuit</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\heartsuit')">
+                <div classs="symbol-name">heartsuit</div>
+                <div class="symbol-code">\\heartsuit</div>
+                <div class="symbol-display katex-render">\\heartsuit</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\spadesuit')">
+                <div classs="symbol-name">spadesuit</div>
+                <div class="symbol-code">\\spadesuit</div>
+                <div class="symbol-display katex-render">\\spadesuit</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\ldots')">
+                <div class="symbol-name">ldots</div>
+                <div class="symbol-code">\\ldots</div>
+                <div class="symbol-display katex-render">\\ldots</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\cdots')">
+                <div class="symbol-name">cdots</div>
+                <div class="symbol-code">\\cdots</div>
+                <div class="symbol-display katex-render">\\cdots</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\vdots')">
+                <div classs="symbol-name">vdots</div>
+                <div class="symbol-code">\\vdots</div>
+                <div class="symbol-display katex-render">\\vdots</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\ddots')">
+                <div classs="symbol-name">ddots</div>
+                <div class="symbol-code">\\ddots</div>
+                <div class="symbol-display katex-render">\\ddots</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\aleph')">
+                <div classs="symbol-name">aleph</div>
+                <div class="symbol-code">\\aleph</div>
+                <div class="symbol-display katex-render">\\aleph</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\beth')">
+                <div class="symbol-name">beth</div>
+                <div class="symbol-code">\\beth</div>
+                <div class="symbol-display katex-render">\\beth</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\gimel')">
+                <div class="symbol-name">gimel</div>
+                <div class="symbol-code">\\gimel</div>
+                <div classs="symbol-display katex-render">\\gimel</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\daleth')">
+                <div class="symbol-name">daleth</div>
+                <div class="symbol-code">\\daleth</div>
+                <div class="symbol-display katex-render">\\daleth</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\hbar')">
+                <div class="symbol-name">hbar</div>
+                <div class="symbol-code">\\hbar</div>
+                <div class="symbol-display katex-render">\\hbar</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\imath')">
+                <div class="symbol-name">imath</div>
+                <div class="symbol-code">\\imath</div>
+                <div class="symbol-display katex-render">\\imath</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\jmath')">
+                <div class="symbol-name">jmath</div>
+                <div class="symbol-code">\\jmath</div>
+                <div class="symbol-display katex-render">\\jmath</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\ell')">
+                <div class="symbol-name">ell</div>
+                <div class="symbol-code">\\ell</div>
+                <div class="symbol-display katex-render">\\ell</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\wp')">
+                <div class="symbol-name">wp</div>
+                <div class="symbol-code">\\wp</div>
+                <div class="symbol-display katex-render">\\wp</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\Re')">
+                <div class="symbol-name">Re</div>
+                <div class="symbol-code">\\Re</div>
+                <div class="symbol-display katex-render">\\Re</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\Im')">
+                <div classs="symbol-name">Im</div>
+                <div class="symbol-code">\\Im</div>
+                <div class="symbol-display katex-render">\\Im</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>Matrices y Arrays</h3>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="content-list">
+              <div class="symbol-card" onclick="copyToClipboard('\\begin{matrix}a&b\\\\c&d\\end{matrix}')">
+                <div class="symbol-name">matrix</div>
+                <div class="symbol-code">\\begin{matrix}...\\end{matrix}</div>
+                <div class="symbol-display katex-render">\\begin{matrix}a&b\\\\c&d\\end{matrix}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\begin{pmatrix}a&b\\\\c&d\\end{pmatrix}')">
+                <div class="symbol-name">pmatrix</div>
+                <div class="symbol-code">\\begin{pmatrix}...\\end{pmatrix}</div>
+                <div class="symbol-display katex-render">\\begin{pmatrix}a&b\\\\c&d\\end{pmatrix}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\begin{bmatrix}a&b\\\\c&d\\end{bmatrix}')">
+                <div class="symbol-name">bmatrix</div>
+                <div class="symbol-code">\\begin{bmatrix}...\\end{bmatrix}</div>
+                <div class="symbol-display katex-render">\\begin{bmatrix}a&b\\\\c&d\\end{bmatrix}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\begin{Bmatrix}a&b\\\\c&d\\end{Bmatrix}')">
+                <div class="symbol-name">Bmatrix</div>
+                <div class="symbol-code">\\begin{Bmatrix}...\\end{Bmatrix}</div>
+                <div class="symbol-display katex-render">\\begin{Bmatrix}a&b\\\\c&d\\end{Bmatrix}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\begin{vmatrix}a&b\\\\c&d\\end{vmatrix}')">
+                <div class="symbol-name">vmatrix</div>
+                <div class="symbol-code">\\begin{vmatrix}...\\end{vmatrix}</div>
+                <div class="symbol-display katex-render">\\begin{vmatrix}a&b\\\\c&d\\end{vmatrix}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\begin{Vmatrix}a&b\\\\c&d\\end{Vmatrix}')">
+                <div class="symbol-name">Vmatrix</div>
+                <div class="symbol-code">\\begin{Vmatrix}...\\end{Vmatrix}</div>
+                <div class="symbol-display katex-render">\\begin{Vmatrix}a&b\\\\c&d\\end{Vmatrix}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\begin{cases}x&\\text{if }x>0\\\\0&\\text{otherwise}\\end{cases}')">
+                <div class="symbol-name">cases</div>
+                <div class="symbol-code">\\begin{cases}...\\end{cases}</div>
+                <div class="symbol-display katex-render">\\begin{cases}x&\\text{if }x>0\\\\0&\\text{otherwise}\\end{cases}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>Estilos de Texto y Formato</h3>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="content-list">
+              <div class="symbol-card" onclick="copyToClipboard('\\text{texto}')">
+                <div class="symbol-name">text{texto}</div>
+                <div class="symbol-code">\\text{texto}</div>
+                <div class="symbol-display katex-render">\\text{texto}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\textbf{negrita}')">
+                <div class="symbol-name">textbf{negrita}</div>
+                <div class="symbol-code">\\textbf{negrita}</div>
+                <div class="symbol-display katex-render">\\textbf{negrita}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\textit{italica}')">
+                <div class="symbol-name">textit{italica}</div>
+                <div class="symbol-code">\\textit{italica}</div>
+                <div class="symbol-display katex-render">\\textit{italica}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\mathrm{ABC}')">
+                <div class="symbol-name">mathrm{ABC}</div>
+                <div class="symbol-code">\\mathrm{ABC}</div>
+                <div class="symbol-display katex-render">\\mathrm{ABC}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\mathbf{ABC}')">
+                <div class="symbol-name">mathbf{ABC}</div>
+                <div class="symbol-code">\\mathbf{ABC}</div>
+                <div class="symbol-display katex-render">\\mathbf{ABC}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\mathit{ABC}')">
+                <div class="symbol-name">mathit{ABC}</div>
+                <div class="symbol-code">\\mathit{ABC}</div>
+                <div class="symbol-display katex-render">\\mathit{ABC}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\mathsf{ABC}')">
+                <div class="symbol-name">mathsf{ABC}</div>
+                <div class="symbol-code">\\mathsf{ABC}</div>
+                <div class_s="symbol-display katex-render">\\mathsf{ABC}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\mathtt{ABC}')">
+                <div class="symbol-name">mathtt{ABC}</div>
+                <div classs="symbol-code">\\mathtt{ABC}</div>
+                <div class="symbol-display katex-render">\\mathtt{ABC}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\mathcal{ABC}')">
+                <div class="symbol-name">mathcal{ABC}</div>
+                <div class="symbol-code">\\mathcal{ABC}</div>
+                <div class="symbol-display katex-render">\\mathcal{ABC}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\mathbb{R}')">
+                <div class="symbol-name">mathbb{R}</div>
+                <div class="symbol-code">\\mathbb{R}</div>
+                <div class="symbol-display katex-render">\\mathbb{R}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\mathfrak{ABC}')">
+                <div class="symbol-name">mathfrak{ABC}</div>
+                <div class="symbol-code">\\mathfrak{ABC}</div>
+                <div class="symbol-display katex-render">\\mathfrak{ABC}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\mathscr{ABC}')">
+                <div class="symbol-name">mathscr{ABC}</div>
+                <div class="symbol-code">\\mathscr{ABC}</div>
+                <div class="symbol-display katex-render">\\mathscr{ABC}</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\boxed{x+y}')">
+                <div class="symbol-name">boxed{x+y}</div>
+                <div class="symbol-code">\\boxed{x+y}</div>
+                <div class="symbol-display katex-render">\\boxed{x+y}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>Espaciado</h3>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="content-list">
+              <div class="symbol-card" onclick="copyToClipboard('\\,')">
+                <div class="symbol-name">espacio fino</div>
+                <div class="symbol-code">\\,</div>
+                <div class="symbol-display katex-render">a\\,b</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\:')">
+                <div class="symbol-name">espacio medio</div>
+                <div class="symbol-code">\\:</div>
+                <div class="symbol-display katex-render">a\\:b</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\;')">
+                <div class="symbol-name">espacio grueso</div>
+                <div class="symbol-code">\\;</div>
+                <div class="symbol-display katex-render">a\\;b</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\!')">
+                <div class="symbol-name">espacio negativo</div>
+                <div class="symbol-code">\\!</div>
+                <div class="symbol-display katex-render">a\\!b</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\quad')">
+                <div class="symbol-name">quad</div>
+                <div class="symbol-code">\\quad</div>
+                <div class="symbol-display katex-render">a\\quad b</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\qquad')">
+                <div class="symbol-name">qquad</div>
+                <div class="symbol-code">\\qquad</div>
+                <div class="symbol-display katex-render">a\\qquad b</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\\\')">
+                <div class="symbol-name">nueva línea</div>
+                <div class="symbol-code">\\\\</div>
+                <div classs="symbol-display katex-render">a\\\\b</div>
+              </div>
+              <div class="symbol-card" onclick="copyToClipboard('\\newline')">
+                <div class="symbol-name">newline</div>
+                <div class="symbol-code">\\newline</div>
+                <div class="symbol-display katex-render">a\\newline b</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="copy-notification" id="copyNotification">✓ Copiado al portapapeles</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+    <script>
+      // Ya no necesitamos "DOMContentLoaded" porque los scripts al final del body
+      // se ejecutan después de que el HTML de arriba esté cargado.
+
+      // Bucle de renderizado de KaTeX
+      document.querySelectorAll('.katex-render').forEach(function (element) {
+        try {
+          const stringToRender = element.textContent;
+
+          // Ahora "katex" SÍ existe y está definido
+          katex.render(stringToRender, element, {
+            throwOnError: false,
+            displayMode: false
+          });
+        } catch (e) {
+          console.error('Error rendering KaTeX:', e, 'for string:', element.textContent);
+          // Si falla, al menos mostramos el código que intentó renderizar
+          element.textContent = element.textContent + ' (Error)';
+        }
+      });
+
+      // --- El resto de funciones auxiliares ---
+
+      // Función para toggle del acordeón
+      function toggleAccordion(header) {
+        const item = header.parentElement;
+        const wasActive = item.classList.contains('active');
+
+        document.querySelectorAll('.accordion-item').forEach(function (accItem) {
+          accItem.classList.remove('active');
+        });
+
+        if (!wasActive) {
+          item.classList.add('active');
+        }
+      }
+
+      // Función para copiar al portapapeles
+      function copyToClipboard(text) {
+        navigator.clipboard
+          .writeText(text)
+          .then(function () {
+            showCopyNotification();
+          })
+          .catch(function (err) {
+            console.error('Error al copiar:', err);
+          });
+      }
+
+      // Función para mostrar notificación de copiado
+      function showCopyNotification() {
+        const notification = document.getElementById('copyNotification');
+        notification.classList.add('show');
+        setTimeout(function () {
+          notification.classList.remove('show');
+        }, 2000);
+      }
+    </script>
+
+    <div style="text-align: center; margin-top: 20px; font-size: 0.9em; color: #fafafa">
+      <p class="author">José M. Fernández — ABE/ASE Math Master Teacher, Harry S. Truman College, City Colleges of Chicago.</p>
+      <p>
+        Este material se distribuye bajo licencia
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="license" target="_blank">
+          <span style="color: #fafafa">Creative Commons Atribución-NoComercial-CompartirIgual 4.0 (CC BY-NC-SA 4.0)</span>
+        </a>
+        .
+      </p>
+    </div>
+  </body>
+</html>
