@@ -1,0 +1,3589 @@
+<!doctype html>
+<html lang="es">
+  <!--
+  Manual de CSS
+  © José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago
+  Licencia: CC BY-NC-SA 4.0  ·  https://creativecommons.org/licenses/by-nc-sa/4.0/
+-->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago" />
+    <meta name="license" content="CC BY-NC-SA 4.0" />
+    <link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" />
+
+    <title>Manual de CSS - Guía Interactiva</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+        color: #333;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 30px;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .header p {
+        font-size: 1.2em;
+        opacity: 0.9;
+      }
+
+      .accordion {
+        padding: 20px;
+      }
+
+      .accordion-item {
+        margin-bottom: 15px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease;
+      }
+
+      .accordion-item:hover {
+        transform: translateY(-2px);
+      }
+
+      .accordion-header {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 20px;
+        cursor: pointer;
+        font-size: 1.3em;
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s ease;
+      }
+
+      .accordion-header:hover {
+        background: linear-gradient(135deg, #5a6fd8, #6a4191);
+      }
+
+      .accordion-header.active {
+        background: linear-gradient(135deg, #f093fb, #f5576c);
+      }
+
+      .accordion-icon {
+        font-size: 1.5em;
+        transition: transform 0.3s ease;
+      }
+
+      .accordion-header.active .accordion-icon {
+        transform: rotate(180deg);
+      }
+
+      .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease-out;
+        background: #f8f9ff;
+      }
+
+      .accordion-content.active {
+        max-height: 8000px;
+      }
+
+      .accordion-body {
+        padding: 25px;
+        line-height: 1.7;
+      }
+
+      .tip {
+        background: linear-gradient(135deg, #a8edea, #fed6e3);
+        padding: 15px;
+        border-radius: 10px;
+        margin: 15px 0;
+        border-left: 5px solid #667eea;
+      }
+
+      .code-block {
+        background: #2d3748;
+        color: #e2e8f0;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 15px 0;
+        font-family: 'Courier New', monospace;
+        overflow-x: auto;
+        position: relative;
+        white-space: pre;
+        line-height: 1.3;
+      }
+
+      .code-block::before {
+        content: '🎨 CSS';
+        position: absolute;
+        top: -12px;
+        left: 20px;
+        background: #667eea;
+        color: white;
+        padding: 8px 20px;
+        border-radius: 18px;
+        font-size: 0.85em;
+        font-family: 'Segoe UI', sans-serif;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .selector {
+        color: #f6ad55;
+        font-weight: bold;
+      }
+
+      .property {
+        color: #63b3ed;
+      }
+
+      .value {
+        color: #9ae6b4;
+      }
+
+      .comment {
+        color: #9ca3af;
+      }
+
+      .good {
+        background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
+        padding: 10px;
+        border-radius: 8px;
+        margin: 10px 0;
+        border-left: 4px solid #4caf50;
+      }
+
+      .bad {
+        background: linear-gradient(135deg, #ffcdd2, #f8bbd9);
+        padding: 10px;
+        border-radius: 8px;
+        margin: 10px 0;
+        border-left: 4px solid #f44336;
+      }
+
+      .tags-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+      }
+
+      .tag-card {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        border-left: 4px solid #667eea;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .tag-name {
+        font-weight: bold;
+        color: #667eea;
+        font-size: 1.1em;
+        margin-bottom: 8px;
+      }
+
+      .important {
+        background: linear-gradient(135deg, #ffd54f, #ffcc02);
+        padding: 15px;
+        border-radius: 10px;
+        margin: 15px 0;
+        border-left: 5px solid #ff9800;
+        font-weight: 500;
+      }
+
+      .visual-example {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 15px 0;
+        border: 2px solid #667eea;
+      }
+
+      ul {
+        margin-left: 20px;
+        margin-top: 10px;
+      }
+
+      li {
+        margin-bottom: 8px;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          margin: 10px;
+          border-radius: 15px;
+        }
+
+        .header h1 {
+          font-size: 2em;
+        }
+
+        .accordion-header {
+          font-size: 1.1em;
+          padding: 15px;
+        }
+
+        .accordion-body {
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Manual 🎨 CSS</h1>
+        <p>Domina el diseño y estilo de tus páginas web</p>
+      </div>
+
+      <div class="accordion">
+        <!-- Consejos esenciales -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>🎯 Consejos Esenciales para Iniciarse</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              <div class="tip">
+                <strong>💡 Aprende CSS correctamente!</strong>
+                Estos consejos te ayudarán a escribir estilos eficientes y mantenibles desde el inicio.
+              </div>
+
+              <h3>🔍 1. Entiende la cascada y especificidad</h3>
+              <p>CSS significa "Cascading Style Sheets". Los estilos se aplican en cascada, y la especificidad determina qué regla prevalece.</p>
+
+              <div class="code-block">
+                <span class="comment">/* Especificidad de menor a mayor */</span>
+
+                <span class="comment">/* Elemento: especificidad = 1 */</span>
+                <span class="selector">p</span>
+                {
+                <span class="property">color</span>
+                :
+                <span class="value">blue</span>
+                ; }
+
+                <span class="comment">/* Clase: especificidad = 10 */</span>
+                <span class="selector">.texto</span>
+                {
+                <span class="property">color</span>
+                :
+                <span class="value">green</span>
+                ; }
+
+                <span class="comment">/* ID: especificidad = 100 */</span>
+                <span class="selector">#principal</span>
+                {
+                <span class="property">color</span>
+                :
+                <span class="value">red</span>
+                ; }
+
+                <span class="comment">/* Inline styles: especificidad = 1000 */</span>
+                <span class="comment">/* style="color: purple" */</span>
+              </div>
+
+              <h3>📁 2. Organiza tu código CSS</h3>
+              <p>Mantén tu código ordenado agrupando estilos relacionados.</p>
+
+              <div class="code-block">
+                <span class="comment">/* ===== RESET Y GLOBALES ===== */</span>
+                * {
+                <span class="property">margin</span>
+                :
+                <span class="value">0</span>
+                ;
+                <span class="property">padding</span>
+                :
+                <span class="value">0</span>
+                ;
+                <span class="property">box-sizing</span>
+                :
+                <span class="value">border-box</span>
+                ; }
+
+                <span class="comment">/* ===== TIPOGRAFÍA ===== */</span>
+                <span class="selector">body</span>
+                {
+                <span class="property">font-family</span>
+                :
+                <span class="value">'Arial', sans-serif</span>
+                ;
+                <span class="property">font-size</span>
+                :
+                <span class="value">16px</span>
+                ; }
+
+                <span class="comment">/* ===== LAYOUT ===== */</span>
+                <span class="selector">.container</span>
+                {
+                <span class="property">max-width</span>
+                :
+                <span class="value">1200px</span>
+                ;
+                <span class="property">margin</span>
+                :
+                <span class="value">0 auto</span>
+                ; }
+
+                <span class="comment">/* ===== COMPONENTES ===== */</span>
+                <span class="selector">.button</span>
+                {
+                <span class="property">padding</span>
+                :
+                <span class="value">10px 20px</span>
+                ;
+                <span class="property">border-radius</span>
+                :
+                <span class="value">5px</span>
+                ; }
+              </div>
+
+              <h3>📝 3. Usa nombres de clases descriptivos</h3>
+              <p>Los nombres deben describir el propósito, no la apariencia.</p>
+
+              <div class="good">
+                <strong>✅ Buenos nombres:</strong>
+                <div class="code-block">
+                  <span class="selector">.header-navigation</span>
+                  { }
+                  <span class="selector">.product-card</span>
+                  { }
+                  <span class="selector">.error-message</span>
+                  { }
+                  <span class="selector">.user-profile-avatar</span>
+                  { }
+                </div>
+              </div>
+
+              <div class="bad">
+                <strong>❌ Malos nombres:</strong>
+                <div class="code-block">
+                  <span class="selector">.rojo</span>
+                  { }
+                  <span class="selector">.grande</span>
+                  { }
+                  <span class="selector">.div1</span>
+                  { }
+                  <span class="selector">.cosa</span>
+                  { }
+                </div>
+              </div>
+
+              <h3>🎨 4. Evita !important</h3>
+              <p>Usa !important solo como último recurso. Rompe la cascada natural de CSS.</p>
+
+              <div class="important">
+                <strong>⚠️ Consejo:</strong>
+                Si necesitas !important, probablemente hay un problema de especificidad que deberías resolver de otra manera.
+              </div>
+
+              <h3>📱 5. Piensa en responsive desde el inicio</h3>
+              <p>Diseña con el enfoque "mobile-first" usando media queries para pantallas más grandes.</p>
+
+              <div class="code-block">
+                <span class="comment">/* Estilos base (móvil) */</span>
+                <span class="selector">.container</span>
+                {
+                <span class="property">padding</span>
+                :
+                <span class="value">10px</span>
+                ; }
+
+                <span class="comment">/* Tablet y superiores */</span>
+                <span class="selector">@media (min-width: 768px)</span>
+                {
+                <span class="selector">.container</span>
+                {
+                <span class="property">padding</span>
+                :
+                <span class="value">20px</span>
+                ; } }
+
+                <span class="comment">/* Desktop */</span>
+                <span class="selector">@media (min-width: 1024px)</span>
+                {
+                <span class="selector">.container</span>
+                {
+                <span class="property">padding</span>
+                :
+                <span class="value">40px</span>
+                ; } }
+              </div>
+
+              <h3>🔧 6. Utiliza variables CSS (Custom Properties)</h3>
+              <p>Las variables hacen tu código más mantenible y fácil de actualizar.</p>
+
+              <div class="code-block">
+                <span class="selector">:root</span>
+                {
+                <span class="property">--color-primary</span>
+                :
+                <span class="value">#667eea</span>
+                ;
+                <span class="property">--color-secondary</span>
+                :
+                <span class="value">#764ba2</span>
+                ;
+                <span class="property">--spacing-unit</span>
+                :
+                <span class="value">8px</span>
+                ;
+                <span class="property">--font-main</span>
+                :
+                <span class="value">'Arial', sans-serif</span>
+                ; }
+
+                <span class="selector">.button</span>
+                {
+                <span class="property">background</span>
+                :
+                <span class="value">var(--color-primary)</span>
+                ;
+                <span class="property">padding</span>
+                :
+                <span class="value">var(--spacing-unit)</span>
+                ;
+                <span class="property">font-family</span>
+                :
+                <span class="value">var(--font-main)</span>
+                ; }
+              </div>
+
+              <h3>🎯 7. Aprende las herramientas de desarrollo</h3>
+              <p>Las DevTools del navegador (F12) son esenciales para depurar CSS.</p>
+
+              <div class="tip">
+                <strong>🔑 Atajos útiles:</strong>
+                <ul>
+                  <li>F12 o Ctrl+Shift+I: Abrir DevTools</li>
+                  <li>Ctrl+Shift+C: Modo inspector (seleccionar elemento en la página)</li>
+                  <li>Editar estilos en tiempo real para experimentar</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formas de incluir CSS -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>📂 Formas de Incluir CSS</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              <h3>1️⃣ CSS Externo (Recomendado)</h3>
+              <p>El método más profesional y mantenible. Crea un archivo .css separado.</p>
+
+              <div class="code-block">
+                <span class="comment">&lt;!-- En el HTML --&gt;</span>
+                <span class="selector">&lt;head&gt;</span>
+                <span class="selector">&lt;link</span>
+                <span class="property">rel</span>
+                =
+                <span class="value">"stylesheet"</span>
+                <span class="property">href</span>
+                =
+                <span class="value">"estilos.css"</span>
+                <span class="selector">&gt;</span>
+                <span class="selector">&lt;/head&gt;</span>
+              </div>
+
+              <div class="code-block">
+                <span class="comment">/* En estilos.css */</span>
+                <span class="selector">body</span>
+                {
+                <span class="property">background-color</span>
+                :
+                <span class="value">#f0f0f0</span>
+                ;
+                <span class="property">font-family</span>
+                :
+                <span class="value">Arial, sans-serif</span>
+                ; }
+
+                <span class="selector">.container</span>
+                {
+                <span class="property">max-width</span>
+                :
+                <span class="value">1200px</span>
+                ;
+                <span class="property">margin</span>
+                :
+                <span class="value">0 auto</span>
+                ; }
+              </div>
+
+              <div class="good">
+                <strong>✅ Ventajas:</strong>
+                <ul>
+                  <li>Código limpio y organizado</li>
+                  <li>Reutilizable en múltiples páginas</li>
+                  <li>Mejor rendimiento (se cachea)</li>
+                  <li>Fácil de mantener</li>
+                </ul>
+              </div>
+
+              <h3>2️⃣ CSS Interno</h3>
+              <p>Estilos dentro de la etiqueta &lt;style&gt; en el HTML.</p>
+
+              <div class="code-block">
+                <span class="selector">&lt;head&gt;</span>
+                <span class="selector">&lt;style&gt;</span>
+                <span class="selector">body</span>
+                {
+                <span class="property">background-color</span>
+                :
+                <span class="value">#f0f0f0</span>
+                ; }
+
+                <span class="selector">.titulo</span>
+                {
+                <span class="property">color</span>
+                :
+                <span class="value">#333</span>
+                ;
+                <span class="property">font-size</span>
+                :
+                <span class="value">24px</span>
+                ; }
+                <span class="selector">&lt;/style&gt;</span>
+                <span class="selector">&lt;/head&gt;</span>
+              </div>
+
+              <div class="important">
+                <strong>⚠️ Úsalo solo para:</strong>
+                Páginas únicas o estilos específicos de una sola página.
+              </div>
+
+              <h3>3️⃣ CSS en Línea (Inline)</h3>
+              <p>Estilos directamente en el atributo style del elemento HTML.</p>
+
+              <div class="code-block">
+                <span class="selector">&lt;p</span>
+                <span class="property">style</span>
+                =
+                <span class="value">"color: red; font-size: 18px; margin: 10px;"</span>
+                <span class="selector">&gt;</span>
+                Texto con estilos en línea
+                <span class="selector">&lt;/p&gt;</span>
+              </div>
+
+              <div class="bad">
+                <strong>❌ Evítalo porque:</strong>
+                <ul>
+                  <li>Difícil de mantener</li>
+                  <li>No se puede reutilizar</li>
+                  <li>Mezcla contenido con presentación</li>
+                  <li>Dificulta el responsive design</li>
+                </ul>
+              </div>
+
+              <h3>4️⃣ Import en CSS</h3>
+              <p>Importar un CSS desde otro archivo CSS.</p>
+
+              <div class="code-block">
+                <span class="comment">/* En tu archivo CSS principal */</span>
+                <span class="selector">@import</span>
+                <span class="value">url('reset.css')</span>
+                ;
+                <span class="selector">@import</span>
+                <span class="value">url('typography.css')</span>
+                ;
+                <span class="selector">@import</span>
+                <span class="value">url('layout.css')</span>
+                ;
+
+                <span class="comment">/* Tus estilos propios */</span>
+                <span class="selector">body</span>
+                {
+                <span class="property">background</span>
+                :
+                <span class="value">white</span>
+                ; }
+              </div>
+
+              <div class="tip">
+                <strong>💡 Mejor práctica:</strong>
+                Usa &lt;link&gt; en el HTML en lugar de @import para mejor rendimiento.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Selectores -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>🎯 Selectores CSS</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              <h3>🔵 Selectores Básicos</h3>
+
+              <div class="tags-grid">
+                <div class="tag-card">
+                  <div class="tag-name">Selector de Elemento</div>
+                  <p>Selecciona todos los elementos del tipo especificado.</p>
+                  <div class="code-block">
+                    <span class="selector">p</span>
+                    {
+                    <span class="property">color</span>
+                    :
+                    <span class="value">blue</span>
+                    ; }
+                  </div>
+                </div>
+
+                <div class="tag-card">
+                  <div class="tag-name">Selector de Clase</div>
+                  <p>Selecciona elementos con la clase especificada.</p>
+                  <div class="code-block">
+                    <span class="selector">.destacado</span>
+                    {
+                    <span class="property">font-weight</span>
+                    :
+                    <span class="value">bold</span>
+                    ; }
+                  </div>
+                </div>
+
+                <div class="tag-card">
+                  <div class="tag-name">Selector de ID</div>
+                  <p>Selecciona el elemento con el ID especificado.</p>
+                  <div class="code-block">
+                    <span class="selector">#header</span>
+                    {
+                    <span class="property">background</span>
+                    :
+                    <span class="value">navy</span>
+                    ; }
+                  </div>
+                </div>
+
+                <div class="tag-card">
+                  <div class="tag-name">Selector Universal</div>
+                  <p>Selecciona todos los elementos.</p>
+                  <div class="code-block">
+                    <span class="selector">*</span>
+                    {
+                    <span class="property">margin</span>
+                    :
+                    <span class="value">0</span>
+                    ;
+                    <span class="property">padding</span>
+                    :
+                    <span class="value">0</span>
+                    ; }
+                  </div>
+                </div>
+              </div>
+
+              <h3>🔗 Selectores Combinadores</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Selector descendiente (espacio) */</span>
+                <span class="selector">div p</span>
+                {
+                <span class="property">color</span>
+                :
+                <span class="value">red</span>
+                ; }
+
+                <span class="comment">/* Hijo directo (&gt;) */</span>
+                <span class="selector">div > p</span>
+                {
+                <span class="property">color</span>
+                :
+                <span class="value">blue</span>
+                ; }
+
+                <span class="comment">/* Hermano adyacente (+) */</span>
+                <span class="selector">h2 + p</span>
+                {
+                <span class="property">margin-top</span>
+                :
+                <span class="value">0</span>
+                ; }
+
+                <span class="comment">/* Hermanos generales (~) */</span>
+                <span class="selector">h2 ~ p</span>
+                {
+                <span class="property">color</span>
+                :
+                <span class="value">gray</span>
+                ; }
+              </div>
+
+              <h3>🎭 Pseudo-clases</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Estados de enlace */</span>
+                <span class="selector">a:link</span>
+                {
+                <span class="property">color</span>
+                :
+                <span class="value">blue</span>
+                ; }
+                <span class="selector">a:visited</span>
+                {
+                <span class="property">color</span>
+                :
+                <span class="value">purple</span>
+                ; }
+                <span class="selector">a:hover</span>
+                {
+                <span class="property">color</span>
+                :
+                <span class="value">red</span>
+                ; }
+                <span class="selector">a:active</span>
+                {
+                <span class="property">color</span>
+                :
+                <span class="value">orange</span>
+                ; }
+
+                <span class="comment">/* Pseudo-clases estructurales */</span>
+                <span class="selector">li:first-child</span>
+                {
+                <span class="property">font-weight</span>
+                :
+                <span class="value">bold</span>
+                ; }
+                <span class="selector">li:last-child</span>
+                {
+                <span class="property">border-bottom</span>
+                :
+                <span class="value">none</span>
+                ; }
+                <span class="selector">li:nth-child(odd)</span>
+                {
+                <span class="property">background</span>
+                :
+                <span class="value">#f0f0f0</span>
+                ; }
+                <span class="selector">li:nth-child(3)</span>
+                {
+                <span class="property">color</span>
+                :
+                <span class="value">red</span>
+                ; }
+
+                <span class="comment">/* Otros útiles */</span>
+                <span class="selector">input:focus</span>
+                {
+                <span class="property">border-color</span>
+                :
+                <span class="value">blue</span>
+                ; }
+                <span class="selector">input:disabled</span>
+                {
+                <span class="property">opacity</span>
+                :
+                <span class="value">0.5</span>
+                ; }
+                <span class="selector">p:not(.destacado)</span>
+                {
+                <span class="property">color</span>
+                :
+                <span class="value">gray</span>
+                ; }
+              </div>
+
+              <h3>✨ Pseudo-elementos</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Primera letra */</span>
+                <span class="selector">p::first-letter</span>
+                {
+                <span class="property">font-size</span>
+                :
+                <span class="value">2em</span>
+                ;
+                <span class="property">font-weight</span>
+                :
+                <span class="value">bold</span>
+                ; }
+
+                <span class="comment">/* Primera línea */</span>
+                <span class="selector">p::first-line</span>
+                {
+                <span class="property">color</span>
+                :
+                <span class="value">blue</span>
+                ; }
+
+                <span class="comment">/* Antes y después */</span>
+                <span class="selector">.quote::before</span>
+                {
+                <span class="property">content</span>
+                :
+                <span class="value">'"'</span>
+                ;
+                <span class="property">font-size</span>
+                :
+                <span class="value">2em</span>
+                ; }
+
+                <span class="selector">.quote::after</span>
+                {
+                <span class="property">content</span>
+                :
+                <span class="value">'"'</span>
+                ;
+                <span class="property">font-size</span>
+                :
+                <span class="value">2em</span>
+                ; }
+
+                <span class="comment">/* Selección de texto */</span>
+                <span class="selector">::selection</span>
+                {
+                <span class="property">background</span>
+                :
+                <span class="value">yellow</span>
+                ;
+                <span class="property">color</span>
+                :
+                <span class="value">black</span>
+                ; }
+              </div>
+
+              <h3>🎯 Selectores de Atributo</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Tiene el atributo */</span>
+                <span class="selector">[disabled]</span>
+                {
+                <span class="property">opacity</span>
+                :
+                <span class="value">0.5</span>
+                ; }
+
+                <span class="comment">/* Valor exacto */</span>
+                <span class="selector">[type="text"]</span>
+                {
+                <span class="property">border</span>
+                :
+                <span class="value">1px solid gray</span>
+                ; }
+
+                <span class="comment">/* Contiene el valor */</span>
+                <span class="selector">[class*="btn"]</span>
+                {
+                <span class="property">padding</span>
+                :
+                <span class="value">10px</span>
+                ; }
+
+                <span class="comment">/* Empieza con */</span>
+                <span class="selector">[href^="https"]</span>
+                {
+                <span class="property">color</span>
+                :
+                <span class="value">green</span>
+                ; }
+
+                <span class="comment">/* Termina con */</span>
+                <span class="selector">[href$=".pdf"]</span>
+                {
+                <span class="property">color</span>
+                :
+                <span class="value">red</span>
+                ; }
+              </div>
+
+              <div class="important">
+                <strong>💡 Tip:</strong>
+                Combina selectores para mayor especificidad:
+                <code>.container .button:hover</code>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Box Model -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>📦 Box Model</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              <div class="tip">
+                <strong>🎯 Concepto clave:</strong>
+                Todo elemento en CSS es una caja rectangular con contenido, padding, borde y margen.
+              </div>
+
+              <h3>📐 Componentes del Box Model</h3>
+
+              <div class="code-block">
+                <span class="comment">/* De adentro hacia afuera */</span>
+                <span class="selector">.caja</span>
+                {
+                <span class="comment">/* 1. Contenido */</span>
+                <span class="property">width</span>
+                :
+                <span class="value">300px</span>
+                ;
+                <span class="property">height</span>
+                :
+                <span class="value">200px</span>
+                ;
+
+                <span class="comment">/* 2. Padding (relleno interno) */</span>
+                <span class="property">padding</span>
+                :
+                <span class="value">20px</span>
+                ;
+                <span class="comment">/* o individual: */</span>
+                <span class="property">padding-top</span>
+                :
+                <span class="value">10px</span>
+                ;
+                <span class="property">padding-right</span>
+                :
+                <span class="value">20px</span>
+                ;
+                <span class="property">padding-bottom</span>
+                :
+                <span class="value">10px</span>
+                ;
+                <span class="property">padding-left</span>
+                :
+                <span class="value">20px</span>
+                ;
+
+                <span class="comment">/* 3. Borde */</span>
+                <span class="property">border</span>
+                :
+                <span class="value">2px solid black</span>
+                ;
+                <span class="comment">/* o detallado: */</span>
+                <span class="property">border-width</span>
+                :
+                <span class="value">2px</span>
+                ;
+                <span class="property">border-style</span>
+                :
+                <span class="value">solid</span>
+                ;
+                <span class="property">border-color</span>
+                :
+                <span class="value">black</span>
+                ;
+
+                <span class="comment">/* 4. Margin (espacio externo) */</span>
+                <span class="property">margin</span>
+                :
+                <span class="value">10px</span>
+                ;
+                <span class="comment">/* o individual: */</span>
+                <span class="property">margin-top</span>
+                :
+                <span class="value">10px</span>
+                ;
+                <span class="property">margin-right</span>
+                :
+                <span class="value">20px</span>
+                ;
+                <span class="property">margin-bottom</span>
+                :
+                <span class="value">10px</span>
+                ;
+                <span class="property">margin-left</span>
+                :
+                <span class="value">20px</span>
+                ; }
+              </div>
+
+              <h3>📏 Atajos para padding y margin</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Un valor: todos los lados */</span>
+                <span class="property">padding</span>
+                :
+                <span class="value">20px</span>
+                ;
+
+                <span class="comment">/* Dos valores: vertical horizontal */</span>
+                <span class="property">padding</span>
+                :
+                <span class="value">10px 20px</span>
+                ;
+
+                <span class="comment">/* Tres valores: arriba horizontal abajo */</span>
+                <span class="property">padding</span>
+                :
+                <span class="value">10px 20px 30px</span>
+                ;
+
+                <span class="comment">/* Cuatro valores: arriba derecha abajo izquierda */</span>
+                <span class="property">padding</span>
+                :
+                <span class="value">10px 20px 30px 40px</span>
+                ;
+              </div>
+
+              <h3>🎛️ Box-sizing</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Por defecto (content-box) */</span>
+                <span class="selector">.caja-default</span>
+                {
+                <span class="property">width</span>
+                :
+                <span class="value">300px</span>
+                ;
+                <span class="property">padding</span>
+                :
+                <span class="value">20px</span>
+                ;
+                <span class="property">border</span>
+                :
+                <span class="value">2px solid black</span>
+                ;
+                <span class="comment">/* Ancho total = 300 + 40 + 4 = 344px */</span>
+                }
+
+                <span class="comment">/* Recomendado: border-box */</span>
+                <span class="selector">.caja-mejor</span>
+                {
+                <span class="property">box-sizing</span>
+                :
+                <span class="value">border-box</span>
+                ;
+                <span class="property">width</span>
+                :
+                <span class="value">300px</span>
+                ;
+                <span class="property">padding</span>
+                :
+                <span class="value">20px</span>
+                ;
+                <span class="property">border</span>
+                :
+                <span class="value">2px solid black</span>
+                ;
+                <span class="comment">/* Ancho total = 300px (incluye padding y border) */</span>
+                }
+              </div>
+
+              <div class="good">
+                <strong>✅ Mejor práctica global:</strong>
+                <div class="code-block">
+                  <span class="selector">*</span>
+                  {
+                  <span class="property">box-sizing</span>
+                  :
+                  <span class="value">border-box</span>
+                  ; }
+                </div>
+              </div>
+
+              <h3>🎨 Bordes Avanzados</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Bordes redondeados */</span>
+                <span class="selector">.card</span>
+                {
+                <span class="property">border-radius</span>
+                :
+                <span class="value">10px</span>
+                ;
+                <span class="comment">/* o individual: */</span>
+                <span class="property">border-top-left-radius</span>
+                :
+                <span class="value">10px</span>
+                ;
+                <span class="property">border-top-right-radius</span>
+                :
+                <span class="value">10px</span>
+                ;
+                <span class="property">border-bottom-right-radius</span>
+                :
+                <span class="value">10px</span>
+                ;
+                <span class="property">border-bottom-left-radius</span>
+                :
+                <span class="value">10px</span>
+                ; }
+
+                <span class="comment">/* Círculo perfecto */</span>
+                <span class="selector">.circle</span>
+                {
+                <span class="property">width</span>
+                :
+                <span class="value">100px</span>
+                ;
+                <span class="property">height</span>
+                :
+                <span class="value">100px</span>
+                ;
+                <span class="property">border-radius</span>
+                :
+                <span class="value">50%</span>
+                ; }
+
+                <span class="comment">/* Diferentes estilos de borde */</span>
+                <span class="selector">.ejemplos</span>
+                {
+                <span class="property">border-style</span>
+                :
+                <span class="value">solid</span>
+                ;
+                <span class="comment">/* sólido */</span>
+                <span class="property">border-style</span>
+                :
+                <span class="value">dashed</span>
+                ;
+                <span class="comment">/* guiones */</span>
+                <span class="property">border-style</span>
+                :
+                <span class="value">dotted</span>
+                ;
+                <span class="comment">/* puntos */</span>
+                <span class="property">border-style</span>
+                :
+                <span class="value">double</span>
+                ;
+                <span class="comment">/* doble */</span>
+                <span class="property">border-style</span>
+                :
+                <span class="value">groove</span>
+                ;
+                <span class="comment">/* ranura */</span>
+                }
+              </div>
+
+              <h3>📍 Margin Collapse</h3>
+              <p>Los márgenes verticales de elementos adyacentes se colapsan (se fusionan).</p>
+
+              <div class="code-block">
+                <span class="comment">/* Estos márgenes se colapsan */</span>
+                <span class="selector">.elemento1</span>
+                {
+                <span class="property">margin-bottom</span>
+                :
+                <span class="value">30px</span>
+                ; }
+
+                <span class="selector">.elemento2</span>
+                {
+                <span class="property">margin-top</span>
+                :
+                <span class="value">20px</span>
+                ; }
+                <span class="comment">/* El espacio entre ellos será 30px, no 50px */</span>
+              </div>
+
+              <div class="important">
+                <strong>💡 Consejo:</strong>
+                Usa solo margin-bottom o margin-top consistentemente para evitar confusión con margin collapse.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Colores y Tipografía -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>🎨 Colores y Tipografía</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              <h3>🌈 Formas de Definir Colores</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Por nombre */</span>
+                <span class="selector">.ejemplo1</span>
+                {
+                <span class="property">color</span>
+                :
+                <span class="value">red</span>
+                ;
+                <span class="property">background-color</span>
+                :
+                <span class="value">blue</span>
+                ; }
+
+                <span class="comment">/* Hexadecimal */</span>
+                <span class="selector">.ejemplo2</span>
+                {
+                <span class="property">color</span>
+                :
+                <span class="value">#FF0000</span>
+                ;
+                <span class="comment">/* rojo */</span>
+                <span class="property">color</span>
+                :
+                <span class="value">#F00</span>
+                ;
+                <span class="comment">/* rojo (forma corta) */</span>
+                }
+
+                <span class="comment">/* RGB */</span>
+                <span class="selector">.ejemplo3</span>
+                {
+                <span class="property">color</span>
+                :
+                <span class="value">rgb(255, 0, 0)</span>
+                ;
+                <span class="comment">/* rojo */</span>
+                <span class="property">color</span>
+                :
+                <span class="value">rgba(255, 0, 0, 0.5)</span>
+                ;
+                <span class="comment">/* rojo 50% opaco */</span>
+                }
+
+                <span class="comment">/* HSL (Hue, Saturation, Lightness) */</span>
+                <span class="selector">.ejemplo4</span>
+                {
+                <span class="property">color</span>
+                :
+                <span class="value">hsl(0, 100%, 50%)</span>
+                ;
+                <span class="comment">/* rojo */</span>
+                <span class="property">color</span>
+                :
+                <span class="value">hsla(0, 100%, 50%, 0.5)</span>
+                ;
+                <span class="comment">/* rojo 50% opaco */</span>
+                }
+              </div>
+
+              <h3>🔤 Propiedades de Tipografía</h3>
+
+              <div class="code-block">
+                <span class="selector">.texto</span>
+                {
+                <span class="comment">/* Familia de fuente */</span>
+                <span class="property">font-family</span>
+                :
+                <span class="value">'Arial', 'Helvetica', sans-serif</span>
+                ;
+
+                <span class="comment">/* Tamaño */</span>
+                <span class="property">font-size</span>
+                :
+                <span class="value">16px</span>
+                ;
+                <span class="comment">/* píxeles */</span>
+                <span class="property">font-size</span>
+                :
+                <span class="value">1.5em</span>
+                ;
+                <span class="comment">/* relativo al padre */</span>
+                <span class="property">font-size</span>
+                :
+                <span class="value">1.5rem</span>
+                ;
+                <span class="comment">/* relativo a root */</span>
+
+                <span class="comment">/* Peso */</span>
+                <span class="property">font-weight</span>
+                :
+                <span class="value">normal</span>
+                ;
+                <span class="comment">/* 400 */</span>
+                <span class="property">font-weight</span>
+                :
+                <span class="value">bold</span>
+                ;
+                <span class="comment">/* 700 */</span>
+                <span class="property">font-weight</span>
+                :
+                <span class="value">600</span>
+                ;
+                <span class="comment">/* semi-bold */</span>
+
+                <span class="comment">/* Estilo */</span>
+                <span class="property">font-style</span>
+                :
+                <span class="value">normal</span>
+                ;
+                <span class="property">font-style</span>
+                :
+                <span class="value">italic</span>
+                ;
+                <span class="property">font-style</span>
+                :
+                <span class="value">oblique</span>
+                ;
+
+                <span class="comment">/* Altura de línea */</span>
+                <span class="property">line-height</span>
+                :
+                <span class="value">1.6</span>
+                ;
+                <span class="comment">/* multiplicador */</span>
+                <span class="property">line-height</span>
+                :
+                <span class="value">24px</span>
+                ;
+                <span class="comment">/* valor fijo */</span>
+
+                <span class="comment">/* Espaciado entre letras */</span>
+                <span class="property">letter-spacing</span>
+                :
+                <span class="value">2px</span>
+                ;
+
+                <span class="comment">/* Espaciado entre palabras */</span>
+                <span class="property">word-spacing</span>
+                :
+                <span class="value">5px</span>
+                ;
+
+                <span class="comment">/* Alineación */</span>
+                <span class="property">text-align</span>
+                :
+                <span class="value">left</span>
+                ;
+                <span class="property">text-align</span>
+                :
+                <span class="value">center</span>
+                ;
+                <span class="property">text-align</span>
+                :
+                <span class="value">right</span>
+                ;
+                <span class="property">text-align</span>
+                :
+                <span class="value">justify</span>
+                ;
+
+                <span class="comment">/* Decoración */</span>
+                <span class="property">text-decoration</span>
+                :
+                <span class="value">none</span>
+                ;
+                <span class="property">text-decoration</span>
+                :
+                <span class="value">underline</span>
+                ;
+                <span class="property">text-decoration</span>
+                :
+                <span class="value">line-through</span>
+                ;
+                <span class="property">text-decoration</span>
+                :
+                <span class="value">overline</span>
+                ;
+
+                <span class="comment">/* Transformación */</span>
+                <span class="property">text-transform</span>
+                :
+                <span class="value">uppercase</span>
+                ;
+                <span class="property">text-transform</span>
+                :
+                <span class="value">lowercase</span>
+                ;
+                <span class="property">text-transform</span>
+                :
+                <span class="value">capitalize</span>
+                ; }
+              </div>
+
+              <h3>📝 Google Fonts</h3>
+
+              <div class="code-block">
+                <span class="comment">&lt;!-- En el HTML --&gt;</span>
+                <span class="selector">&lt;head&gt;</span>
+                <span class="selector">&lt;link</span>
+                <span class="property">href</span>
+                =
+                <span class="value">"https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"</span>
+                <span class="property">rel</span>
+                =
+                <span class="value">"stylesheet"</span>
+                <span class="selector">&gt;</span>
+                <span class="selector">&lt;/head&gt;</span>
+              </div>
+
+              <div class="code-block">
+                <span class="comment">/* En el CSS */</span>
+                <span class="selector">body</span>
+                {
+                <span class="property">font-family</span>
+                :
+                <span class="value">'Roboto', sans-serif</span>
+                ; }
+              </div>
+
+              <h3>🎨 Gradientes</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Gradiente lineal */</span>
+                <span class="selector">.fondo1</span>
+                {
+                <span class="property">background</span>
+                :
+                <span class="value">linear-gradient(to right, #667eea, #764ba2)</span>
+                ;
+                <span class="property">background</span>
+                :
+                <span class="value">linear-gradient(45deg, red, blue)</span>
+                ;
+                <span class="property">background</span>
+                :
+                <span class="value">linear-gradient(to bottom, red 0%, yellow 50%, green 100%)</span>
+                ; }
+
+                <span class="comment">/* Gradiente radial */</span>
+                <span class="selector">.fondo2</span>
+                {
+                <span class="property">background</span>
+                :
+                <span class="value">radial-gradient(circle, red, yellow, green)</span>
+                ;
+                <span class="property">background</span>
+                :
+                <span class="value">radial-gradient(ellipse at top, #667eea, #764ba2)</span>
+                ; }
+              </div>
+
+              <h3>🖼️ Sombras</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Sombra de texto */</span>
+                <span class="selector">.texto</span>
+                {
+                <span class="property">text-shadow</span>
+                :
+                <span class="value">2px 2px 4px rgba(0, 0, 0, 0.5)</span>
+                ;
+                <span class="comment">/* horizontal vertical blur color */</span>
+                }
+
+                <span class="comment">/* Sombra de caja */</span>
+                <span class="selector">.caja</span>
+                {
+                <span class="property">box-shadow</span>
+                :
+                <span class="value">0 4px 6px rgba(0, 0, 0, 0.1)</span>
+                ;
+                <span class="comment">/* horizontal vertical blur spread color */</span>
+
+                <span class="comment">/* Sombra interior */</span>
+                <span class="property">box-shadow</span>
+                :
+                <span class="value">inset 0 2px 4px rgba(0, 0, 0, 0.3)</span>
+                ;
+
+                <span class="comment">/* Múltiples sombras */</span>
+                <span class="property">box-shadow</span>
+                :
+                <span class="value">0 2px 4px rgba(0,0,0,0.1)</span>
+                ,
+                <span class="value">0 8px 16px rgba(0,0,0,0.1)</span>
+                ; }
+              </div>
+
+              <div class="important">
+                <strong>💡 Tip:</strong>
+                Usa rem para tamaños de fuente (más accesible) y em para spacing relacionado con texto.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flexbox -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>📐 Flexbox</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              <div class="tip">
+                <strong>🎯 Flexbox es ideal para:</strong>
+                Layouts en una dimensión (fila o columna), alineación de elementos, distribución de espacio.
+              </div>
+
+              <h3>🎛️ Contenedor Flex (padre)</h3>
+
+              <div class="code-block">
+                <span class="selector">.container</span>
+                {
+                <span class="comment">/* Activar flexbox */</span>
+                <span class="property">display</span>
+                :
+                <span class="value">flex</span>
+                ;
+
+                <span class="comment">/* Dirección principal */</span>
+                <span class="property">flex-direction</span>
+                :
+                <span class="value">row</span>
+                ;
+                <span class="comment">/* horizontal (default) */</span>
+                <span class="property">flex-direction</span>
+                :
+                <span class="value">row-reverse</span>
+                ;
+                <span class="comment">/* horizontal invertido */</span>
+                <span class="property">flex-direction</span>
+                :
+                <span class="value">column</span>
+                ;
+                <span class="comment">/* vertical */</span>
+                <span class="property">flex-direction</span>
+                :
+                <span class="value">column-reverse</span>
+                ;
+                <span class="comment">/* vertical invertido */</span>
+
+                <span class="comment">/* Ajuste de línea */</span>
+                <span class="property">flex-wrap</span>
+                :
+                <span class="value">nowrap</span>
+                ;
+                <span class="comment">/* no ajustar (default) */</span>
+                <span class="property">flex-wrap</span>
+                :
+                <span class="value">wrap</span>
+                ;
+                <span class="comment">/* ajustar a nueva línea */</span>
+                <span class="property">flex-wrap</span>
+                :
+                <span class="value">wrap-reverse</span>
+                ;
+                <span class="comment">/* ajustar invertido */</span>
+
+                <span class="comment">/* Alineación en eje principal (horizontal si row) */</span>
+                <span class="property">justify-content</span>
+                :
+                <span class="value">flex-start</span>
+                ;
+                <span class="comment">/* inicio */</span>
+                <span class="property">justify-content</span>
+                :
+                <span class="value">flex-end</span>
+                ;
+                <span class="comment">/* final */</span>
+                <span class="property">justify-content</span>
+                :
+                <span class="value">center</span>
+                ;
+                <span class="comment">/* centro */</span>
+                <span class="property">justify-content</span>
+                :
+                <span class="value">space-between</span>
+                ;
+                <span class="comment">/* espaciado entre */</span>
+                <span class="property">justify-content</span>
+                :
+                <span class="value">space-around</span>
+                ;
+                <span class="comment">/* espaciado alrededor */</span>
+                <span class="property">justify-content</span>
+                :
+                <span class="value">space-evenly</span>
+                ;
+                <span class="comment">/* espaciado uniforme */</span>
+
+                <span class="comment">/* Alineación en eje secundario (vertical si row) */</span>
+                <span class="property">align-items</span>
+                :
+                <span class="value">stretch</span>
+                ;
+                <span class="comment">/* estirar (default) */</span>
+                <span class="property">align-items</span>
+                :
+                <span class="value">flex-start</span>
+                ;
+                <span class="comment">/* inicio */</span>
+                <span class="property">align-items</span>
+                :
+                <span class="value">flex-end</span>
+                ;
+                <span class="comment">/* final */</span>
+                <span class="property">align-items</span>
+                :
+                <span class="value">center</span>
+                ;
+                <span class="comment">/* centro */</span>
+                <span class="property">align-items</span>
+                :
+                <span class="value">baseline</span>
+                ;
+                <span class="comment">/* línea base de texto */</span>
+
+                <span class="comment">/* Alineación de múltiples líneas */</span>
+                <span class="property">align-content</span>
+                :
+                <span class="value">flex-start</span>
+                ;
+                <span class="property">align-content</span>
+                :
+                <span class="value">flex-end</span>
+                ;
+                <span class="property">align-content</span>
+                :
+                <span class="value">center</span>
+                ;
+                <span class="property">align-content</span>
+                :
+                <span class="value">space-between</span>
+                ;
+                <span class="property">align-content</span>
+                :
+                <span class="value">space-around</span>
+                ;
+
+                <span class="comment">/* Espacio entre items */</span>
+                <span class="property">gap</span>
+                :
+                <span class="value">20px</span>
+                ;
+                <span class="comment">/* ambos ejes */</span>
+                <span class="property">row-gap</span>
+                :
+                <span class="value">20px</span>
+                ;
+                <span class="comment">/* entre filas */</span>
+                <span class="property">column-gap</span>
+                :
+                <span class="value">10px</span>
+                ;
+                <span class="comment">/* entre columnas */</span>
+                }
+              </div>
+
+              <h3>📦 Items Flex (hijos)</h3>
+
+              <div class="code-block">
+                <span class="selector">.item</span>
+                {
+                <span class="comment">/* Orden de aparición */</span>
+                <span class="property">order</span>
+                :
+                <span class="value">1</span>
+                ;
+                <span class="comment">/* default es 0 */</span>
+
+                <span class="comment">/* Crecer para ocupar espacio */</span>
+                <span class="property">flex-grow</span>
+                :
+                <span class="value">1</span>
+                ;
+                <span class="comment">/* puede crecer */</span>
+
+                <span class="comment">/* Encogerse si es necesario */</span>
+                <span class="property">flex-shrink</span>
+                :
+                <span class="value">1</span>
+                ;
+                <span class="comment">/* puede encogerse */</span>
+
+                <span class="comment">/* Tamaño base */</span>
+                <span class="property">flex-basis</span>
+                :
+                <span class="value">200px</span>
+                ;
+                <span class="comment">/* tamaño inicial */</span>
+
+                <span class="comment">/* Atajo para grow, shrink y basis */</span>
+                <span class="property">flex</span>
+                :
+                <span class="value">1</span>
+                ;
+                <span class="comment">/* grow: 1, shrink: 1, basis: 0 */</span>
+                <span class="property">flex</span>
+                :
+                <span class="value">0 0 200px</span>
+                ;
+                <span class="comment">/* grow: 0, shrink: 0, basis: 200px */</span>
+
+                <span class="comment">/* Alineación individual */</span>
+                <span class="property">align-self</span>
+                :
+                <span class="value">auto</span>
+                ;
+                <span class="comment">/* heredar del padre */</span>
+                <span class="property">align-self</span>
+                :
+                <span class="value">flex-start</span>
+                ;
+                <span class="property">align-self</span>
+                :
+                <span class="value">flex-end</span>
+                ;
+                <span class="property">align-self</span>
+                :
+                <span class="value">center</span>
+                ;
+                <span class="property">align-self</span>
+                :
+                <span class="value">stretch</span>
+                ; }
+              </div>
+
+              <h3>✨ Ejemplos Prácticos</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Centrar perfectamente */</span>
+                <span class="selector">.centrado</span>
+                {
+                <span class="property">display</span>
+                :
+                <span class="value">flex</span>
+                ;
+                <span class="property">justify-content</span>
+                :
+                <span class="value">center</span>
+                ;
+                <span class="property">align-items</span>
+                :
+                <span class="value">center</span>
+                ;
+                <span class="property">height</span>
+                :
+                <span class="value">100vh</span>
+                ; }
+
+                <span class="comment">/* Barra de navegación */</span>
+                <span class="selector">.navbar</span>
+                {
+                <span class="property">display</span>
+                :
+                <span class="value">flex</span>
+                ;
+                <span class="property">justify-content</span>
+                :
+                <span class="value">space-between</span>
+                ;
+                <span class="property">align-items</span>
+                :
+                <span class="value">center</span>
+                ;
+                <span class="property">padding</span>
+                :
+                <span class="value">1rem</span>
+                ; }
+
+                <span class="comment">/* Grid de tarjetas responsivo */</span>
+                <span class="selector">.cards</span>
+                {
+                <span class="property">display</span>
+                :
+                <span class="value">flex</span>
+                ;
+                <span class="property">flex-wrap</span>
+                :
+                <span class="value">wrap</span>
+                ;
+                <span class="property">gap</span>
+                :
+                <span class="value">20px</span>
+                ; }
+
+                <span class="selector">.card</span>
+                {
+                <span class="property">flex</span>
+                :
+                <span class="value">1 1 300px</span>
+                ;
+                <span class="comment">/* mínimo 300px */</span>
+                }
+
+                <span class="comment">/* Sidebar + Contenido */</span>
+                <span class="selector">.layout</span>
+                {
+                <span class="property">display</span>
+                :
+                <span class="value">flex</span>
+                ;
+                <span class="property">gap</span>
+                :
+                <span class="value">20px</span>
+                ; }
+
+                <span class="selector">.sidebar</span>
+                {
+                <span class="property">flex</span>
+                :
+                <span class="value">0 0 250px</span>
+                ;
+                <span class="comment">/* ancho fijo */</span>
+                }
+
+                <span class="selector">.content</span>
+                {
+                <span class="property">flex</span>
+                :
+                <span class="value">1</span>
+                ;
+                <span class="comment">/* ocupa el resto */</span>
+                }
+              </div>
+
+              <div class="important">
+                <strong>🎓 Memoriza:</strong>
+                justify-content = eje principal, align-items = eje secundario
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CSS Grid -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>🎯 CSS Grid</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              <div class="tip">
+                <strong>🎯 Grid es ideal para:</strong>
+                Layouts bidimensionales (filas y columnas), diseños complejos, alineación precisa.
+              </div>
+
+              <h3>🏗️ Contenedor Grid (padre)</h3>
+
+              <div class="code-block">
+                <span class="selector">.container</span>
+                {
+                <span class="comment">/* Activar grid */</span>
+                <span class="property">display</span>
+                :
+                <span class="value">grid</span>
+                ;
+
+                <span class="comment">/* Definir columnas */</span>
+                <span class="property">grid-template-columns</span>
+                :
+                <span class="value">200px 200px 200px</span>
+                ;
+                <span class="comment">/* 3 columnas fijas */</span>
+                <span class="property">grid-template-columns</span>
+                :
+                <span class="value">1fr 1fr 1fr</span>
+                ;
+                <span class="comment">/* 3 columnas iguales */</span>
+                <span class="property">grid-template-columns</span>
+                :
+                <span class="value">1fr 2fr 1fr</span>
+                ;
+                <span class="comment">/* central más grande */</span>
+                <span class="property">grid-template-columns</span>
+                :
+                <span class="value">repeat(3, 1fr)</span>
+                ;
+                <span class="comment">/* atajo */</span>
+                <span class="property">grid-template-columns</span>
+                :
+                <span class="value">repeat(auto-fit, minmax(250px, 1fr))</span>
+                ;
+                <span class="comment">/* responsivo */</span>
+
+                <span class="comment">/* Definir filas */</span>
+                <span class="property">grid-template-rows</span>
+                :
+                <span class="value">100px 200px 100px</span>
+                ;
+                <span class="property">grid-template-rows</span>
+                :
+                <span class="value">auto 1fr auto</span>
+                ;
+                <span class="comment">/* header, content, footer */</span>
+
+                <span class="comment">/* Espaciado */</span>
+                <span class="property">gap</span>
+                :
+                <span class="value">20px</span>
+                ;
+                <span class="comment">/* ambos ejes */</span>
+                <span class="property">row-gap</span>
+                :
+                <span class="value">20px</span>
+                ;
+                <span class="comment">/* entre filas */</span>
+                <span class="property">column-gap</span>
+                :
+                <span class="value">10px</span>
+                ;
+                <span class="comment">/* entre columnas */</span>
+
+                <span class="comment">/* Alineación de items */</span>
+                <span class="property">justify-items</span>
+                :
+                <span class="value">start</span>
+                ;
+                <span class="comment">/* horizontal */</span>
+                <span class="property">justify-items</span>
+                :
+                <span class="value">end</span>
+                ;
+                <span class="property">justify-items</span>
+                :
+                <span class="value">center</span>
+                ;
+                <span class="property">justify-items</span>
+                :
+                <span class="value">stretch</span>
+                ;
+                <span class="comment">/* default */</span>
+
+                <span class="property">align-items</span>
+                :
+                <span class="value">start</span>
+                ;
+                <span class="comment">/* vertical */</span>
+                <span class="property">align-items</span>
+                :
+                <span class="value">end</span>
+                ;
+                <span class="property">align-items</span>
+                :
+                <span class="value">center</span>
+                ;
+                <span class="property">align-items</span>
+                :
+                <span class="value">stretch</span>
+                ;
+                <span class="comment">/* default */</span>
+
+                <span class="comment">/* Alineación de la grid completa */</span>
+                <span class="property">justify-content</span>
+                :
+                <span class="value">start</span>
+                ;
+                <span class="property">justify-content</span>
+                :
+                <span class="value">end</span>
+                ;
+                <span class="property">justify-content</span>
+                :
+                <span class="value">center</span>
+                ;
+                <span class="property">justify-content</span>
+                :
+                <span class="value">space-between</span>
+                ;
+                <span class="property">justify-content</span>
+                :
+                <span class="value">space-around</span>
+                ;
+                <span class="property">justify-content</span>
+                :
+                <span class="value">space-evenly</span>
+                ;
+
+                <span class="property">align-content</span>
+                :
+                <span class="value">start</span>
+                ;
+                <span class="property">align-content</span>
+                :
+                <span class="value">end</span>
+                ;
+                <span class="property">align-content</span>
+                :
+                <span class="value">center</span>
+                ;
+                <span class="property">align-content</span>
+                :
+                <span class="value">space-between</span>
+                ; }
+              </div>
+
+              <h3>📦 Items Grid (hijos)</h3>
+
+              <div class="code-block">
+                <span class="selector">.item</span>
+                {
+                <span class="comment">/* Posicionar por líneas */</span>
+                <span class="property">grid-column-start</span>
+                :
+                <span class="value">1</span>
+                ;
+                <span class="property">grid-column-end</span>
+                :
+                <span class="value">3</span>
+                ;
+                <span class="comment">/* ocupa 2 columnas */</span>
+
+                <span class="comment">/* Atajo */</span>
+                <span class="property">grid-column</span>
+                :
+                <span class="value">1 / 3</span>
+                ;
+                <span class="comment">/* de línea 1 a 3 */</span>
+                <span class="property">grid-column</span>
+                :
+                <span class="value">1 / span 2</span>
+                ;
+                <span class="comment">/* desde 1, ocupa 2 */</span>
+
+                <span class="comment">/* Filas */</span>
+                <span class="property">grid-row</span>
+                :
+                <span class="value">1 / 3</span>
+                ;
+                <span class="property">grid-row</span>
+                :
+                <span class="value">1 / span 2</span>
+                ;
+
+                <span class="comment">/* Área nombrada */</span>
+                <span class="property">grid-area</span>
+                :
+                <span class="value">header</span>
+                ;
+
+                <span class="comment">/* Alineación individual */</span>
+                <span class="property">justify-self</span>
+                :
+                <span class="value">start</span>
+                ;
+                <span class="property">justify-self</span>
+                :
+                <span class="value">end</span>
+                ;
+                <span class="property">justify-self</span>
+                :
+                <span class="value">center</span>
+                ;
+
+                <span class="property">align-self</span>
+                :
+                <span class="value">start</span>
+                ;
+                <span class="property">align-self</span>
+                :
+                <span class="value">end</span>
+                ;
+                <span class="property">align-self</span>
+                :
+                <span class="value">center</span>
+                ; }
+              </div>
+
+              <h3>🗺️ Grid Template Areas</h3>
+
+              <div class="code-block">
+                <span class="selector">.container</span>
+                {
+                <span class="property">display</span>
+                :
+                <span class="value">grid</span>
+                ;
+                <span class="property">grid-template-columns</span>
+                :
+                <span class="value">200px 1fr 200px</span>
+                ;
+                <span class="property">grid-template-rows</span>
+                :
+                <span class="value">auto 1fr auto</span>
+                ;
+                <span class="property">grid-template-areas</span>
+                :
+                <span class="value">"header header header"</span>
+                <span class="value">"sidebar content ads"</span>
+                <span class="value">"footer footer footer"</span>
+                ; }
+
+                <span class="selector">.header</span>
+                {
+                <span class="property">grid-area</span>
+                :
+                <span class="value">header</span>
+                ; }
+                <span class="selector">.sidebar</span>
+                {
+                <span class="property">grid-area</span>
+                :
+                <span class="value">sidebar</span>
+                ; }
+                <span class="selector">.content</span>
+                {
+                <span class="property">grid-area</span>
+                :
+                <span class="value">content</span>
+                ; }
+                <span class="selector">.ads</span>
+                {
+                <span class="property">grid-area</span>
+                :
+                <span class="value">ads</span>
+                ; }
+                <span class="selector">.footer</span>
+                {
+                <span class="property">grid-area</span>
+                :
+                <span class="value">footer</span>
+                ; }
+              </div>
+
+              <h3>✨ Ejemplos Prácticos</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Galería responsiva */</span>
+                <span class="selector">.galeria</span>
+                {
+                <span class="property">display</span>
+                :
+                <span class="value">grid</span>
+                ;
+                <span class="property">grid-template-columns</span>
+                :
+                <span class="value">repeat(auto-fill, minmax(200px, 1fr))</span>
+                ;
+                <span class="property">gap</span>
+                :
+                <span class="value">10px</span>
+                ; }
+
+                <span class="comment">/* Dashboard layout */</span>
+                <span class="selector">.dashboard</span>
+                {
+                <span class="property">display</span>
+                :
+                <span class="value">grid</span>
+                ;
+                <span class="property">grid-template-columns</span>
+                :
+                <span class="value">repeat(12, 1fr)</span>
+                ;
+                <span class="property">gap</span>
+                :
+                <span class="value">20px</span>
+                ; }
+
+                <span class="selector">.widget-grande</span>
+                {
+                <span class="property">grid-column</span>
+                :
+                <span class="value">span 6</span>
+                ;
+                <span class="comment">/* ocupa 6 columnas */</span>
+                }
+
+                <span class="selector">.widget-pequeno</span>
+                {
+                <span class="property">grid-column</span>
+                :
+                <span class="value">span 3</span>
+                ;
+                <span class="comment">/* ocupa 3 columnas */</span>
+                }
+
+                <span class="comment">/* Calendario */</span>
+                <span class="selector">.calendario</span>
+                {
+                <span class="property">display</span>
+                :
+                <span class="value">grid</span>
+                ;
+                <span class="property">grid-template-columns</span>
+                :
+                <span class="value">repeat(7, 1fr)</span>
+                ;
+                <span class="comment">/* 7 días */</span>
+                <span class="property">gap</span>
+                :
+                <span class="value">2px</span>
+                ; }
+
+                <span class="comment">/* Layout de página completa */</span>
+                <span class="selector">.pagina</span>
+                {
+                <span class="property">display</span>
+                :
+                <span class="value">grid</span>
+                ;
+                <span class="property">min-height</span>
+                :
+                <span class="value">100vh</span>
+                ;
+                <span class="property">grid-template-rows</span>
+                :
+                <span class="value">auto 1fr auto</span>
+                ; }
+
+                <span class="selector">.header</span>
+                {
+                <span class="comment">/* altura automática */</span>
+                }
+                <span class="selector">.main</span>
+                {
+                <span class="comment">/* toma todo el espacio disponible */</span>
+                }
+                <span class="selector">.footer</span>
+                {
+                <span class="comment">/* altura automática */</span>
+                }
+              </div>
+
+              <div class="important">
+                <strong>🎓 Tip:</strong>
+                auto-fit colapsa tracks vacíos, auto-fill los mantiene. Usa auto-fit para grids responsivos.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Position y Display -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>📍 Position y Display</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              <h3>🎭 Display</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Valores principales */</span>
+                <span class="selector">.elemento</span>
+                {
+                <span class="property">display</span>
+                :
+                <span class="value">block</span>
+                ;
+                <span class="comment">/* ocupa todo el ancho */</span>
+                <span class="property">display</span>
+                :
+                <span class="value">inline</span>
+                ;
+                <span class="comment">/* en línea con texto */</span>
+                <span class="property">display</span>
+                :
+                <span class="value">inline-block</span>
+                ;
+                <span class="comment">/* en línea pero con dimensiones */</span>
+                <span class="property">display</span>
+                :
+                <span class="value">none</span>
+                ;
+                <span class="comment">/* oculto (no ocupa espacio) */</span>
+                <span class="property">display</span>
+                :
+                <span class="value">flex</span>
+                ;
+                <span class="comment">/* contenedor flexible */</span>
+                <span class="property">display</span>
+                :
+                <span class="value">grid</span>
+                ;
+                <span class="comment">/* contenedor grid */</span>
+                <span class="property">display</span>
+                :
+                <span class="value">inline-flex</span>
+                ;
+                <span class="comment">/* flex en línea */</span>
+                <span class="property">display</span>
+                :
+                <span class="value">inline-grid</span>
+                ;
+                <span class="comment">/* grid en línea */</span>
+                }
+
+                <span class="comment">/* Diferencias importantes */</span>
+                <span class="selector">.block</span>
+                {
+                <span class="property">display</span>
+                :
+                <span class="value">block</span>
+                ;
+                <span class="property">width</span>
+                :
+                <span class="value">100px</span>
+                ;
+                <span class="comment">/* ✅ funciona */</span>
+                <span class="property">height</span>
+                :
+                <span class="value">100px</span>
+                ;
+                <span class="comment">/* ✅ funciona */</span>
+                <span class="property">margin</span>
+                :
+                <span class="value">20px</span>
+                ;
+                <span class="comment">/* ✅ funciona en todos lados */</span>
+                }
+
+                <span class="selector">.inline</span>
+                {
+                <span class="property">display</span>
+                :
+                <span class="value">inline</span>
+                ;
+                <span class="property">width</span>
+                :
+                <span class="value">100px</span>
+                ;
+                <span class="comment">/* ❌ ignorado */</span>
+                <span class="property">height</span>
+                :
+                <span class="value">100px</span>
+                ;
+                <span class="comment">/* ❌ ignorado */</span>
+                <span class="property">margin</span>
+                :
+                <span class="value">20px</span>
+                ;
+                <span class="comment">/* ⚠️ solo horizontal */</span>
+                }
+              </div>
+
+              <h3>📍 Position</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Static - default, flujo normal */</span>
+                <span class="selector">.static</span>
+                {
+                <span class="property">position</span>
+                :
+                <span class="value">static</span>
+                ;
+                <span class="comment">/* top, right, bottom, left no funcionan */</span>
+                }
+
+                <span class="comment">/* Relative - relativo a su posición normal */</span>
+                <span class="selector">.relative</span>
+                {
+                <span class="property">position</span>
+                :
+                <span class="value">relative</span>
+                ;
+                <span class="property">top</span>
+                :
+                <span class="value">10px</span>
+                ;
+                <span class="comment">/* se mueve 10px abajo */</span>
+                <span class="property">left</span>
+                :
+                <span class="value">20px</span>
+                ;
+                <span class="comment">/* se mueve 20px derecha */</span>
+                <span class="comment">/* mantiene su espacio original */</span>
+                }
+
+                <span class="comment">/* Absolute - relativo al ancestro positioned más cercano */</span>
+                <span class="selector">.absolute</span>
+                {
+                <span class="property">position</span>
+                :
+                <span class="value">absolute</span>
+                ;
+                <span class="property">top</span>
+                :
+                <span class="value">0</span>
+                ;
+                <span class="property">right</span>
+                :
+                <span class="value">0</span>
+                ;
+                <span class="comment">/* sale del flujo normal */</span>
+                <span class="comment">/* no ocupa espacio */</span>
+                }
+
+                <span class="comment">/* Fixed - relativo a la ventana del navegador */</span>
+                <span class="selector">.fixed</span>
+                {
+                <span class="property">position</span>
+                :
+                <span class="value">fixed</span>
+                ;
+                <span class="property">bottom</span>
+                :
+                <span class="value">20px</span>
+                ;
+                <span class="property">right</span>
+                :
+                <span class="value">20px</span>
+                ;
+                <span class="comment">/* permanece en posición al hacer scroll */</span>
+                }
+
+                <span class="comment">/* Sticky - híbrido entre relative y fixed */</span>
+                <span class="selector">.sticky</span>
+                {
+                <span class="property">position</span>
+                :
+                <span class="value">sticky</span>
+                ;
+                <span class="property">top</span>
+                :
+                <span class="value">0</span>
+                ;
+                <span class="comment">/* se comporta como relative hasta que alcanza top: 0 */</span>
+                <span class="comment">/* luego se vuelve fixed */</span>
+                }
+              </div>
+
+              <h3>📐 Z-index</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Controla el orden de apilamiento */</span>
+                <span class="selector">.capa1</span>
+                {
+                <span class="property">position</span>
+                :
+                <span class="value">relative</span>
+                ;
+                <span class="comment">/* necesita position para z-index */</span>
+                <span class="property">z-index</span>
+                :
+                <span class="value">1</span>
+                ; }
+
+                <span class="selector">.capa2</span>
+                {
+                <span class="property">position</span>
+                :
+                <span class="value">relative</span>
+                ;
+                <span class="property">z-index</span>
+                :
+                <span class="value">10</span>
+                ;
+                <span class="comment">/* aparece encima */</span>
+                }
+
+                <span class="selector">.capa3</span>
+                {
+                <span class="property">position</span>
+                :
+                <span class="value">relative</span>
+                ;
+                <span class="property">z-index</span>
+                :
+                <span class="value">-1</span>
+                ;
+                <span class="comment">/* aparece debajo */</span>
+                }
+              </div>
+
+              <h3>✨ Ejemplos Prácticos</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Modal centrado */</span>
+                <span class="selector">.modal</span>
+                {
+                <span class="property">position</span>
+                :
+                <span class="value">fixed</span>
+                ;
+                <span class="property">top</span>
+                :
+                <span class="value">50%</span>
+                ;
+                <span class="property">left</span>
+                :
+                <span class="value">50%</span>
+                ;
+                <span class="property">transform</span>
+                :
+                <span class="value">translate(-50%, -50%)</span>
+                ;
+                <span class="property">z-index</span>
+                :
+                <span class="value">1000</span>
+                ; }
+
+                <span class="comment">/* Badge en esquina */</span>
+                <span class="selector">.container</span>
+                {
+                <span class="property">position</span>
+                :
+                <span class="value">relative</span>
+                ; }
+
+                <span class="selector">.badge</span>
+                {
+                <span class="property">position</span>
+                :
+                <span class="value">absolute</span>
+                ;
+                <span class="property">top</span>
+                :
+                <span class="value">-10px</span>
+                ;
+                <span class="property">right</span>
+                :
+                <span class="value">-10px</span>
+                ;
+                <span class="property">background</span>
+                :
+                <span class="value">red</span>
+                ;
+                <span class="property">border-radius</span>
+                :
+                <span class="value">50%</span>
+                ; }
+
+                <span class="comment">/* Header sticky */</span>
+                <span class="selector">.header</span>
+                {
+                <span class="property">position</span>
+                :
+                <span class="value">sticky</span>
+                ;
+                <span class="property">top</span>
+                :
+                <span class="value">0</span>
+                ;
+                <span class="property">background</span>
+                :
+                <span class="value">white</span>
+                ;
+                <span class="property">z-index</span>
+                :
+                <span class="value">100</span>
+                ; }
+
+                <span class="comment">/* Botón flotante */</span>
+                <span class="selector">.fab</span>
+                {
+                <span class="property">position</span>
+                :
+                <span class="value">fixed</span>
+                ;
+                <span class="property">bottom</span>
+                :
+                <span class="value">20px</span>
+                ;
+                <span class="property">right</span>
+                :
+                <span class="value">20px</span>
+                ;
+                <span class="property">width</span>
+                :
+                <span class="value">60px</span>
+                ;
+                <span class="property">height</span>
+                :
+                <span class="value">60px</span>
+                ;
+                <span class="property">border-radius</span>
+                :
+                <span class="value">50%</span>
+                ;
+                <span class="property">z-index</span>
+                :
+                <span class="value">999</span>
+                ; }
+              </div>
+
+              <div class="important">
+                <strong>💡 Recuerda:</strong>
+                Para usar z-index, el elemento debe tener position diferente de static.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Responsive Design -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>📱 Diseño Responsivo</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              <h3>📏 Media Queries</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Sintaxis básica */</span>
+                <span class="selector">@media (condición)</span>
+                {
+                <span class="comment">/* estilos que se aplican cuando se cumple la condición */</span>
+                }
+
+                <span class="comment">/* Por ancho de pantalla */</span>
+                <span class="selector">@media (min-width: 768px)</span>
+                {
+                <span class="selector">.container</span>
+                {
+                <span class="property">padding</span>
+                :
+                <span class="value">20px</span>
+                ; } }
+
+                <span class="selector">@media (max-width: 767px)</span>
+                {
+                <span class="selector">.container</span>
+                {
+                <span class="property">padding</span>
+                :
+                <span class="value">10px</span>
+                ; } }
+
+                <span class="comment">/* Rango */</span>
+                <span class="selector">@media (min-width: 768px) and (max-width: 1024px)</span>
+                {
+                <span class="selector">.container</span>
+                {
+                <span class="property">max-width</span>
+                :
+                <span class="value">960px</span>
+                ; } }
+
+                <span class="comment">/* Orientación */</span>
+                <span class="selector">@media (orientation: landscape)</span>
+                {
+                <span class="comment">/* horizontal */</span>
+                }
+
+                <span class="selector">@media (orientation: portrait)</span>
+                {
+                <span class="comment">/* vertical */</span>
+                }
+
+                <span class="comment">/* Tipo de medio */</span>
+                <span class="selector">@media print</span>
+                {
+                <span class="selector">.no-imprimir</span>
+                {
+                <span class="property">display</span>
+                :
+                <span class="value">none</span>
+                ; } }
+
+                <span class="selector">@media screen</span>
+                {
+                <span class="comment">/* solo para pantallas */</span>
+                }
+              </div>
+
+              <h3>📊 Breakpoints Comunes</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Mobile First Approach (recomendado) */</span>
+
+                <span class="comment">/* Estilos base: móvil (default) */</span>
+                <span class="selector">.container</span>
+                {
+                <span class="property">padding</span>
+                :
+                <span class="value">10px</span>
+                ;
+                <span class="property">font-size</span>
+                :
+                <span class="value">14px</span>
+                ; }
+
+                <span class="comment">/* Tablet pequeña (576px+) */</span>
+                <span class="selector">@media (min-width: 576px)</span>
+                {
+                <span class="selector">.container</span>
+                {
+                <span class="property">padding</span>
+                :
+                <span class="value">15px</span>
+                ; } }
+
+                <span class="comment">/* Tablet (768px+) */</span>
+                <span class="selector">@media (min-width: 768px)</span>
+                {
+                <span class="selector">.container</span>
+                {
+                <span class="property">padding</span>
+                :
+                <span class="value">20px</span>
+                ;
+                <span class="property">font-size</span>
+                :
+                <span class="value">16px</span>
+                ; } }
+
+                <span class="comment">/* Desktop (1024px+) */</span>
+                <span class="selector">@media (min-width: 1024px)</span>
+                {
+                <span class="selector">.container</span>
+                {
+                <span class="property">max-width</span>
+                :
+                <span class="value">1200px</span>
+                ;
+                <span class="property">padding</span>
+                :
+                <span class="value">30px</span>
+                ; } }
+
+                <span class="comment">/* Desktop grande (1440px+) */</span>
+                <span class="selector">@media (min-width: 1440px)</span>
+                {
+                <span class="selector">.container</span>
+                {
+                <span class="property">max-width</span>
+                :
+                <span class="value">1400px</span>
+                ; } }
+              </div>
+
+              <h3>🎯 Técnicas Responsivas</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Unidades relativas */</span>
+                <span class="selector">.texto</span>
+                {
+                <span class="property">font-size</span>
+                :
+                <span class="value">16px</span>
+                ;
+                <span class="comment">/* fijo */</span>
+                <span class="property">font-size</span>
+                :
+                <span class="value">1rem</span>
+                ;
+                <span class="comment">/* relativo a root */</span>
+                <span class="property">font-size</span>
+                :
+                <span class="value">1em</span>
+                ;
+                <span class="comment">/* relativo al padre */</span>
+                <span class="property">font-size</span>
+                :
+                <span class="value">2vw</span>
+                ;
+                <span class="comment">/* 2% del viewport width */</span>
+                <span class="property">font-size</span>
+                :
+                <span class="value">2vh</span>
+                ;
+                <span class="comment">/* 2% del viewport height */</span>
+                }
+
+                <span class="comment">/* Imágenes responsivas */</span>
+                <span class="selector">img</span>
+                {
+                <span class="property">max-width</span>
+                :
+                <span class="value">100%</span>
+                ;
+                <span class="property">height</span>
+                :
+                <span class="value">auto</span>
+                ;
+                <span class="property">display</span>
+                :
+                <span class="value">block</span>
+                ; }
+
+                <span class="comment">/* Videos responsivos */</span>
+                <span class="selector">.video-container</span>
+                {
+                <span class="property">position</span>
+                :
+                <span class="value">relative</span>
+                ;
+                <span class="property">padding-bottom</span>
+                :
+                <span class="value">56.25%</span>
+                ;
+                <span class="comment">/* 16:9 */</span>
+                <span class="property">height</span>
+                :
+                <span class="value">0</span>
+                ;
+                <span class="property">overflow</span>
+                :
+                <span class="value">hidden</span>
+                ; }
+
+                <span class="selector">.video-container iframe</span>
+                {
+                <span class="property">position</span>
+                :
+                <span class="value">absolute</span>
+                ;
+                <span class="property">top</span>
+                :
+                <span class="value">0</span>
+                ;
+                <span class="property">left</span>
+                :
+                <span class="value">0</span>
+                ;
+                <span class="property">width</span>
+                :
+                <span class="value">100%</span>
+                ;
+                <span class="property">height</span>
+                :
+                <span class="value">100%</span>
+                ; }
+
+                <span class="comment">/* Tipografía fluida */</span>
+                <span class="selector">h1</span>
+                {
+                <span class="property">font-size</span>
+                :
+                <span class="value">clamp(24px, 5vw, 48px)</span>
+                ;
+                <span class="comment">/* mínimo: 24px, preferido: 5vw, máximo: 48px */</span>
+                }
+              </div>
+
+              <h3>🎨 Layout Responsivo</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Grid responsivo automático */</span>
+                <span class="selector">.grid</span>
+                {
+                <span class="property">display</span>
+                :
+                <span class="value">grid</span>
+                ;
+                <span class="property">grid-template-columns</span>
+                :
+                <span class="value">repeat(auto-fit, minmax(250px, 1fr))</span>
+                ;
+                <span class="property">gap</span>
+                :
+                <span class="value">20px</span>
+                ; }
+
+                <span class="comment">/* Flexbox responsivo */</span>
+                <span class="selector">.flex-grid</span>
+                {
+                <span class="property">display</span>
+                :
+                <span class="value">flex</span>
+                ;
+                <span class="property">flex-wrap</span>
+                :
+                <span class="value">wrap</span>
+                ;
+                <span class="property">gap</span>
+                :
+                <span class="value">20px</span>
+                ; }
+
+                <span class="selector">.flex-grid > *</span>
+                {
+                <span class="property">flex</span>
+                :
+                <span class="value">1 1 300px</span>
+                ;
+                <span class="comment">/* mínimo 300px */</span>
+                }
+
+                <span class="comment">/* Ocultar/mostrar según dispositivo */</span>
+                <span class="selector">.mobile-only</span>
+                {
+                <span class="property">display</span>
+                :
+                <span class="value">block</span>
+                ; }
+
+                <span class="selector">.desktop-only</span>
+                {
+                <span class="property">display</span>
+                :
+                <span class="value">none</span>
+                ; }
+
+                <span class="selector">@media (min-width: 768px)</span>
+                {
+                <span class="selector">.mobile-only</span>
+                {
+                <span class="property">display</span>
+                :
+                <span class="value">none</span>
+                ; }
+
+                <span class="selector">.desktop-only</span>
+                {
+                <span class="property">display</span>
+                :
+                <span class="value">block</span>
+                ; } }
+              </div>
+
+              <div class="important">
+                <strong>⚠️ No olvides:</strong>
+                Incluir el meta viewport en tu HTML:
+                <code>&lt;meta name="viewport" content="width=device-width,initial-scale=1"&gt;</code>
+              </div>
+
+              <div class="tip">
+                <strong>🎯 Mejor práctica:</strong>
+                Diseña mobile-first. Es más fácil expandir un diseño simple que simplificar uno complejo.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transiciones y Animaciones -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>✨ Transiciones y Animaciones</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              <h3>🔄 Transiciones</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Sintaxis completa */</span>
+                <span class="selector">.boton</span>
+                {
+                <span class="property">background</span>
+                :
+                <span class="value">blue</span>
+                ;
+                <span class="property">transition-property</span>
+                :
+                <span class="value">background</span>
+                ;
+                <span class="comment">/* qué animar */</span>
+                <span class="property">transition-duration</span>
+                :
+                <span class="value">0.3s</span>
+                ;
+                <span class="comment">/* duración */</span>
+                <span class="property">transition-timing-function</span>
+                :
+                <span class="value">ease</span>
+                ;
+                <span class="comment">/* aceleración */</span>
+                <span class="property">transition-delay</span>
+                :
+                <span class="value">0s</span>
+                ;
+                <span class="comment">/* retraso */</span>
+                }
+
+                <span class="selector">.boton:hover</span>
+                {
+                <span class="property">background</span>
+                :
+                <span class="value">red</span>
+                ; }
+
+                <span class="comment">/* Atajo (recomendado) */</span>
+                <span class="selector">.boton</span>
+                {
+                <span class="property">background</span>
+                :
+                <span class="value">blue</span>
+                ;
+                <span class="property">transition</span>
+                :
+                <span class="value">background 0.3s ease</span>
+                ; }
+
+                <span class="comment">/* Múltiples propiedades */</span>
+                <span class="selector">.card</span>
+                {
+                <span class="property">transition</span>
+                :
+                <span class="value">transform 0.3s ease, box-shadow 0.3s ease</span>
+                ; }
+
+                <span class="comment">/* Todo */</span>
+                <span class="selector">.elemento</span>
+                {
+                <span class="property">transition</span>
+                :
+                <span class="value">all 0.3s ease</span>
+                ; }
+
+                <span class="comment">/* Timing functions comunes */</span>
+                <span class="property">transition-timing-function</span>
+                :
+                <span class="value">linear</span>
+                ;
+                <span class="comment">/* constante */</span>
+                <span class="property">transition-timing-function</span>
+                :
+                <span class="value">ease</span>
+                ;
+                <span class="comment">/* default */</span>
+                <span class="property">transition-timing-function</span>
+                :
+                <span class="value">ease-in</span>
+                ;
+                <span class="comment">/* acelera */</span>
+                <span class="property">transition-timing-function</span>
+                :
+                <span class="value">ease-out</span>
+                ;
+                <span class="comment">/* desacelera */</span>
+                <span class="property">transition-timing-function</span>
+                :
+                <span class="value">ease-in-out</span>
+                ;
+                <span class="comment">/* acelera y desacelera */</span>
+                <span class="property">transition-timing-function</span>
+                :
+                <span class="value">cubic-bezier(0.4, 0, 0.2, 1)</span>
+                ;
+                <span class="comment">/* personalizado */</span>
+              </div>
+
+              <h3>🎬 Animaciones con @keyframes</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Definir animación */</span>
+                <span class="selector">@keyframes deslizar</span>
+                {
+                <span class="selector">from</span>
+                {
+                <span class="property">transform</span>
+                :
+                <span class="value">translateX(-100%)</span>
+                ;
+                <span class="property">opacity</span>
+                :
+                <span class="value">0</span>
+                ; }
+
+                <span class="selector">to</span>
+                {
+                <span class="property">transform</span>
+                :
+                <span class="value">translateX(0)</span>
+                ;
+                <span class="property">opacity</span>
+                :
+                <span class="value">1</span>
+                ; } }
+
+                <span class="comment">/* Con porcentajes */</span>
+                <span class="selector">@keyframes rebote</span>
+                {
+                <span class="selector">0%</span>
+                {
+                <span class="property">transform</span>
+                :
+                <span class="value">translateY(0)</span>
+                ; }
+
+                <span class="selector">50%</span>
+                {
+                <span class="property">transform</span>
+                :
+                <span class="value">translateY(-20px)</span>
+                ; }
+
+                <span class="selector">100%</span>
+                {
+                <span class="property">transform</span>
+                :
+                <span class="value">translateY(0)</span>
+                ; } }
+
+                <span class="comment">/* Aplicar animación */</span>
+                <span class="selector">.elemento</span>
+                {
+                <span class="property">animation-name</span>
+                :
+                <span class="value">deslizar</span>
+                ;
+                <span class="property">animation-duration</span>
+                :
+                <span class="value">1s</span>
+                ;
+                <span class="property">animation-timing-function</span>
+                :
+                <span class="value">ease</span>
+                ;
+                <span class="property">animation-delay</span>
+                :
+                <span class="value">0s</span>
+                ;
+                <span class="property">animation-iteration-count</span>
+                :
+                <span class="value">infinite</span>
+                ;
+                <span class="comment">/* o número */</span>
+                <span class="property">animation-direction</span>
+                :
+                <span class="value">normal</span>
+                ;
+                <span class="comment">/* normal, reverse, alternate */</span>
+                <span class="property">animation-fill-mode</span>
+                :
+                <span class="value">forwards</span>
+                ;
+                <span class="comment">/* mantiene estado final */</span>
+                }
+
+                <span class="comment">/* Atajo */</span>
+                <span class="selector">.elemento</span>
+                {
+                <span class="property">animation</span>
+                :
+                <span class="value">deslizar 1s ease 0s infinite normal forwards</span>
+                ; }
+              </div>
+
+              <h3>🎨 Ejemplos Prácticos</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Hover suave */</span>
+                <span class="selector">.boton</span>
+                {
+                <span class="property">background</span>
+                :
+                <span class="value">#667eea</span>
+                ;
+                <span class="property">transform</span>
+                :
+                <span class="value">scale(1)</span>
+                ;
+                <span class="property">transition</span>
+                :
+                <span class="value">all 0.3s ease</span>
+                ; }
+
+                <span class="selector">.boton:hover</span>
+                {
+                <span class="property">background</span>
+                :
+                <span class="value">#764ba2</span>
+                ;
+                <span class="property">transform</span>
+                :
+                <span class="value">scale(1.05)</span>
+                ; }
+
+                <span class="comment">/* Rotación infinita */</span>
+                <span class="selector">@keyframes girar</span>
+                {
+                <span class="selector">from</span>
+                {
+                <span class="property">transform</span>
+                :
+                <span class="value">rotate(0deg)</span>
+                ; }
+                <span class="selector">to</span>
+                {
+                <span class="property">transform</span>
+                :
+                <span class="value">rotate(360deg)</span>
+                ; } }
+
+                <span class="selector">.loading</span>
+                {
+                <span class="property">animation</span>
+                :
+                <span class="value">girar 2s linear infinite</span>
+                ; }
+
+                <span class="comment">/* Fade in al cargar */</span>
+                <span class="selector">@keyframes fadeIn</span>
+                {
+                <span class="selector">from</span>
+                {
+                <span class="property">opacity</span>
+                :
+                <span class="value">0</span>
+                ;
+                <span class="property">transform</span>
+                :
+                <span class="value">translateY(20px)</span>
+                ; }
+                <span class="selector">to</span>
+                {
+                <span class="property">opacity</span>
+                :
+                <span class="value">1</span>
+                ;
+                <span class="property">transform</span>
+                :
+                <span class="value">translateY(0)</span>
+                ; } }
+
+                <span class="selector">.aparecer</span>
+                {
+                <span class="property">animation</span>
+                :
+                <span class="value">fadeIn 0.6s ease</span>
+                ; }
+
+                <span class="comment">/* Pulso */</span>
+                <span class="selector">@keyframes pulso</span>
+                {
+                <span class="selector">0%, 100%</span>
+                {
+                <span class="property">transform</span>
+                :
+                <span class="value">scale(1)</span>
+                ; }
+                <span class="selector">50%</span>
+                {
+                <span class="property">transform</span>
+                :
+                <span class="value">scale(1.1)</span>
+                ; } }
+
+                <span class="selector">.notificacion</span>
+                {
+                <span class="property">animation</span>
+                :
+                <span class="value">pulso 2s ease-in-out infinite</span>
+                ; }
+              </div>
+
+              <div class="important">
+                <strong>Tip de rendimiento:</strong>
+                Anima solo transform y opacity para mejor performance. Evita animar width, height, margin, etc.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mejores Prácticas -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>Mejores Prácticas y Consejos</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              <h3>Organización del Código</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Estructura recomendada */</span>
+
+                <span class="comment">/* ===== 1. RESET/NORMALIZE ===== */</span>
+                * {
+                <span class="property">margin</span>
+                :
+                <span class="value">0</span>
+                ;
+                <span class="property">padding</span>
+                :
+                <span class="value">0</span>
+                ;
+                <span class="property">box-sizing</span>
+                :
+                <span class="value">border-box</span>
+                ; }
+
+                <span class="comment">/* ===== 2. VARIABLES ===== */</span>
+                <span class="selector">:root</span>
+                {
+                <span class="property">--color-primary</span>
+                :
+                <span class="value">#667eea</span>
+                ;
+                <span class="property">--spacing-unit</span>
+                :
+                <span class="value">8px</span>
+                ; }
+
+                <span class="comment">/* ===== 3. TIPOGRAFÍA BASE ===== */</span>
+                <span class="selector">body</span>
+                {
+                <span class="property">font-family</span>
+                :
+                <span class="value">Arial, sans-serif</span>
+                ;
+                <span class="property">line-height</span>
+                :
+                <span class="value">1.6</span>
+                ; }
+
+                <span class="comment">/* ===== 4. LAYOUT ===== */</span>
+                <span class="selector">.container</span>
+                { }
+                <span class="selector">.grid</span>
+                { }
+
+                <span class="comment">/* ===== 5. COMPONENTES ===== */</span>
+                <span class="selector">.button</span>
+                { }
+                <span class="selector">.card</span>
+                { }
+
+                <span class="comment">/* ===== 6. UTILIDADES ===== */</span>
+                <span class="selector">.text-center</span>
+                {
+                <span class="property">text-align</span>
+                :
+                <span class="value">center</span>
+                ; }
+                <span class="selector">.hidden</span>
+                {
+                <span class="property">display</span>
+                :
+                <span class="value">none</span>
+                ; }
+
+                <span class="comment">/* ===== 7. MEDIA QUERIES ===== */</span>
+                <span class="selector">@media (min-width: 768px)</span>
+                {
+                <span class="comment">/* responsive styles */</span>
+                }
+              </div>
+
+              <h3>Nomenclatura BEM</h3>
+
+              <div class="code-block">
+                <span class="comment">/* Block Element Modifier */</span>
+
+                <span class="comment">/* Bloque: componente independiente */</span>
+                <span class="selector">.card</span>
+                { }
+
+                <span class="comment">/* Elemento: parte del bloque */</span>
+                <span class="selector">.card__title</span>
+                { }
+                <span class="selector">.card__body</span>
+                { }
+                <span class="selector">.card__footer</span>
+                { }
+
+                <span class="comment">/* Modificador: variación del bloque o elemento */</span>
+                <span class="selector">.card--featured</span>
+                { }
+                <span class="selector">.card--large</span>
+                { }
+                <span class="selector">.card__title--bold</span>
+                { }
+              </div>
+
+              <div class="code-block">
+                <span class="comment">&lt;!-- HTML correspondiente --&gt;</span>
+                <span class="selector">&lt;div</span>
+                <span class="property">class</span>
+                =
+                <span class="value">"card card--featured"</span>
+                <span class="selector">&gt;</span>
+                <span class="selector">&lt;h2</span>
+                <span class="property">class</span>
+                =
+                <span class="value">"card__title card__title--bold"</span>
+                <span class="selector">&gt;</span>
+                Título
+                <span class="selector">&lt;/h2&gt;</span>
+                <span class="selector">&lt;div</span>
+                <span class="property">class</span>
+                =
+                <span class="value">"card__body"</span>
+                <span class="selector">&gt;</span>
+                Contenido
+                <span class="selector">&lt;/div&gt;</span>
+                <span class="selector">&lt;div</span>
+                <span class="property">class</span>
+                =
+                <span class="value">"card__footer"</span>
+                <span class="selector">&gt;</span>
+                Pie
+                <span class="selector">&lt;/div&gt;</span>
+                <span class="selector">&lt;/div&gt;</span>
+              </div>
+
+              <h3>Errores Comunes a Evitar</h3>
+
+              <div class="bad">
+                <strong>Usar demasiada especificidad</strong>
+                <div class="code-block">
+                  <span class="selector">div#container .wrapper ul li a.link</span>
+                  {
+                  <span class="comment">/* Difícil de sobrescribir */</span>
+                  }
+                </div>
+              </div>
+
+              <div class="good">
+                <strong>Usa clases específicas</strong>
+                <div class="code-block">
+                  <span class="selector">.nav-link</span>
+                  {
+                  <span class="comment">/* Fácil de mantener */</span>
+                  }
+                </div>
+              </div>
+
+              <div class="bad">
+                <strong>Repetir código</strong>
+                <div class="code-block">
+                  <span class="selector">.button-primary</span>
+                  {
+                  <span class="property">padding</span>
+                  :
+                  <span class="value">10px 20px</span>
+                  ;
+                  <span class="property">border-radius</span>
+                  :
+                  <span class="value">5px</span>
+                  ;
+                  <span class="property">background</span>
+                  :
+                  <span class="value">blue</span>
+                  ; }
+
+                  <span class="selector">.button-secondary</span>
+                  {
+                  <span class="property">padding</span>
+                  :
+                  <span class="value">10px 20px</span>
+                  ;
+                  <span class="property">border-radius</span>
+                  :
+                  <span class="value">5px</span>
+                  ;
+                  <span class="property">background</span>
+                  :
+                  <span class="value">gray</span>
+                  ; }
+                </div>
+              </div>
+
+              <div class="good">
+                <strong>Usa clases base</strong>
+                <div class="code-block">
+                  <span class="selector">.button</span>
+                  {
+                  <span class="property">padding</span>
+                  :
+                  <span class="value">10px 20px</span>
+                  ;
+                  <span class="property">border-radius</span>
+                  :
+                  <span class="value">5px</span>
+                  ; }
+
+                  <span class="selector">.button--primary</span>
+                  {
+                  <span class="property">background</span>
+                  :
+                  <span class="value">blue</span>
+                  ; }
+                  <span class="selector">.button--secondary</span>
+                  {
+                  <span class="property">background</span>
+                  :
+                  <span class="value">gray</span>
+                  ; }
+                </div>
+              </div>
+
+              <h3>Herramientas Útiles</h3>
+
+              <ul>
+                <li>
+                  <strong>Can I Use:</strong>
+                  Verifica compatibilidad de navegadores
+                </li>
+                <li>
+                  <strong>CSS Validator:</strong>
+                  Valida tu código CSS
+                </li>
+                <li>
+                  <strong>PurgeCSS:</strong>
+                  Elimina CSS no utilizado
+                </li>
+                <li>
+                  <strong>Autoprefixer:</strong>
+                  Añade prefijos de navegador automáticamente
+                </li>
+                <li>
+                  <strong>Sass/SCSS:</strong>
+                  Preprocesador CSS con variables, anidamiento
+                </li>
+                <li>
+                  <strong>PostCSS:</strong>
+                  Transforma CSS con plugins
+                </li>
+              </ul>
+
+              <div class="tip">
+                <strong>Recursos para aprender más:</strong>
+                <ul>
+                  <li>MDN Web Docs - Documentación completa</li>
+                  <li>CSS-Tricks - Tutoriales y trucos</li>
+                  <li>Flexbox Froggy - Juego para aprender Flexbox</li>
+                  <li>Grid Garden - Juego para aprender Grid</li>
+                  <li>CodePen - Experimenta con CSS en vivo</li>
+                </ul>
+              </div>
+
+              <div class="important">
+                <strong>Siguiente paso:</strong>
+                Una vez domines CSS, aprende JavaScript para añadir interactividad, y explora frameworks modernos como Tailwind CSS o metodologías como CSS-in-JS.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function toggleAccordion(header) {
+        const content = header.nextElementSibling;
+        const icon = header.querySelector('.accordion-icon');
+
+        // Cerrar todos los otros acordeones
+        document.querySelectorAll('.accordion-content').forEach(item => {
+          if (item !== content) {
+            item.classList.remove('active');
+            item.previousElementSibling.classList.remove('active');
+          }
+        });
+
+        // Toggle del acordeón actual
+        content.classList.toggle('active');
+        header.classList.toggle('active');
+
+        // Scroll suave hacia el encabezado del acordeón
+        setTimeout(() => {
+          header.scrollIntoView({behavior: 'smooth', block: 'start'});
+        }, 100);
+      }
+
+      // Efecto de desplazamiento suave para enlaces internos
+      document.addEventListener('DOMContentLoaded', function () {
+        // Abrir el primer acordeón por defecto
+        // const firstAccordion = document.querySelector(".accordion-header");
+        // if (firstAccordion) {
+        //   toggleAccordion(firstAccordion);
+        // }
+      });
+    </script>
+  </body>
+  <footer>
+    <div style="text-align: center; color: #fafafa; padding-top: 1rem">
+      <p>
+        José M. Fernández — ABE/ASE Math Master Teacher, Harry S. Truman College, City Colleges of Chicago.
+        <br />
+        Este material se distribuye bajo licencia
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="license" target="_blank">
+          <span style="color: #fafafa">Creative Commons Atribución-NoComercial-CompartirIgual 4.0 (CC BY-NC-SA 4.0)</span>
+        </a>
+        .
+      </p>
+    </div>
+  </footer>
+</html>
