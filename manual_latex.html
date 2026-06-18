@@ -1,0 +1,533 @@
+<!doctype html>
+<!--
+  Manual de LaTeX
+  © José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago
+  Licencia: CC BY-NC-SA 4.0  ·  https://creativecommons.org/licenses/by-nc-sa/4.0/
+-->
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago" />
+    <meta name="license" content="CC BY-NC-SA 4.0" />
+    <link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" />
+    <title>Manual Interactivo de LaTeX</title>
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [
+            ['$', '$'],
+            ['\\(', '\\)']
+          ],
+          displayMath: [
+            ['$$', '$$'],
+            ['\\[', '\\]']
+          ]
+        }
+      };
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+
+    <style>
+      /* Variables de Color */
+      :root {
+        --color-primario: #0d47a1; /* Azul oscuro */
+        --color-secundario: #1976d2; /* Azul medio */
+        --color-fondo: #f4f7f6;
+        --color-tarjeta: #ffffff;
+        --color-texto: #333;
+        --color-borde: #ddd;
+        --sombra-tarjeta: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        background-color: var(--color-fondo);
+        color: var(--color-texto);
+        line-height: 1.6;
+        margin: 0;
+        padding: 20px;
+      }
+
+      main {
+        max-width: 1000px;
+        margin: 20px auto;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 25px;
+      }
+
+      h1,
+      h2 {
+        color: var(--color-primario);
+        border-bottom: 2px solid var(--color-secundario);
+        padding-bottom: 8px;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      /* Estilo del Acordeón */
+      .accordion {
+        background-color: var(--color-primario);
+        color: white;
+        cursor: pointer;
+        padding: 18px 25px;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        font-size: 1.1rem;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      /* Símbolo de + y - para el acordeón */
+      .accordion::after {
+        content: '+';
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white;
+        transition: transform 0.3s ease;
+      }
+
+      .accordion.active::after {
+        content: '−';
+        transform: rotate(180deg);
+      }
+
+      .accordion:hover {
+        background-color: var(--color-secundario);
+      }
+
+      .panel {
+        padding: 0 18px;
+        background-color: var(--color-tarjeta);
+        max-height: 0; /* Contraído por defecto */
+        overflow: hidden;
+        transition: max-height 0.4s ease-out;
+        border-radius: 0 0 8px 8px;
+        box-shadow: var(--sombra-tarjeta);
+        margin-bottom: 10px; /* Separación entre acordeones cerrados */
+      }
+
+      .panel.active {
+        margin-bottom: 20px; /* Separación cuando está abierto */
+      }
+
+      /* Estilo de la Tabla de Símbolos */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+
+      th,
+      td {
+        border: 1px solid var(--color-borde);
+        padding: 12px;
+        text-align: left;
+        vertical-align: middle;
+      }
+
+      th {
+        background-color: #eef;
+        color: var(--color-primario);
+        font-weight: 600;
+      }
+
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+
+      /* Estilo del Editor en Vivo */
+      .editor-seccion {
+        background-color: var(--color-tarjeta);
+        border-radius: 8px;
+        box-shadow: var(--sombra-tarjeta);
+        overflow: hidden;
+      }
+
+      .editor-seccion h2 {
+        padding: 15px 25px;
+        margin: 0;
+        background-color: var(--color-secundario);
+        color: white;
+        border-bottom: none;
+      }
+
+      .editor-container {
+        display: flex;
+        min-height: 300px;
+      }
+
+      #latex-input,
+      #latex-output {
+        width: 50%;
+        padding: 20px;
+        box-sizing: border-box; /* Importante para que el padding no afecte el ancho */
+      }
+
+      #latex-input {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 1rem;
+        border: none;
+        border-right: 2px solid var(--color-borde);
+        resize: vertical;
+        min-height: 300px;
+        background-color: #fafafa;
+        outline-color: var(--color-primario);
+      }
+
+      #latex-output {
+        font-size: 1.1rem;
+        overflow-y: auto;
+        background-color: var(--color-tarjeta);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Manual Interactivo de Sintaxis LaTeX</h1>
+      </header>
+
+      <section class="editor-seccion">
+        <h2>🤓 Editor LaTeX en Vivo</h2>
+        <div class="editor-container">
+          <textarea id="latex-input" placeholder="Escribe tu LaTeX aquí... por ejemplo: \frac{a}{b}">
+Escribe tu código aquí...
+
+Ejemplo: $$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
+
+O en línea: $E = mc^2$
+                </textarea
+          >
+          <div id="latex-output"></div>
+        </div>
+      </section>
+
+      <section class="acordeon-seccion">
+        <h2>📋 Guía Rápida de Símbolos</h2>
+
+        <button class="accordion">Operadores Matemáticos Básicos</button>
+        <div class="panel">
+          <table>
+            <thead>
+              <tr>
+                <th>Símbolo</th>
+                <th>Código LaTeX</th>
+                <th>Resultado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Suma</td>
+                <td><code>+</code></td>
+                <td>$+$</td>
+              </tr>
+              <tr>
+                <td>Resta</td>
+                <td><code>-</code></td>
+                <td>$-$</td>
+              </tr>
+              <tr>
+                <td>Multiplicación</td>
+                <td><code>\times</code></td>
+                <td>$\times$</td>
+              </tr>
+              <tr>
+                <td>División</td>
+                <td><code>\div</code></td>
+                <td>$\div$</td>
+              </tr>
+              <tr>
+                <td>Más-Menos</td>
+                <td><code>\pm</code></td>
+                <td>$\pm$</td>
+              </tr>
+              <tr>
+                <td>Infinito</td>
+                <td><code>\infty</code></td>
+                <td>$\infty$</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <button class="accordion">Letras Griegas</button>
+        <div class="panel">
+          <table>
+            <thead>
+              <tr>
+                <th>Símbolo</th>
+                <th>Código LaTeX</th>
+                <th>Resultado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Alpha (min)</td>
+                <td><code>\alpha</code></td>
+                <td>$\alpha$</td>
+              </tr>
+              <tr>
+                <td>Beta (min)</td>
+                <td><code>\beta</code></td>
+                <td>$\beta$</td>
+              </tr>
+              <tr>
+                <td>Pi (min)</td>
+                <td><code>\pi</code></td>
+                <td>$\pi$</td>
+              </tr>
+              <tr>
+                <td>Delta (MAY)</td>
+                <td><code>\Delta</code></td>
+                <td>$\Delta$</td>
+              </tr>
+              <tr>
+                <td>Omega (MAY)</td>
+                <td><code>\Omega</code></td>
+                <td>$\Omega$</td>
+              </tr>
+              <tr>
+                <td>Sigma (MAY)</td>
+                <td><code>\Sigma</code></td>
+                <td>$\Sigma$</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <button class="accordion">Superíndices y Subíndices</button>
+        <div class="panel">
+          <table>
+            <thead>
+              <tr>
+                <th>Descripción</th>
+                <th>Código LaTeX</th>
+                <th>Resultado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Superíndice simple</td>
+                <td><code>x^2</code></td>
+                <td>$x^2$</td>
+              </tr>
+              <tr>
+                <td>Superíndice múltiple</td>
+                <td><code>x^{2n+1}</code></td>
+                <td>$x^{2n+1}$</td>
+              </tr>
+              <tr>
+                <td>Subíndice simple</td>
+                <td><code>a_i</code></td>
+                <td>$a_i$</td>
+              </tr>
+              <tr>
+                <td>Subíndice múltiple</td>
+                <td><code>a_{i,j}</code></td>
+                <td>$a_{i,j}$</td>
+              </tr>
+              <tr>
+                <td>Combinado</td>
+                <td><code>C_n^k</code></td>
+                <td>$C_n^k$</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <button class="accordion">Fracciones y Raíces</button>
+        <div class="panel">
+          <table>
+            <thead>
+              <tr>
+                <th>Descripción</th>
+                <th>Código LaTeX</th>
+                <th>Resultado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Fracción</td>
+                <td><code>\frac{a}{b}</code></td>
+                <td>$\frac{a}{b}$</td>
+              </tr>
+              <tr>
+                <td>Fracción (modo display)</td>
+                <td><code>$$ \frac{a}{b} $$</code></td>
+                <td>$$ \frac{a}{b} $$</td>
+              </tr>
+              <tr>
+                <td>Raíz cuadrada</td>
+                <td><code>\sqrt{x}</code></td>
+                <td>$\sqrt{x}$</td>
+              </tr>
+              <tr>
+                <td>Raíz cúbica</td>
+                <td><code>\sqrt[3]{x}</code></td>
+                <td>$\sqrt[3]{x}$</td>
+              </tr>
+              <tr>
+                <td>Raíz enésima</td>
+                <td><code>\sqrt[n]{x+y}</code></td>
+                <td>$\sqrt[n]{x+y}$</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <button class="accordion">Sumatorios e Integrales</button>
+        <div class="panel">
+          <table>
+            <thead>
+              <tr>
+                <th>Descripción</th>
+                <th>Código LaTeX</th>
+                <th>Resultado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Sumatorio</td>
+                <td><code>\sum_{i=1}^n i^2</code></td>
+                <td>$\sum_{i=1}^n i^2$</td>
+              </tr>
+              <tr>
+                <td>Sumatorio (modo display)</td>
+                <td><code>$$ \sum_{i=1}^n i^2 $$</code></td>
+                <td>$$ \sum_{i=1}^n i^2 $$</td>
+              </tr>
+              <tr>
+                <td>Integral</td>
+                <td><code>\int_a^b f(x) dx</code></td>
+                <td>$\int_a^b f(x) dx$</td>
+              </tr>
+              <tr>
+                <td>Integral (modo display)</td>
+                <td><code>$$ \int_a^b f(x) dx $$</code></td>
+                <td>$$ \int_a^b f(x) dx $$</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <button class="accordion">Delimitadores (Paréntesis, Corchetes...)</button>
+        <div class="panel">
+          <table>
+            <thead>
+              <tr>
+                <th>Descripción</th>
+                <th>Código LaTeX</th>
+                <th>Resultado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Paréntesis</td>
+                <td><code>(x + y)</code></td>
+                <td>$(x + y)$</td>
+              </tr>
+              <tr>
+                <td>Corchetes</td>
+                <td><code>[x + y]</code></td>
+                <td>$[x + y]$</td>
+              </tr>
+              <tr>
+                <td>Llaves</td>
+                <td>
+                  <code>\{x + y\}</code>
+                  (requiere escape)
+                </td>
+                <td>$\{x + y\}$</td>
+              </tr>
+              <tr>
+                <td>Paréntesis automáticos (escalables)</td>
+                <td><code>\left( \frac{A}{B} \right)</code></td>
+                <td>$\left( \frac{A}{B} \right)$</td>
+              </tr>
+              <tr>
+                <td>Valor absoluto (escalable)</td>
+                <td><code>\left| -x \right|</code></td>
+                <td>$\left| -x \right|$</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        // --- LÓGICA DEL ACORDEÓN ---
+        const acc = document.getElementsByClassName('accordion');
+        for (let i = 0; i < acc.length; i++) {
+          acc[i].addEventListener('click', function () {
+            // Cierra todos los paneles excepto el actual
+            for (let j = 0; j < acc.length; j++) {
+              if (acc[j] !== this) {
+                acc[j].classList.remove('active');
+                acc[j].nextElementSibling.style.maxHeight = null;
+              }
+            }
+
+            // Abre o cierra el panel actual
+            this.classList.toggle('active');
+            const panel = this.nextElementSibling;
+            if (panel.style.maxHeight) {
+              panel.style.maxHeight = null;
+            } else {
+              panel.style.maxHeight = panel.scrollHeight + 'px';
+            }
+          });
+        }
+
+        // --- LÓGICA DEL EDITOR EN VIVO ---
+        const inputArea = document.getElementById('latex-input');
+        const outputArea = document.getElementById('latex-output');
+
+        function updatePreview() {
+          outputArea.innerHTML = inputArea.value;
+          // Llama a MathJax para que "renderice" el contenido del div de salida
+          MathJax.typesetPromise([outputArea]).catch(err => console.log(err.message));
+        }
+
+        // Actualiza la vista previa cada vez que el usuario escribe
+        inputArea.addEventListener('input', updatePreview);
+
+        // Renderiza el contenido inicial del editor al cargar la página
+        updatePreview();
+
+        // --- ¡AQUÍ ESTÁ LA CORRECCIÓN! ---
+        // Esta línea le dice a MathJax que renderice el resto de la página
+        // (es decir, todas las tablas del acordeón) cuando se carga.
+        MathJax.typesetPromise();
+      });
+    </script>
+  </body>
+  <footer>
+    <div style="text-align: center; padding-top: 10px">
+      <p>
+        José M. Fernández — ABE/ASE Math Master Teacher, Harry S. Truman College, City Colleges of Chicago.
+        <br />
+        Este material se distribuye bajo licencia
+        <br />
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="license" target="_blank">
+          Creative Commons Atribución-NoComercial-CompartirIgual 4.0
+          <br />
+          (CC BY-NC-SA 4.0)
+        </a>
+        .
+      </p>
+    </div>
+  </footer>
+</html>
