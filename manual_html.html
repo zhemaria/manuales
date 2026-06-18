@@ -1,0 +1,2090 @@
+<!doctype html>
+<!--
+  Manual de HTML-5
+  © José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago
+  Licencia: CC BY-NC-SA 4.0  ·  https://creativecommons.org/licenses/by-nc-sa/4.0/
+-->
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago" />
+    <meta name="license" content="CC BY-NC-SA 4.0" />
+    <link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" />
+    <title>Manual de HTML - Guía Interactiva</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+        color: #333;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #ff6b6b, #feca57);
+        color: white;
+        padding: 30px;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .header p {
+        font-size: 1.2em;
+        opacity: 0.9;
+      }
+
+      .accordion {
+        padding: 20px;
+      }
+
+      .accordion-item {
+        margin-bottom: 15px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease;
+      }
+
+      .accordion-item:hover {
+        transform: translateY(-2px);
+      }
+
+      .accordion-header {
+        background: linear-gradient(135deg, #4facfe, #00f2fe);
+        color: white;
+        padding: 20px;
+        cursor: pointer;
+        font-size: 1.3em;
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s ease;
+      }
+
+      .accordion-header:hover {
+        background: linear-gradient(135deg, #43a3f5, #00e5f2);
+      }
+
+      .accordion-header.active {
+        background: linear-gradient(135deg, #ff6b6b, #feca57);
+      }
+
+      .accordion-icon {
+        font-size: 1.5em;
+        transition: transform 0.3s ease;
+      }
+
+      .accordion-header.active .accordion-icon {
+        transform: rotate(180deg);
+      }
+
+      .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease-out;
+        background: #f8f9ff;
+      }
+
+      .accordion-content.active {
+        max-height: 8000px;
+      }
+
+      .accordion-body {
+        padding: 25px;
+        line-height: 1.7;
+      }
+
+      .tip {
+        background: linear-gradient(135deg, #a8edea, #fed6e3);
+        padding: 15px;
+        border-radius: 10px;
+        margin: 15px 0;
+        border-left: 5px solid #ff6b6b;
+      }
+
+      .code-block {
+        background: #2d3748;
+        color: #e2e8f0;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 15px 0;
+        font-family: 'Courier New', monospace;
+        overflow-x: auto;
+        position: relative;
+        white-space: pre;
+        line-height: 1.6;
+      }
+
+      .code-block::before {
+        content: '💻 Código';
+        position: absolute;
+        top: -12px;
+        left: 20px;
+        background: #4a5568;
+        color: white;
+        padding: 8px 20px;
+        border-radius: 18px;
+        font-size: 0.85em;
+        font-family: 'Segoe UI', sans-serif;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .tag {
+        color: #81c784;
+        font-weight: bold;
+      }
+
+      .attribute {
+        color: #ffb74d;
+      }
+
+      .string {
+        color: #e57373;
+      }
+
+      .good {
+        background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
+        padding: 10px;
+        border-radius: 8px;
+        margin: 10px 0;
+        border-left: 4px solid #4caf50;
+      }
+
+      .bad {
+        background: linear-gradient(135deg, #ffcdd2, #f8bbd9);
+        padding: 10px;
+        border-radius: 8px;
+        margin: 10px 0;
+        border-left: 4px solid #f44336;
+      }
+
+      .tags-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+      }
+
+      .tag-card {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        border-left: 4px solid #4facfe;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .tag-name {
+        font-weight: bold;
+        color: #4facfe;
+        font-size: 1.1em;
+        margin-bottom: 8px;
+      }
+
+      .important {
+        background: linear-gradient(135deg, #ffd54f, #ffcc02);
+        padding: 15px;
+        border-radius: 10px;
+        margin: 15px 0;
+        border-left: 5px solid #ff9800;
+        font-weight: 500;
+      }
+
+      ul {
+        margin-left: 20px;
+        margin-top: 10px;
+      }
+
+      li {
+        margin-bottom: 8px;
+      }
+
+      .emoji {
+        font-size: 1.3em;
+        margin-right: 8px;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          margin: 10px;
+          border-radius: 15px;
+        }
+
+        .header h1 {
+          font-size: 2em;
+        }
+
+        .accordion-header {
+          font-size: 1.1em;
+          padding: 15px;
+        }
+
+        .accordion-body {
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Manual 🚀 HTML-5</h1>
+        <p>Una guía completa para dominar HTML desde cero</p>
+      </div>
+
+      <div class="accordion">
+        <!-- Consejos para iniciarse -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>🎯 Consejos Esenciales para Iniciarse</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              <div class="tip">
+                <strong>💡 ¡Perfecto para principiantes!</strong>
+                Estos consejos te ayudarán a escribir código HTML limpio y profesional desde el primer día.
+              </div>
+
+              <h3>🔒 1. Cierra siempre las etiquetas</h3>
+              <p>La mayoría de etiquetas HTML requieren apertura y cierre. Esto mantiene tu código organizado y funcional.</p>
+
+              <div class="good">
+                <strong>✅ Correcto:</strong>
+                <div class="code-block">
+                  <span class="tag">&lt;p&gt;</span>
+                  Esto es un párrafo correctamente cerrado.
+                  <span class="tag">&lt;/p&gt;</span>
+
+                  <span class="tag">&lt;div&gt;</span>
+                  <span class="tag">&lt;h1&gt;</span>
+                  Título principal
+                  <span class="tag">&lt;/h1&gt;</span>
+                  <span class="tag">&lt;/div&gt;</span>
+                </div>
+              </div>
+
+              <div class="bad">
+                <strong>❌ Incorrecto:</strong>
+                <div class="code-block">
+                  <span class="tag">&lt;p&gt;</span>
+                  Párrafo sin cerrar
+
+                  <span class="tag">&lt;div&gt;</span>
+                  <span class="tag">&lt;h1&gt;</span>
+                  Título sin cerrar
+                </div>
+              </div>
+
+              <div class="important">
+                <strong>⚠️ Excepción:</strong>
+                Algunas etiquetas se autocierran: &lt;img&gt;, &lt;br&gt;, &lt;hr&gt;, &lt;input&gt;, &lt;meta&gt;
+              </div>
+
+              <h3>📐 2. Utiliza sangrías y estructura el código</h3>
+              <p>Las sangrías (indentación) hacen que tu código sea más legible y fácil de mantener.</p>
+
+              <div class="code-block">
+                <span class="tag">
+                  &lt;div
+                  <span class="attribute">class=</span>
+                  <span class="string">"contenedor"</span>
+                  &gt;
+                </span>
+                <span class="tag">&lt;header&gt;</span>
+                <span class="tag">&lt;h1&gt;</span>
+                Mi Página Web
+                <span class="tag">&lt;/h1&gt;</span>
+                <span class="tag">&lt;nav&gt;</span>
+                <span class="tag">&lt;ul&gt;</span>
+                <span class="tag">&lt;li&gt;</span>
+                <span class="tag">
+                  &lt;a
+                  <span class="attribute">href=</span>
+                  <span class="string">"#inicio"</span>
+                  &gt;
+                </span>
+                Inicio
+                <span class="tag">&lt;/a&gt;</span>
+                <span class="tag">&lt;/li&gt;</span>
+                <span class="tag">&lt;li&gt;</span>
+                <span class="tag">
+                  &lt;a
+                  <span class="attribute">href=</span>
+                  <span class="string">"#sobre"</span>
+                  &gt;
+                </span>
+                Sobre mí
+                <span class="tag">&lt;/a&gt;</span>
+                <span class="tag">&lt;/li&gt;</span>
+                <span class="tag">&lt;/ul&gt;</span>
+                <span class="tag">&lt;/nav&gt;</span>
+                <span class="tag">&lt;/header&gt;</span>
+                <span class="tag">&lt;/div&gt;</span>
+              </div>
+
+              <h3>💬 3. Deja comentarios para organizarte</h3>
+              <p>Los comentarios te ayudan a recordar qué hace cada sección y facilitan el trabajo en equipo.</p>
+
+              <div class="code-block">
+                <span style="color: #9ca3af">&lt;!-- Encabezado principal de la página --&gt;</span>
+                <span class="tag">&lt;header&gt;</span>
+                <span class="tag">&lt;h1&gt;</span>
+                Bienvenido a mi página
+                <span class="tag">&lt;/h1&gt;</span>
+                <span class="tag">&lt;/header&gt;</span>
+
+                <span style="color: #9ca3af">&lt;!-- Sección de contenido principal --&gt;</span>
+                <span class="tag">&lt;main&gt;</span>
+                <span style="color: #9ca3af">&lt;!-- Aquí va el contenido más importante --&gt;</span>
+                <span class="tag">&lt;/main&gt;</span>
+              </div>
+
+              <h3>🏷️ 4. Usa nombres descriptivos</h3>
+              <p>Elige nombres claros para clases e IDs que describan la función del elemento.</p>
+
+              <div class="good">
+                <strong>✅ Nombres descriptivos:</strong>
+                <div class="code-block">
+                  <span class="tag">
+                    &lt;div
+                    <span class="attribute">id=</span>
+                    <span class="string">"menu-principal"</span>
+                    <span class="attribute">class=</span>
+                    <span class="string">"navegacion-horizontal"</span>
+                    &gt;
+                  </span>
+                  <span class="tag">
+                    &lt;button
+                    <span class="attribute">class=</span>
+                    <span class="string">"boton-enviar-formulario"</span>
+                    &gt;
+                  </span>
+                  Enviar
+                  <span class="tag">&lt;/button&gt;</span>
+                  <span class="tag">
+                    &lt;section
+                    <span class="attribute">id=</span>
+                    <span class="string">"galeria-fotos"</span>
+                    &gt;
+                  </span>
+                </div>
+              </div>
+
+              <div class="bad">
+                <strong>❌ Nombres poco descriptivos:</strong>
+                <div class="code-block">
+                  <span class="tag">
+                    &lt;div
+                    <span class="attribute">id=</span>
+                    <span class="string">"div1"</span>
+                    <span class="attribute">class=</span>
+                    <span class="string">"cosa"</span>
+                    &gt;
+                  </span>
+                  <span class="tag">
+                    &lt;button
+                    <span class="attribute">class=</span>
+                    <span class="string">"btn"</span>
+                    &gt;
+                  </span>
+                  Enviar
+                  <span class="tag">&lt;/button&gt;</span>
+                  <span class="tag">
+                    &lt;section
+                    <span class="attribute">id=</span>
+                    <span class="string">"s2"</span>
+                    &gt;
+                  </span>
+                </div>
+              </div>
+
+              <h3>🧪 5. Prueba tu código regularmente</h3>
+              <p>No esperes a terminar todo para probar. Guarda frecuentemente y abre tu archivo en el navegador.</p>
+
+              <div class="important">
+                <strong>🔄 Flujo recomendado:</strong>
+                Escribe → Guarda → Actualiza navegador → Verifica → Repite
+              </div>
+
+              <h3>♿ 6. Aprende sobre accesibilidad</h3>
+              <p>Haz tu sitio accesible para todos los usuarios, incluyendo personas con discapacidades.</p>
+
+              <div class="code-block">
+                <span class="tag">
+                  &lt;img
+                  <span class="attribute">src=</span>
+                  <span class="string">"paisaje.jpg"</span>
+                  <span class="attribute">alt=</span>
+                  <span class="string">"Hermoso paisaje montañoso al atardecer"</span>
+                  &gt;
+                </span>
+
+                <span class="tag">
+                  &lt;button
+                  <span class="attribute">aria-label=</span>
+                  <span class="string">"Cerrar ventana modal"</span>
+                  &gt;
+                </span>
+                ×
+                <span class="tag">&lt;/button&gt;</span>
+
+                <span class="tag">
+                  &lt;input
+                  <span class="attribute">type=</span>
+                  <span class="string">"email"</span>
+                  <span class="attribute">required</span>
+                  <span class="attribute">aria-describedby=</span>
+                  <span class="string">"email-help"</span>
+                  &gt;
+                </span>
+              </div>
+
+              <h3>✅ 7. Valida tu código</h3>
+              <p>Usa herramientas como el Validador de HTML de W3C para encontrar errores.</p>
+
+              <div class="tip">
+                <strong>🔗 Recurso útil:</strong>
+                <a href="https://validator.w3.org/" target="_blank">validator.w3.org</a>
+                - Validador oficial de W3C
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estructura básica -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>🏗️ Estructura Básica de HTML</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              <div class="tip">
+                <strong>📋 Plantilla base:</strong>
+                Todo documento HTML debe seguir esta estructura fundamental.
+              </div>
+
+              <div class="code-block">
+                <span style="color: #9ca3af">&lt;!DOCTYPE html&gt;</span>
+                <span class="tag">
+                  &lt;html
+                  <span class="attribute">lang=</span>
+                  <span class="string">"es"</span>
+                  &gt;
+                </span>
+                <span class="tag">&lt;head&gt;</span>
+                <span class="tag">
+                  &lt;meta
+                  <span class="attribute">charset=</span>
+                  <span class="string">"UTF-8"</span>
+                  &gt;
+                </span>
+                <span class="tag">
+                  &lt;meta
+                  <span class="attribute">name=</span>
+                  <span class="string">"viewport"</span>
+                  <span class="attribute">content=</span>
+                  <span class="string">"width=device-width, initial-scale=1.0"</span>
+                  &gt;
+                </span>
+                <span class="tag">&lt;title&gt;</span>
+                Mi Primera Página
+                <span class="tag">&lt;/title&gt;</span>
+                <span class="tag">&lt;/head&gt;</span>
+                <span class="tag">&lt;body&gt;</span>
+                <span style="color: #9ca3af">&lt;!-- Aquí va todo el contenido visible --&gt;</span>
+                <span class="tag">&lt;h1&gt;</span>
+                ¡Hola Mundo!
+                <span class="tag">&lt;/h1&gt;</span>
+                <span class="tag">&lt;p&gt;</span>
+                Esta es mi primera página web.
+                <span class="tag">&lt;/p&gt;</span>
+                <span class="tag">&lt;/body&gt;</span>
+                <span class="tag">&lt;/html&gt;</span>
+              </div>
+
+              <div class="tags-grid">
+                <div class="tag-card">
+                  <div class="tag-name">&lt;!DOCTYPE html&gt;</div>
+                  <p>Declara que es un documento HTML5. Siempre va al inicio.</p>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">&lt;html&gt;</div>
+                  <p>Elemento raíz que contiene todo el contenido de la página.</p>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">&lt;head&gt;</div>
+                  <p>Metadatos no visibles: título, enlaces a CSS, etc.</p>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">&lt;body&gt;</div>
+                  <p>Todo el contenido visible de la página web.</p>
+                </div>
+              </div>
+
+              <div class="important">
+                <strong>🎯 Tip importante:</strong>
+                El atributo
+                <code>lang="es"</code>
+                ayuda a los lectores de pantalla y motores de búsqueda a entender el idioma del contenido.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Encabezados y texto -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>📝 Encabezados y Texto</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              <h3>🏆 Jerarquía de Encabezados</h3>
+              <p>Los encabezados crean una estructura jerárquica en tu contenido.</p>
+
+              <div class="code-block">
+                <span class="tag">&lt;h1&gt;</span>
+                Título Principal (solo uno por página)
+                <span class="tag">&lt;/h1&gt;</span>
+                <span class="tag">&lt;h2&gt;</span>
+                Sección Principal
+                <span class="tag">&lt;/h2&gt;</span>
+                <span class="tag">&lt;h3&gt;</span>
+                Subsección
+                <span class="tag">&lt;/h3&gt;</span>
+                <span class="tag">&lt;h4&gt;</span>
+                Sub-subsección
+                <span class="tag">&lt;/h4&gt;</span>
+                <span class="tag">&lt;h5&gt;</span>
+                Título menor
+                <span class="tag">&lt;/h5&gt;</span>
+                <span class="tag">&lt;h6&gt;</span>
+                Título más pequeño
+                <span class="tag">&lt;/h6&gt;</span>
+              </div>
+
+              <div class="important">
+                <strong>⚠️ Regla de oro:</strong>
+                Usa solo un &lt;h1&gt; por página y mantén la jerarquía lógica (no saltes de h1 a h3).
+              </div>
+
+              <h3>✏️ Formato de Texto</h3>
+              <div class="tags-grid">
+                <div class="tag-card">
+                  <div class="tag-name">&lt;p&gt;</div>
+                  <p>Párrafo de texto normal. La base de todo contenido textual.</p>
+                  <div class="code-block">
+                    <span class="tag">&lt;p&gt;</span>
+                    Este es un párrafo.
+                    <span class="tag">&lt;/p&gt;</span>
+                  </div>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">&lt;strong&gt;</div>
+                  <p>Texto importante (negrita). Enfatiza contenido crucial.</p>
+                  <div class="code-block">
+                    <span class="tag">&lt;strong&gt;</span>
+                    Muy importante
+                    <span class="tag">&lt;/strong&gt;</span>
+                  </div>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">&lt;em&gt;</div>
+                  <p>Texto enfatizado (cursiva). Para énfasis sutil.</p>
+                  <div class="code-block">
+                    <span class="tag">&lt;em&gt;</span>
+                    Texto enfatizado
+                    <span class="tag">&lt;/em&gt;</span>
+                  </div>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">&lt;br&gt;</div>
+                  <p>Salto de línea. Úsalo con moderación.</p>
+                  <div class="code-block">
+                    Línea 1
+                    <span class="tag">&lt;br&gt;</span>
+                    Línea 2
+                  </div>
+                </div>
+              </div>
+
+              <h3>🔗 Enlaces</h3>
+              <div class="code-block">
+                <span style="color: #9ca3af">&lt;!-- Enlace externo --&gt;</span>
+                <span class="tag">
+                  &lt;a
+                  <span class="attribute">href=</span>
+                  <span class="string">"https://google.com"</span>
+                  <span class="attribute">target=</span>
+                  <span class="string">"_blank"</span>
+                  &gt;
+                </span>
+                Ir a Google
+                <span class="tag">&lt;/a&gt;</span>
+
+                <span style="color: #9ca3af">&lt;!-- Enlace interno --&gt;</span>
+                <span class="tag">
+                  &lt;a
+                  <span class="attribute">href=</span>
+                  <span class="string">"#seccion1"</span>
+                  &gt;
+                </span>
+                Ir a sección 1
+                <span class="tag">&lt;/a&gt;</span>
+
+                <span style="color: #9ca3af">&lt;!-- Enlace de email --&gt;</span>
+                <span class="tag">
+                  &lt;a
+                  <span class="attribute">href=</span>
+                  <span class="string">"mailto:contacto@ejemplo.com"</span>
+                  &gt;
+                </span>
+                Enviar email
+                <span class="tag">&lt;/a&gt;</span>
+
+                <span style="color: #9ca3af">&lt;!-- Enlace de teléfono --&gt;</span>
+                <span class="tag">
+                  &lt;a
+                  <span class="attribute">href=</span>
+                  <span class="string">"tel:+1234567890"</span>
+                  &gt;
+                </span>
+                Llamar ahora
+                <span class="tag">&lt;/a&gt;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Listas -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>📋 Listas</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              <h3>🔸 Lista Desordenada (Viñetas)</h3>
+              <div class="code-block">
+                <span class="tag">&lt;ul&gt;</span>
+                <span class="tag">&lt;li&gt;</span>
+                Primer elemento
+                <span class="tag">&lt;/li&gt;</span>
+                <span class="tag">&lt;li&gt;</span>
+                Segundo elemento
+                <span class="tag">&lt;/li&gt;</span>
+                <span class="tag">&lt;li&gt;</span>
+                Tercer elemento
+                <span class="tag">&lt;/li&gt;</span>
+                <span class="tag">&lt;/ul&gt;</span>
+              </div>
+
+              <h3>🔢 Lista Ordenada (Números)</h3>
+              <div class="code-block">
+                <span class="tag">&lt;ol&gt;</span>
+                <span class="tag">&lt;li&gt;</span>
+                Paso 1: Planificar
+                <span class="tag">&lt;/li&gt;</span>
+                <span class="tag">&lt;li&gt;</span>
+                Paso 2: Diseñar
+                <span class="tag">&lt;/li&gt;</span>
+                <span class="tag">&lt;li&gt;</span>
+                Paso 3: Desarrollar
+                <span class="tag">&lt;/li&gt;</span>
+                <span class="tag">&lt;/ol&gt;</span>
+              </div>
+
+              <h3>🎯 Lista de Definiciones</h3>
+              <div class="code-block">
+                <span class="tag">&lt;dl&gt;</span>
+                <span class="tag">&lt;dt&gt;</span>
+                HTML
+                <span class="tag">&lt;/dt&gt;</span>
+                <span class="tag">&lt;dd&gt;</span>
+                Lenguaje de marcado para crear páginas web
+                <span class="tag">&lt;/dd&gt;</span>
+
+                <span class="tag">&lt;dt&gt;</span>
+                CSS
+                <span class="tag">&lt;/dt&gt;</span>
+                <span class="tag">&lt;dd&gt;</span>
+                Lenguaje para dar estilo a páginas web
+                <span class="tag">&lt;/dd&gt;</span>
+                <span class="tag">&lt;/dl&gt;</span>
+              </div>
+
+              <h3>🌳 Listas Anidadas</h3>
+              <div class="code-block">
+                <span class="tag">&lt;ul&gt;</span>
+                <span class="tag">&lt;li&gt;</span>
+                Frutas
+                <span class="tag">&lt;ul&gt;</span>
+                <span class="tag">&lt;li&gt;</span>
+                Manzanas
+                <span class="tag">&lt;/li&gt;</span>
+                <span class="tag">&lt;li&gt;</span>
+                Naranjas
+                <span class="tag">&lt;/li&gt;</span>
+                <span class="tag">&lt;/ul&gt;</span>
+                <span class="tag">&lt;/li&gt;</span>
+                <span class="tag">&lt;li&gt;</span>
+                Verduras
+                <span class="tag">&lt;ul&gt;</span>
+                <span class="tag">&lt;li&gt;</span>
+                Zanahorias
+                <span class="tag">&lt;/li&gt;</span>
+                <span class="tag">&lt;li&gt;</span>
+                Brócoli
+                <span class="tag">&lt;/li&gt;</span>
+                <span class="tag">&lt;/ul&gt;</span>
+                <span class="tag">&lt;/li&gt;</span>
+                <span class="tag">&lt;/ul&gt;</span>
+              </div>
+
+              <div class="tip">
+                <strong>💡 Consejo:</strong>
+                Puedes cambiar el tipo de numeración con CSS o el atributo
+                <code>type</code>
+                en &lt;ol&gt;.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Imágenes y multimedia -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>🖼️ Imágenes y Multimedia</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              <h3>📸 Imágenes</h3>
+              <div class="code-block">
+                <span style="color: #9ca3af">&lt;!-- Imagen básica --&gt;</span>
+                <span class="tag">
+                  &lt;img
+                  <span class="attribute">src=</span>
+                  <span class="string">"imagen.jpg"</span>
+                  <span class="attribute">alt=</span>
+                  <span class="string">"Descripción de la imagen"</span>
+                  &gt;
+                </span>
+
+                <span style="color: #9ca3af">&lt;!-- Imagen con dimensiones --&gt;</span>
+                <span class="tag">
+                  &lt;img
+                  <span class="attribute">src=</span>
+                  <span class="string">"logo.png"</span>
+                  <span class="attribute">alt=</span>
+                  <span class="string">"Logo de la empresa"</span>
+                  <span class="attribute">width=</span>
+                  <span class="string">"200"</span>
+                  <span class="attribute">height=</span>
+                  <span class="string">"100"</span>
+                  &gt;
+                </span>
+
+                <span style="color: #9ca3af">&lt;!-- Imagen responsiva --&gt;</span>
+                <span class="tag">
+                  &lt;img
+                  <span class="attribute">src=</span>
+                  <span class="string">"foto.jpg"</span>
+                  <span class="attribute">alt=</span>
+                  <span class="string">"Paisaje hermoso"</span>
+                  <span class="attribute">style=</span>
+                  <span class="string">"max-width: 100%; height: auto;"</span>
+                  &gt;
+                </span>
+              </div>
+
+              <div class="important">
+                <strong>⚠️ Importante:</strong>
+                El atributo
+                <code>alt</code>
+                es obligatorio para accesibilidad. Describe qué muestra la imagen.
+              </div>
+
+              <h3>🎬 Videos</h3>
+              <div class="code-block">
+                <span class="tag">
+                  &lt;video
+                  <span class="attribute">controls</span>
+                  <span class="attribute">width=</span>
+                  <span class="string">"600"</span>
+                  &gt;
+                </span>
+                <span class="tag">
+                  &lt;source
+                  <span class="attribute">src=</span>
+                  <span class="string">"video.mp4"</span>
+                  <span class="attribute">type=</span>
+                  <span class="string">"video/mp4"</span>
+                  &gt;
+                </span>
+                <span class="tag">
+                  &lt;source
+                  <span class="attribute">src=</span>
+                  <span class="string">"video.webm"</span>
+                  <span class="attribute">type=</span>
+                  <span class="string">"video/webm"</span>
+                  &gt;
+                </span>
+                Tu navegador no soporta el elemento video.
+                <span class="tag">&lt;/video&gt;</span>
+              </div>
+
+              <h3>🎵 Audio</h3>
+              <div class="code-block">
+                <span class="tag">
+                  &lt;audio
+                  <span class="attribute">controls</span>
+                  &gt;
+                </span>
+                <span class="tag">
+                  &lt;source
+                  <span class="attribute">src=</span>
+                  <span class="string">"audio.mp3"</span>
+                  <span class="attribute">type=</span>
+                  <span class="string">"audio/mpeg"</span>
+                  &gt;
+                </span>
+                <span class="tag">
+                  &lt;source
+                  <span class="attribute">src=</span>
+                  <span class="string">"audio.ogg"</span>
+                  <span class="attribute">type=</span>
+                  <span class="string">"audio/ogg"</span>
+                  &gt;
+                </span>
+                Tu navegador no soporta el elemento audio.
+                <span class="tag">&lt;/audio&gt;</span>
+              </div>
+
+              <h3>🌐 Videos de YouTube</h3>
+              <div class="code-block">
+                <span class="tag">
+                  &lt;iframe
+                  <span class="attribute">width=</span>
+                  <span class="string">"560"</span>
+                  <span class="attribute">height=</span>
+                  <span class="string">"315"</span>
+                  <span class="attribute">src=</span>
+                  <span class="string">"https://www.youtube.com/embed/VIDEO_ID"</span>
+                  <span class="attribute">frameborder=</span>
+                  <span class="string">"0"</span>
+                  <span class="attribute">allowfullscreen</span>
+                  &gt;
+                </span>
+                <span class="tag">&lt;/iframe&gt;</span>
+              </div>
+
+              <div class="tip">
+                <strong>💡 Tip:</strong>
+                Siempre incluye formatos alternativos para mejor compatibilidad entre navegadores.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tablas -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>📊 Tablas</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              <h3>📋 Estructura Básica de Tabla</h3>
+              <div class="code-block">
+                <span class="tag">&lt;table&gt;</span>
+                <span class="tag">&lt;thead&gt;</span>
+                <span class="tag">&lt;tr&gt;</span>
+                <span class="tag">&lt;th&gt;</span>
+                Nombre
+                <span class="tag">&lt;/th&gt;</span>
+                <span class="tag">&lt;th&gt;</span>
+                Edad
+                <span class="tag">&lt;/th&gt;</span>
+                <span class="tag">&lt;th&gt;</span>
+                Ciudad
+                <span class="tag">&lt;/th&gt;</span>
+                <span class="tag">&lt;/tr&gt;</span>
+                <span class="tag">&lt;/thead&gt;</span>
+                <span class="tag">&lt;tbody&gt;</span>
+                <span class="tag">&lt;tr&gt;</span>
+                <span class="tag">&lt;td&gt;</span>
+                Juan
+                <span class="tag">&lt;/td&gt;</span>
+                <span class="tag">&lt;td&gt;</span>
+                25
+                <span class="tag">&lt;/td&gt;</span>
+                <span class="tag">&lt;td&gt;</span>
+                Madrid
+                <span class="tag">&lt;/td&gt;</span>
+                <span class="tag">&lt;/tr&gt;</span>
+                <span class="tag">&lt;tr&gt;</span>
+                <span class="tag">&lt;td&gt;</span>
+                María
+                <span class="tag">&lt;/td&gt;</span>
+                <span class="tag">&lt;td&gt;</span>
+                30
+                <span class="tag">&lt;/td&gt;</span>
+                <span class="tag">&lt;td&gt;</span>
+                Barcelona
+                <span class="tag">&lt;/td&gt;</span>
+                <span class="tag">&lt;/tr&gt;</span>
+                <span class="tag">&lt;/tbody&gt;</span>
+                <span class="tag">&lt;/table&gt;</span>
+              </div>
+
+              <div class="tags-grid">
+                <div class="tag-card">
+                  <div class="tag-name">&lt;table&gt;</div>
+                  <p>Contenedor principal de la tabla</p>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">&lt;thead&gt;</div>
+                  <p>Encabezado de la tabla</p>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">&lt;tbody&gt;</div>
+                  <p>Cuerpo principal con datos</p>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">&lt;tr&gt;</div>
+                  <p>Fila de la tabla</p>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">&lt;th&gt;</div>
+                  <p>Celda de encabezado (negrita)</p>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">&lt;td&gt;</div>
+                  <p>Celda de datos normal</p>
+                </div>
+              </div>
+
+              <h3>🔗 Celdas que ocupan múltiples columnas/filas</h3>
+              <div class="code-block">
+                <span class="tag">&lt;table&gt;</span>
+                <span class="tag">&lt;tr&gt;</span>
+                <span class="tag">
+                  &lt;th
+                  <span class="attribute">colspan=</span>
+                  <span class="string">"2"</span>
+                  &gt;
+                </span>
+                Información Personal
+                <span class="tag">&lt;/th&gt;</span>
+                <span class="tag">&lt;/tr&gt;</span>
+                <span class="tag">&lt;tr&gt;</span>
+                <span class="tag">&lt;td&gt;</span>
+                Nombre
+                <span class="tag">&lt;/td&gt;</span>
+                <span class="tag">&lt;td&gt;</span>
+                Juan Pérez
+                <span class="tag">&lt;/td&gt;</span>
+                <span class="tag">&lt;/tr&gt;</span>
+                <span class="tag">&lt;tr&gt;</span>
+                <span class="tag">
+                  &lt;td
+                  <span class="attribute">rowspan=</span>
+                  <span class="string">"2"</span>
+                  &gt;
+                </span>
+                Contacto
+                <span class="tag">&lt;/td&gt;</span>
+                <span class="tag">&lt;td&gt;</span>
+                Email: juan@email.com
+                <span class="tag">&lt;/td&gt;</span>
+                <span class="tag">&lt;/tr&gt;</span>
+                <span class="tag">&lt;tr&gt;</span>
+                <span class="tag">&lt;td&gt;</span>
+                Tel: +34 123 456 789
+                <span class="tag">&lt;/td&gt;</span>
+                <span class="tag">&lt;/tr&gt;</span>
+                <span class="tag">&lt;/table&gt;</span>
+              </div>
+
+              <div class="important">
+                <strong>🎯 Consejo:</strong>
+                Usa &lt;caption&gt; para dar un título descriptivo a tu tabla y mejorar la accesibilidad.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formularios -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>📝 Formularios</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              <h3>📋 Formulario Completo</h3>
+              <div class="code-block">
+                <span class="tag">
+                  &lt;form
+                  <span class="attribute">action=</span>
+                  <span class="string">"/procesar"</span>
+                  <span class="attribute">method=</span>
+                  <span class="string">"POST"</span>
+                  &gt;
+                </span>
+
+                <span style="color: #9ca3af">&lt;!-- Campo de texto --&gt;</span>
+                <span class="tag">
+                  &lt;label
+                  <span class="attribute">for=</span>
+                  <span class="string">"nombre"</span>
+                  &gt;
+                </span>
+                Nombre completo:
+                <span class="tag">&lt;/label&gt;</span>
+                <span class="tag">
+                  &lt;input
+                  <span class="attribute">type=</span>
+                  <span class="string">"text"</span>
+                  <span class="attribute">id=</span>
+                  <span class="string">"nombre"</span>
+                  <span class="attribute">name=</span>
+                  <span class="string">"nombre"</span>
+                  <span class="attribute">required</span>
+                  &gt;
+                </span>
+
+                <span style="color: #9ca3af">&lt;!-- Email --&gt;</span>
+                <span class="tag">
+                  &lt;label
+                  <span class="attribute">for=</span>
+                  <span class="string">"email"</span>
+                  &gt;
+                </span>
+                Correo electrónico:
+                <span class="tag">&lt;/label&gt;</span>
+                <span class="tag">
+                  &lt;input
+                  <span class="attribute">type=</span>
+                  <span class="string">"email"</span>
+                  <span class="attribute">id=</span>
+                  <span class="string">"email"</span>
+                  <span class="attribute">name=</span>
+                  <span class="string">"email"</span>
+                  <span class="attribute">required</span>
+                  &gt;
+                </span>
+
+                <span style="color: #9ca3af">&lt;!-- Contraseña --&gt;</span>
+                <span class="tag">
+                  &lt;label
+                  <span class="attribute">for=</span>
+                  <span class="string">"password"</span>
+                  &gt;
+                </span>
+                Contraseña:
+                <span class="tag">&lt;/label&gt;</span>
+                <span class="tag">
+                  &lt;input
+                  <span class="attribute">type=</span>
+                  <span class="string">"password"</span>
+                  <span class="attribute">id=</span>
+                  <span class="string">"password"</span>
+                  <span class="attribute">name=</span>
+                  <span class="string">"password"</span>
+                  <span class="attribute">required</span>
+                  &gt;
+                </span>
+
+                <span style="color: #9ca3af">&lt;!-- Área de texto --&gt;</span>
+                <span class="tag">
+                  &lt;label
+                  <span class="attribute">for=</span>
+                  <span class="string">"mensaje"</span>
+                  &gt;
+                </span>
+                Mensaje:
+                <span class="tag">&lt;/label&gt;</span>
+                <span class="tag">
+                  &lt;textarea
+                  <span class="attribute">id=</span>
+                  <span class="string">"mensaje"</span>
+                  <span class="attribute">name=</span>
+                  <span class="string">"mensaje"</span>
+                  <span class="attribute">rows=</span>
+                  <span class="string">"4"</span>
+                  <span class="attribute">cols=</span>
+                  <span class="string">"50"</span>
+                  &gt;
+                </span>
+                <span class="tag">&lt;/textarea&gt;</span>
+
+                <span style="color: #9ca3af">&lt;!-- Botón de envío --&gt;</span>
+                <span class="tag">
+                  &lt;button
+                  <span class="attribute">type=</span>
+                  <span class="string">"submit"</span>
+                  &gt;
+                </span>
+                Enviar formulario
+                <span class="tag">&lt;/button&gt;</span>
+                <span class="tag">&lt;/form&gt;</span>
+              </div>
+
+              <h3>🎛️ Tipos de Input</h3>
+              <div class="tags-grid">
+                <div class="tag-card">
+                  <div class="tag-name">type="text"</div>
+                  <p>Texto normal</p>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">type="email"</div>
+                  <p>Validación de email</p>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">type="password"</div>
+                  <p>Oculta el texto</p>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">type="number"</div>
+                  <p>Solo números</p>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">type="date"</div>
+                  <p>Selector de fecha</p>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">type="file"</div>
+                  <p>Subir archivos</p>
+                </div>
+              </div>
+
+              <h3>☑️ Checkboxes y Radio Buttons</h3>
+              <div class="code-block">
+                <span style="color: #9ca3af">&lt;!-- Checkboxes (múltiple selección) --&gt;</span>
+                <span class="tag">&lt;fieldset&gt;</span>
+                <span class="tag">&lt;legend&gt;</span>
+                Selecciona tus hobbies:
+                <span class="tag">&lt;/legend&gt;</span>
+
+                <span class="tag">
+                  &lt;input
+                  <span class="attribute">type=</span>
+                  <span class="string">"checkbox"</span>
+                  <span class="attribute">id=</span>
+                  <span class="string">"lectura"</span>
+                  <span class="attribute">name=</span>
+                  <span class="string">"hobbies"</span>
+                  <span class="attribute">value=</span>
+                  <span class="string">"lectura"</span>
+                  &gt;
+                </span>
+                <span class="tag">
+                  &lt;label
+                  <span class="attribute">for=</span>
+                  <span class="string">"lectura"</span>
+                  &gt;
+                </span>
+                Lectura
+                <span class="tag">&lt;/label&gt;</span>
+
+                <span class="tag">
+                  &lt;input
+                  <span class="attribute">type=</span>
+                  <span class="string">"checkbox"</span>
+                  <span class="attribute">id=</span>
+                  <span class="string">"deportes"</span>
+                  <span class="attribute">name=</span>
+                  <span class="string">"hobbies"</span>
+                  <span class="attribute">value=</span>
+                  <span class="string">"deportes"</span>
+                  &gt;
+                </span>
+                <span class="tag">
+                  &lt;label
+                  <span class="attribute">for=</span>
+                  <span class="string">"deportes"</span>
+                  &gt;
+                </span>
+                Deportes
+                <span class="tag">&lt;/label&gt;</span>
+                <span class="tag">&lt;/fieldset&gt;</span>
+
+                <span style="color: #9ca3af">&lt;!-- Radio buttons (una sola selección) --&gt;</span>
+                <span class="tag">&lt;fieldset&gt;</span>
+                <span class="tag">&lt;legend&gt;</span>
+                Selecciona tu género:
+                <span class="tag">&lt;/legend&gt;</span>
+
+                <span class="tag">
+                  &lt;input
+                  <span class="attribute">type=</span>
+                  <span class="string">"radio"</span>
+                  <span class="attribute">id=</span>
+                  <span class="string">"masculino"</span>
+                  <span class="attribute">name=</span>
+                  <span class="string">"genero"</span>
+                  <span class="attribute">value=</span>
+                  <span class="string">"M"</span>
+                  &gt;
+                </span>
+                <span class="tag">
+                  &lt;label
+                  <span class="attribute">for=</span>
+                  <span class="string">"masculino"</span>
+                  &gt;
+                </span>
+                Masculino
+                <span class="tag">&lt;/label&gt;</span>
+
+                <span class="tag">
+                  &lt;input
+                  <span class="attribute">type=</span>
+                  <span class="string">"radio"</span>
+                  <span class="attribute">id=</span>
+                  <span class="string">"femenino"</span>
+                  <span class="attribute">name=</span>
+                  <span class="string">"genero"</span>
+                  <span class="attribute">value=</span>
+                  <span class="string">"F"</span>
+                  &gt;
+                </span>
+                <span class="tag">
+                  &lt;label
+                  <span class="attribute">for=</span>
+                  <span class="string">"femenino"</span>
+                  &gt;
+                </span>
+                Femenino
+                <span class="tag">&lt;/label&gt;</span>
+                <span class="tag">&lt;/fieldset&gt;</span>
+              </div>
+
+              <h3>📋 Selects (Listas desplegables)</h3>
+              <div class="code-block">
+                <span class="tag">
+                  &lt;label
+                  <span class="attribute">for=</span>
+                  <span class="string">"pais"</span>
+                  &gt;
+                </span>
+                Selecciona tu país:
+                <span class="tag">&lt;/label&gt;</span>
+                <span class="tag">
+                  &lt;select
+                  <span class="attribute">id=</span>
+                  <span class="string">"pais"</span>
+                  <span class="attribute">name=</span>
+                  <span class="string">"pais"</span>
+                  &gt;
+                </span>
+                <span class="tag">
+                  &lt;option
+                  <span class="attribute">value=</span>
+                  <span class="string">""</span>
+                  &gt;
+                </span>
+                -- Selecciona una opción --
+                <span class="tag">&lt;/option&gt;</span>
+                <span class="tag">
+                  &lt;option
+                  <span class="attribute">value=</span>
+                  <span class="string">"es"</span>
+                  &gt;
+                </span>
+                España
+                <span class="tag">&lt;/option&gt;</span>
+                <span class="tag">
+                  &lt;option
+                  <span class="attribute">value=</span>
+                  <span class="string">"mx"</span>
+                  <span class="attribute">selected</span>
+                  &gt;
+                </span>
+                México
+                <span class="tag">&lt;/option&gt;</span>
+                <span class="tag">
+                  &lt;option
+                  <span class="attribute">value=</span>
+                  <span class="string">"ar"</span>
+                  &gt;
+                </span>
+                Argentina
+                <span class="tag">&lt;/option&gt;</span>
+                <span class="tag">&lt;/select&gt;</span>
+              </div>
+
+              <div class="important">
+                <strong>⚠️ Importante:</strong>
+                Siempre asocia los &lt;label&gt; con sus inputs usando el atributo
+                <code>for</code>
+                para mejorar la accesibilidad.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Divisiones y secciones -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>🏗️ Divisiones y Secciones</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              <h3>📦 Elementos de Contenedor</h3>
+
+              <div class="tags-grid">
+                <div class="tag-card">
+                  <div class="tag-name">&lt;div&gt;</div>
+                  <p>Contenedor genérico sin significado semántico. Perfecto para agrupar elementos.</p>
+                  <div class="code-block">
+                    <span class="tag">
+                      &lt;div
+                      <span class="attribute">class=</span>
+                      <span class="string">"contenedor"</span>
+                      &gt;
+                    </span>
+                    <span class="tag">&lt;p&gt;</span>
+                    Contenido agrupado
+                    <span class="tag">&lt;/p&gt;</span>
+                    <span class="tag">&lt;/div&gt;</span>
+                  </div>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">&lt;span&gt;</div>
+                  <p>Contenedor en línea para pequeñas porciones de texto.</p>
+                  <div class="code-block">
+                    <span class="tag">&lt;p&gt;</span>
+                    El precio es
+                    <span class="tag">
+                      &lt;span
+                      <span class="attribute">class=</span>
+                      <span class="string">"precio"</span>
+                      &gt;
+                    </span>
+                    $25
+                    <span class="tag">&lt;/span&gt;</span>
+                    <span class="tag">&lt;/p&gt;</span>
+                  </div>
+                </div>
+              </div>
+
+              <h3>🎭 Elementos Semánticos HTML5</h3>
+              <p>Estos elementos dan significado al contenido y mejoran el SEO:</p>
+
+              <div class="code-block">
+                <span class="tag">&lt;header&gt;</span>
+                <span class="tag">&lt;h1&gt;</span>
+                Mi Blog Personal
+                <span class="tag">&lt;/h1&gt;</span>
+                <span class="tag">&lt;nav&gt;</span>
+                <span class="tag">&lt;ul&gt;</span>
+                <span class="tag">&lt;li&gt;</span>
+                <span class="tag">
+                  &lt;a
+                  <span class="attribute">href=</span>
+                  <span class="string">"#inicio"</span>
+                  &gt;
+                </span>
+                Inicio
+                <span class="tag">&lt;/a&gt;</span>
+                <span class="tag">&lt;/li&gt;</span>
+                <span class="tag">&lt;li&gt;</span>
+                <span class="tag">
+                  &lt;a
+                  <span class="attribute">href=</span>
+                  <span class="string">"#sobre"</span>
+                  &gt;
+                </span>
+                Sobre mí
+                <span class="tag">&lt;/a&gt;</span>
+                <span class="tag">&lt;/li&gt;</span>
+                <span class="tag">&lt;/ul&gt;</span>
+                <span class="tag">&lt;/nav&gt;</span>
+                <span class="tag">&lt;/header&gt;</span>
+
+                <span class="tag">&lt;main&gt;</span>
+                <span class="tag">
+                  &lt;section
+                  <span class="attribute">id=</span>
+                  <span class="string">"articulos"</span>
+                  &gt;
+                </span>
+                <span class="tag">&lt;h2&gt;</span>
+                Mis Artículos
+                <span class="tag">&lt;/h2&gt;</span>
+
+                <span class="tag">&lt;article&gt;</span>
+                <span class="tag">&lt;header&gt;</span>
+                <span class="tag">&lt;h3&gt;</span>
+                Cómo aprender HTML
+                <span class="tag">&lt;/h3&gt;</span>
+                <span class="tag">
+                  &lt;time
+                  <span class="attribute">datetime=</span>
+                  <span class="string">"2024-01-15"</span>
+                  &gt;
+                </span>
+                15 de enero, 2024
+                <span class="tag">&lt;/time&gt;</span>
+                <span class="tag">&lt;/header&gt;</span>
+                <span class="tag">&lt;p&gt;</span>
+                En este artículo explico...
+                <span class="tag">&lt;/p&gt;</span>
+                <span class="tag">&lt;/article&gt;</span>
+                <span class="tag">&lt;/section&gt;</span>
+
+                <span class="tag">&lt;aside&gt;</span>
+                <span class="tag">&lt;h3&gt;</span>
+                Enlaces útiles
+                <span class="tag">&lt;/h3&gt;</span>
+                <span class="tag">&lt;ul&gt;</span>
+                <span class="tag">&lt;li&gt;</span>
+                <span class="tag">
+                  &lt;a
+                  <span class="attribute">href=</span>
+                  <span class="string">"#"</span>
+                  &gt;
+                </span>
+                Recurso 1
+                <span class="tag">&lt;/a&gt;</span>
+                <span class="tag">&lt;/li&gt;</span>
+                <span class="tag">&lt;/ul&gt;</span>
+                <span class="tag">&lt;/aside&gt;</span>
+                <span class="tag">&lt;/main&gt;</span>
+
+                <span class="tag">&lt;footer&gt;</span>
+                <span class="tag">&lt;p&gt;</span>
+                &copy; 2024 Mi Blog. Todos los derechos reservados.
+                <span class="tag">&lt;/p&gt;</span>
+                <span class="tag">&lt;/footer&gt;</span>
+              </div>
+
+              <div class="tags-grid">
+                <div class="tag-card">
+                  <div class="tag-name">&lt;header&gt;</div>
+                  <p>Encabezado de página o sección</p>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">&lt;nav&gt;</div>
+                  <p>Enlaces de navegación</p>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">&lt;main&gt;</div>
+                  <p>Contenido principal (único)</p>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">&lt;section&gt;</div>
+                  <p>Sección temática del documento</p>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">&lt;article&gt;</div>
+                  <p>Contenido independiente</p>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">&lt;aside&gt;</div>
+                  <p>Contenido lateral o secundario</p>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">&lt;footer&gt;</div>
+                  <p>Pie de página o sección</p>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">&lt;time&gt;</div>
+                  <p>Fechas y horas</p>
+                </div>
+              </div>
+
+              <div class="important">
+                <strong>🎯 Beneficios del HTML semántico:</strong>
+                Mejor SEO, accesibilidad mejorada, código más limpio y mantenible.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Atributos importantes -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>🏷️ Atributos Importantes</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              <h3>🆔 ID y Class</h3>
+              <div class="code-block">
+                <span style="color: #9ca3af">&lt;!-- ID: único en toda la página --&gt;</span>
+                <span class="tag">
+                  &lt;div
+                  <span class="attribute">id=</span>
+                  <span class="string">"menu-principal"</span>
+                  &gt;
+                </span>
+                ...
+                <span class="tag">&lt;/div&gt;</span>
+
+                <span style="color: #9ca3af">&lt;!-- Class: reutilizable --&gt;</span>
+                <span class="tag">
+                  &lt;p
+                  <span class="attribute">class=</span>
+                  <span class="string">"texto-destacado"</span>
+                  &gt;
+                </span>
+                Texto importante
+                <span class="tag">&lt;/p&gt;</span>
+                <span class="tag">
+                  &lt;p
+                  <span class="attribute">class=</span>
+                  <span class="string">"texto-destacado"</span>
+                  &gt;
+                </span>
+                Otro texto importante
+                <span class="tag">&lt;/p&gt;</span>
+
+                <span style="color: #9ca3af">&lt;!-- Múltiples clases --&gt;</span>
+                <span class="tag">
+                  &lt;div
+                  <span class="attribute">class=</span>
+                  <span class="string">"contenedor principal centrado"</span>
+                  &gt;
+                </span>
+                ...
+                <span class="tag">&lt;/div&gt;</span>
+              </div>
+
+              <h3>🎨 Atributos de Estilo</h3>
+              <div class="code-block">
+                <span style="color: #9ca3af">&lt;!-- Estilo en línea (no recomendado para proyectos grandes) --&gt;</span>
+                <span class="tag">
+                  &lt;p
+                  <span class="attribute">style=</span>
+                  <span class="string">"color: red; font-size: 18px;"</span>
+                  &gt;
+                </span>
+                Texto rojo
+                <span class="tag">&lt;/p&gt;</span>
+
+                <span style="color: #9ca3af">&lt;!-- Enlace a CSS externo (recomendado) --&gt;</span>
+                <span class="tag">
+                  &lt;link
+                  <span class="attribute">rel=</span>
+                  <span class="string">"stylesheet"</span>
+                  <span class="attribute">href=</span>
+                  <span class="string">"estilos.css"</span>
+                  &gt;
+                </span>
+              </div>
+
+              <h3>🌐 Atributos de Enlaces</h3>
+              <div class="code-block">
+                <span style="color: #9ca3af">&lt;!-- Abrir en nueva pestaña --&gt;</span>
+                <span class="tag">
+                  &lt;a
+                  <span class="attribute">href=</span>
+                  <span class="string">"https://ejemplo.com"</span>
+                  <span class="attribute">target=</span>
+                  <span class="string">"_blank"</span>
+                  <span class="attribute">rel=</span>
+                  <span class="string">"noopener"</span>
+                  &gt;
+                </span>
+                Enlace externo
+                <span class="tag">&lt;/a&gt;</span>
+
+                <span style="color: #9ca3af">&lt;!-- Enlace que descarga --&gt;</span>
+                <span class="tag">
+                  &lt;a
+                  <span class="attribute">href=</span>
+                  <span class="string">"documento.pdf"</span>
+                  <span class="attribute">download</span>
+                  &gt;
+                </span>
+                Descargar PDF
+                <span class="tag">&lt;/a&gt;</span>
+
+                <span style="color: #9ca3af">&lt;!-- Enlace con título informativo --&gt;</span>
+                <span class="tag">
+                  &lt;a
+                  <span class="attribute">href=</span>
+                  <span class="string">"#contacto"</span>
+                  <span class="attribute">title=</span>
+                  <span class="string">"Ir a la sección de contacto"</span>
+                  &gt;
+                </span>
+                Contacto
+                <span class="tag">&lt;/a&gt;</span>
+              </div>
+
+              <h3>♿ Atributos de Accesibilidad</h3>
+              <div class="code-block">
+                <span style="color: #9ca3af">&lt;!-- Texto alternativo --&gt;</span>
+                <span class="tag">
+                  &lt;img
+                  <span class="attribute">src=</span>
+                  <span class="string">"logo.png"</span>
+                  <span class="attribute">alt=</span>
+                  <span class="string">"Logo de la empresa XYZ"</span>
+                  &gt;
+                </span>
+
+                <span style="color: #9ca3af">&lt;!-- Etiquetas ARIA --&gt;</span>
+                <span class="tag">
+                  &lt;button
+                  <span class="attribute">aria-label=</span>
+                  <span class="string">"Cerrar ventana modal"</span>
+                  &gt;
+                </span>
+                ×
+                <span class="tag">&lt;/button&gt;</span>
+
+                <span style="color: #9ca3af">&lt;!-- Roles ARIA --&gt;</span>
+                <span class="tag">
+                  &lt;div
+                  <span class="attribute">role=</span>
+                  <span class="string">"navigation"</span>
+                  &gt;
+                </span>
+                ...
+                <span class="tag">&lt;/div&gt;</span>
+
+                <span style="color: #9ca3af">&lt;!-- Tabindex para navegación por teclado --&gt;</span>
+                <span class="tag">
+                  &lt;div
+                  <span class="attribute">tabindex=</span>
+                  <span class="string">"0"</span>
+                  &gt;
+                </span>
+                Elemento enfocable
+                <span class="tag">&lt;/div&gt;</span>
+              </div>
+
+              <h3>📱 Atributos Responsivos</h3>
+              <div class="code-block">
+                <span style="color: #9ca3af">&lt;!-- Meta viewport (obligatorio) --&gt;</span>
+                <span class="tag">
+                  &lt;meta
+                  <span class="attribute">name=</span>
+                  <span class="string">"viewport"</span>
+                  <span class="attribute">content=</span>
+                  <span class="string">"width=device-width, initial-scale=1.0"</span>
+                  &gt;
+                </span>
+
+                <span style="color: #9ca3af">&lt;!-- Imágenes responsivas --&gt;</span>
+                <span class="tag">
+                  &lt;img
+                  <span class="attribute">src=</span>
+                  <span class="string">"imagen-pequeña.jpg"</span>
+                  <span class="attribute">srcset=</span>
+                  <span class="string">"imagen-pequeña.jpg 480w, imagen-grande.jpg 800w"</span>
+                  <span class="attribute">sizes=</span>
+                  <span class="string">"(max-width: 600px) 480px, 800px"</span>
+                  <span class="attribute">alt=</span>
+                  <span class="string">"Descripción"</span>
+                  &gt;
+                </span>
+              </div>
+
+              <div class="tip">
+                <strong>💡 Regla de oro:</strong>
+                Usa
+                <code>id</code>
+                para elementos únicos y
+                <code>class</code>
+                para elementos que comparten estilos.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Errores comunes -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>⚠️ Errores Comunes a Evitar</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              <h3>❌ Errores Frecuentes</h3>
+
+              <div class="bad">
+                <strong>1. Olvidar cerrar etiquetas</strong>
+                <div class="code-block">
+                  <span style="color: #ff6b6b">&lt;p&gt;Párrafo sin cerrar</span>
+                  <span style="color: #ff6b6b">&lt;div&gt;División sin cerrar</span>
+                </div>
+              </div>
+
+              <div class="good">
+                <strong>✅ Correcto:</strong>
+                <div class="code-block">
+                  <span class="tag">&lt;p&gt;</span>
+                  Párrafo correctamente cerrado
+                  <span class="tag">&lt;/p&gt;</span>
+                  <span class="tag">&lt;div&gt;</span>
+                  División correctamente cerrada
+                  <span class="tag">&lt;/div&gt;</span>
+                </div>
+              </div>
+
+              <div class="bad">
+                <strong>2. Usar múltiples IDs iguales</strong>
+                <div class="code-block">
+                  <span style="color: #ff6b6b">&lt;div id="contenedor"&gt;...&lt;/div&gt;</span>
+                  <span style="color: #ff6b6b">&lt;div id="contenedor"&gt;...&lt;/div&gt;</span>
+                  <span style="color: #ff6b6b">&lt;!-- Error: ID duplicado --&gt;</span>
+                </div>
+              </div>
+
+              <div class="good">
+                <strong>✅ Correcto:</strong>
+                <div class="code-block">
+                  <span class="tag">
+                    &lt;div
+                    <span class="attribute">id=</span>
+                    <span class="string">"contenedor1"</span>
+                    &gt;
+                  </span>
+                  ...
+                  <span class="tag">&lt;/div&gt;</span>
+                  <span class="tag">
+                    &lt;div
+                    <span class="attribute">id=</span>
+                    <span class="string">"contenedor2"</span>
+                    &gt;
+                  </span>
+                  ...
+                  <span class="tag">&lt;/div&gt;</span>
+
+                  <span style="color: #9ca3af">&lt;!-- O mejor aún, usar class si comparten estilos --&gt;</span>
+                  <span class="tag">
+                    &lt;div
+                    <span class="attribute">class=</span>
+                    <span class="string">"contenedor"</span>
+                    &gt;
+                  </span>
+                  ...
+                  <span class="tag">&lt;/div&gt;</span>
+                  <span class="tag">
+                    &lt;div
+                    <span class="attribute">class=</span>
+                    <span class="string">"contenedor"</span>
+                    &gt;
+                  </span>
+                  ...
+                  <span class="tag">&lt;/div&gt;</span>
+                </div>
+              </div>
+
+              <div class="bad">
+                <strong>3. Olvidar el atributo alt en imágenes</strong>
+                <div class="code-block">
+                  <span style="color: #ff6b6b">&lt;img src="foto.jpg"&gt;</span>
+                  <span style="color: #ff6b6b">&lt;!-- Sin alt --&gt;</span>
+                </div>
+              </div>
+
+              <div class="good">
+                <strong>✅ Correcto:</strong>
+                <div class="code-block">
+                  <span class="tag">
+                    &lt;img
+                    <span class="attribute">src=</span>
+                    <span class="string">"foto.jpg"</span>
+                    <span class="attribute">alt=</span>
+                    <span class="string">"Descripción clara de la imagen"</span>
+                    &gt;
+                  </span>
+                </div>
+              </div>
+
+              <div class="bad">
+                <strong>4. Anidar incorrectamente las etiquetas</strong>
+                <div class="code-block">
+                  <span style="color: #ff6b6b">&lt;p&gt;&lt;div&gt;Contenido&lt;/div&gt;&lt;/p&gt;</span>
+                  <span style="color: #ff6b6b">&lt;!-- No puedes poner div dentro de p --&gt;</span>
+                </div>
+              </div>
+
+              <div class="good">
+                <strong>✅ Correcto:</strong>
+                <div class="code-block">
+                  <span class="tag">&lt;div&gt;</span>
+                  <span class="tag">&lt;p&gt;</span>
+                  Contenido del párrafo
+                  <span class="tag">&lt;/p&gt;</span>
+                  <span class="tag">&lt;/div&gt;</span>
+                </div>
+              </div>
+
+              <div class="bad">
+                <strong>5. No usar labels en formularios</strong>
+                <div class="code-block">
+                  <span style="color: #ff6b6b">Nombre: &lt;input type="text" name="nombre"&gt;</span>
+                </div>
+              </div>
+
+              <div class="good">
+                <strong>✅ Correcto:</strong>
+                <div class="code-block">
+                  <span class="tag">
+                    &lt;label
+                    <span class="attribute">for=</span>
+                    <span class="string">"nombre"</span>
+                    &gt;
+                  </span>
+                  Nombre:
+                  <span class="tag">&lt;/label&gt;</span>
+                  <span class="tag">
+                    &lt;input
+                    <span class="attribute">type=</span>
+                    <span class="string">"text"</span>
+                    <span class="attribute">id=</span>
+                    <span class="string">"nombre"</span>
+                    <span class="attribute">name=</span>
+                    <span class="string">"nombre"</span>
+                    &gt;
+                  </span>
+                </div>
+              </div>
+
+              <h3>🛠️ Herramientas para Detectar Errores</h3>
+              <ul>
+                <li>
+                  🔍
+                  <strong>Validador W3C:</strong>
+                  validator.w3.org
+                </li>
+                <li>
+                  🔧
+                  <strong>DevTools del navegador:</strong>
+                  F12 → Console
+                </li>
+                <li>
+                  📝
+                  <strong>Extensiones de VS Code:</strong>
+                  HTML Validation, Auto Close Tag
+                </li>
+                <li>
+                  🎯
+                  <strong>Lighthouse:</strong>
+                  Para auditorías de calidad
+                </li>
+              </ul>
+
+              <div class="important">
+                <strong>💡 Tip profesional:</strong>
+                Valida tu HTML regularmente. Un código limpio es más fácil de mantener y tiene mejor rendimiento.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Herramientas y recursos -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>🛠️ Herramientas y Recursos</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              <h3>💻 Editores de Código Recomendados</h3>
+              <div class="tags-grid">
+                <div class="tag-card">
+                  <div class="tag-name">Visual Studio Code</div>
+                  <p>Gratuito, muchas extensiones, muy popular para desarrollo web.</p>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">Sublime Text</div>
+                  <p>Rápido y ligero, perfecto para principiantes.</p>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">Atom</div>
+                  <p>Altamente personalizable, bueno para proyectos colaborativos.</p>
+                </div>
+                <div class="tag-card">
+                  <div class="tag-name">Notepad++</div>
+                  <p>Simple y eficaz para Windows.</p>
+                </div>
+              </div>
+
+              <h3>🧩 Extensiones Útiles para VS Code</h3>
+              <ul>
+                <li>
+                  <strong>🏷️ Auto Rename Tag:</strong>
+                  Renombra etiquetas automáticamente
+                </li>
+                <li>
+                  <strong>🎨 HTML CSS Support:</strong>
+                  Autocompletado mejorado
+                </li>
+                <li>
+                  <strong>🔍 HTML Validate:</strong>
+                  Valida tu HTML en tiempo real
+                </li>
+                <li>
+                  <strong>💡 IntelliSense for CSS class names:</strong>
+                  Autocompletado de clases CSS
+                </li>
+                <li>
+                  <strong>🌈 Color Highlight:</strong>
+                  Resalta los colores en tu código
+                </li>
+                <li>
+                  <strong>📱 Live Server:</strong>
+                  Servidor local con recarga automática
+                </li>
+              </ul>
+
+              <h3>🌐 Recursos Online Gratuitos</h3>
+              <div class="tip">
+                <strong>📚 Documentación Oficial:</strong>
+                <ul>
+                  <li>MDN Web Docs (developer.mozilla.org) - La mejor referencia</li>
+                  <li>W3Schools (w3schools.com) - Tutoriales paso a paso</li>
+                  <li>HTML.com - Guías detalladas</li>
+                </ul>
+              </div>
+
+              <div class="tip">
+                <strong>🎯 Práctica Interactiva:</strong>
+                <ul>
+                  <li>CodePen.io - Editor online para experimentar</li>
+                  <li>JSFiddle - Prueba código rápidamente</li>
+                  <li>Repl.it - Entorno de desarrollo online</li>
+                  <li>FreeCodeCamp - Cursos gratuitos estructurados</li>
+                </ul>
+              </div>
+
+              <h3>🔧 Herramientas de Validación</h3>
+              <div class="code-block">
+                🔍 Validador HTML W3C: validator.w3.org 🎨 Validador CSS W3C: jigsaw.w3.org/css-validator ♿ Auditor de accesibilidad: wave.webaim.org ⚡ Auditor de rendimiento: pagespeed.web.dev
+              </div>
+
+              <h3>🎨 Generadores y Utilidades</h3>
+              <ul>
+                <li>
+                  <strong>🖼️ Placeholder Images:</strong>
+                  picsum.photos, placeholder.com
+                </li>
+                <li>
+                  <strong>🎨 Paletas de colores:</strong>
+                  coolors.co, adobe.color
+                </li>
+                <li>
+                  <strong>📝 Lorem Ipsum:</strong>
+                  lipsum.com
+                </li>
+                <li>
+                  <strong>🔤 Google Fonts:</strong>
+                  fonts.google.com
+                </li>
+                <li>
+                  <strong>🎭 Iconos gratuitos:</strong>
+                  fontawesome.com, heroicons.com
+                </li>
+              </ul>
+
+              <h3>📖 Plan de Aprendizaje Sugerido</h3>
+              <div class="important">
+                <strong>🎯 Ruta de aprendizaje de 4 semanas:</strong>
+                <br />
+                <br />
+                <strong>Semana 1:</strong>
+                Estructura básica, etiquetas de texto, enlaces
+                <br />
+                <strong>Semana 2:</strong>
+                Listas, imágenes, tablas básicas
+                <br />
+                <strong>Semana 3:</strong>
+                Formularios, elementos semánticos
+                <br />
+                <strong>Semana 4:</strong>
+                Proyecto práctico integrando todo lo aprendido
+              </div>
+
+              <div class="tip">
+                <strong>🚀 Siguiente paso:</strong>
+                Una vez domines HTML, aprende CSS para dar estilo a tus páginas, y luego JavaScript para añadir interactividad.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function toggleAccordion(header) {
+        const content = header.nextElementSibling;
+        const icon = header.querySelector('.accordion-icon');
+
+        // Cerrar todos los otros acordeones
+        document.querySelectorAll('.accordion-content').forEach(item => {
+          if (item !== content) {
+            item.classList.remove('active');
+            item.previousElementSibling.classList.remove('active');
+          }
+        });
+
+        // Toggle del acordeón actual
+        content.classList.toggle('active');
+        header.classList.toggle('active');
+
+        // Scroll suave hacia el encabezado del acordeón
+        setTimeout(() => {
+          header.scrollIntoView({behavior: 'smooth', block: 'start'});
+        }, 100);
+      }
+
+      // Efecto de desplazamiento suave para enlaces internos
+      document.addEventListener('DOMContentLoaded', function () {
+        // Abrir el primer acordeón por defecto
+        // const firstAccordion = document.querySelector(".accordion-header");
+        // if (firstAccordion) {
+        //   toggleAccordion(firstAccordion);
+        // }
+      });
+    </script>
+  </body>
+  <footer>
+    <div style="text-align: center; color: #fafafa; padding-top: 1rem">
+      <p class="author">José M. Fernández — ABE/ASE Math Master Teacher, Harry S. Truman College, City Colleges of Chicago.</p>
+      <p>
+        Este material se distribuye bajo licencia
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="license" target="_blank">
+          <span style="color: #fafafa">
+            Creative Commons Atribución-NoComercial-CompartirIgual 4.0
+            <br />
+            (CC BY-NC-SA 4.0)
+          </span>
+        </a>
+        .
+      </p>
+    </div>
+  </footer>
+</html>
