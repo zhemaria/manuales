@@ -1,1 +1,843 @@
+<!DOCTYPE html>
+<!--
+  Google Sheets Manual for GED Teachers — collaborative work in the classroom
+  Author: José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago.
+  Year: 2026
+  Summary: Professional development (PD) guide in accordion format for teachers who have never used
+  Google Sheets. Covers how to use the tool and, above all, how to work with it alongside students.
+  License: CC BY-NC-SA 4.0 — https://creativecommons.org/licenses/by-nc-sa/4.0/
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Sheets Manual for Teachers: Collaborative work with your students</title>
+  <meta name="description" content="A step-by-step, accordion-format guide for GED teachers who are starting out with Google Sheets and want to use it for team work with their class.">
+  <meta name="author" content="José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago.">
+  <meta name="license" content="CC BY-NC-SA 4.0">
+  <link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap');
 
+    :root{
+      --verde-fondo: #1B5E20;     /* deep green, white text 7.58:1 */
+      --verde-claro: #2E7D32;
+      --verde-tinte: #F1F7F2;     /* soft section background */
+      --verde-borde: #C8E0CC;
+      --papel: #FAFAF7;
+      --tinta: #1a1a1a;
+      --apagado: #555555;         /* minimum 4.5:1 on white */
+      --ambar-fondo: #FFF8E8;
+      --ambar-tinta: #5C3900;     /* dark brown 10.29:1 */
+      --rojo-fondo: #FDECEA;
+      --rojo-tinta: #8E1B0E;
+      --azul-fondo: #EAF2FB;
+      --azul-tinta: #0D47A1;
+      --sombra: 0 2px 10px rgba(27,94,32,.08);
+      --radio: 12px;
+    }
+
+    *{ box-sizing: border-box; }
+
+    html{ scroll-behavior: smooth; }
+
+    body{
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--tinta);
+      background: var(--papel);
+      line-height: 1.7;
+      font-size: 17px;
+    }
+
+    .envoltura{
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 0 20px 80px;
+    }
+
+    /* ---------- Header ---------- */
+    .cabecera{
+      background: var(--verde-fondo);
+      color: #ffffff;
+      padding: 56px 20px 48px;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 6px solid var(--verde-claro);
+    }
+    /* Subtle spreadsheet grid (decorative) */
+    .cabecera::before{
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 40px 32px;
+      pointer-events: none;
+    }
+    .cabecera-interior{
+      max-width: 880px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .eyebrow{
+      font-family: ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      font-size: 13px;
+      color: #CDEBD2;
+      margin: 0 0 14px;
+    }
+    .cabecera h1{
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: clamp(28px, 5vw, 42px);
+      line-height: 1.15;
+      margin: 0 0 14px;
+    }
+    .cabecera p.subtitulo{
+      font-size: clamp(16px, 2.4vw, 19px);
+      max-width: 640px;
+      margin: 0;
+      color: #EAF7EC;
+    }
+
+    /* ---------- Objectives box ---------- */
+    .caja-objetivos{
+      background: #ffffff;
+      border: 2px solid var(--verde-borde);
+      border-left: 8px solid var(--verde-fondo);
+      border-radius: var(--radio);
+      padding: 24px 26px;
+      margin: 38px 0 8px;
+      box-shadow: var(--sombra);
+    }
+    .caja-objetivos h2{
+      font-family: 'Poppins', sans-serif;
+      margin: 0 0 12px;
+      font-size: 20px;
+      color: var(--verde-fondo);
+    }
+    .caja-objetivos ul{ margin: 0; padding-left: 22px; }
+    .caja-objetivos li{ margin: 7px 0; }
+
+    .intro{ margin: 30px 0 8px; color: var(--tinta); }
+
+    /* ---------- Table of contents ---------- */
+    .toc{
+      background: var(--verde-tinte);
+      border: 1px solid var(--verde-borde);
+      border-radius: var(--radio);
+      padding: 22px 26px;
+      margin: 28px 0 18px;
+    }
+    .toc h2{
+      font-family: 'Poppins', sans-serif;
+      font-size: 18px;
+      margin: 0 0 12px;
+      color: var(--verde-fondo);
+    }
+    .toc ol{ margin: 0; padding-left: 0; list-style: none; counter-reset: toc; }
+    .toc li{ counter-increment: toc; margin: 4px 0; }
+    .toc a{
+      display: flex;
+      gap: 12px;
+      align-items: baseline;
+      text-decoration: none;
+      color: var(--tinta);
+      padding: 6px 8px;
+      border-radius: 8px;
+    }
+    .toc a::before{
+      content: counter(toc, decimal-leading-zero);
+      font-family: ui-monospace, Consolas, monospace;
+      color: var(--verde-claro);
+      font-weight: 700;
+      font-size: 14px;
+      min-width: 26px;
+    }
+    .toc a:hover, .toc a:focus-visible{ background: #ffffff; color: var(--verde-fondo); text-decoration: underline; }
+
+    .controles{ display: flex; gap: 10px; flex-wrap: wrap; margin: 16px 0 0; }
+    .btn{
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 2px solid var(--verde-fondo);
+      background: #ffffff;
+      color: var(--verde-fondo);
+      padding: 8px 16px;
+      border-radius: 999px;
+    }
+    .btn:hover, .btn:focus-visible{ background: var(--verde-fondo); color: #ffffff; }
+
+    /* ---------- Accordion sections ---------- */
+    details.seccion-grande{
+      background: #ffffff;
+      border: 1px solid var(--verde-borde);
+      border-radius: var(--radio);
+      margin: 16px 0;
+      box-shadow: var(--sombra);
+      overflow: hidden;
+    }
+    details.seccion-grande > summary{
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 22px;
+      background: #ffffff;
+    }
+    details.seccion-grande > summary::-webkit-details-marker{ display: none; }
+    details.seccion-grande[open] > summary{
+      background: var(--verde-tinte);
+      border-bottom: 1px solid var(--verde-borde);
+    }
+    .num-circulo{
+      flex: 0 0 auto;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--verde-fondo);
+      color: #ffffff;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+    }
+    summary h2{
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(17px, 2.6vw, 21px);
+      font-weight: 600;
+      margin: 0;
+      flex: 1;
+      color: var(--verde-fondo);
+      line-height: 1.3;
+    }
+    .chevron{
+      flex: 0 0 auto;
+      width: 22px; height: 22px;
+      transition: transform .25s ease;
+      color: var(--verde-claro);
+    }
+    details.seccion-grande[open] .chevron{ transform: rotate(180deg); }
+
+    .cuerpo{ padding: 8px 26px 28px; }
+    .cuerpo h3{
+      font-family: 'Poppins', sans-serif;
+      font-size: 17px;
+      color: var(--verde-fondo);
+      margin: 26px 0 8px;
+    }
+    .cuerpo p{ margin: 10px 0; }
+    .cuerpo ol, .cuerpo ul{ margin: 10px 0; padding-left: 24px; }
+    .cuerpo li{ margin: 8px 0; }
+
+    /* ---------- Menu path (chips) ---------- */
+    .ruta{
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      background: var(--verde-tinte);
+      border: 1px solid var(--verde-borde);
+      border-radius: 6px;
+      padding: 2px 9px;
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: .9em;
+      color: var(--verde-fondo);
+      white-space: nowrap;
+    }
+    .ruta .sep{ color: var(--verde-claro); font-weight: 700; }
+
+    /* ---------- Formula ---------- */
+    .formula{
+      display: block;
+      font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+      background: #0d2818;
+      color: #d7f5dd;
+      padding: 14px 16px;
+      border-radius: 8px;
+      font-size: 15px;
+      overflow-x: auto;
+      margin: 14px 0;
+      border-left: 4px solid var(--verde-claro);
+    }
+    code.celda{
+      font-family: ui-monospace, Consolas, monospace;
+      background: var(--verde-tinte);
+      border: 1px solid var(--verde-borde);
+      border-radius: 5px;
+      padding: 1px 6px;
+      font-size: .92em;
+      color: var(--verde-fondo);
+    }
+
+    /* ---------- Callouts ---------- */
+    .nota{
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin: 18px 0;
+      border-left: 6px solid;
+    }
+    .nota p:first-child{ margin-top: 0; }
+    .nota p:last-child{ margin-bottom: 0; }
+    .nota .etiqueta{
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .nota.consejo{ background: var(--ambar-fondo); border-color: var(--ambar-tinta); color: var(--ambar-tinta); }
+    .nota.atencion{ background: var(--rojo-fondo); border-color: var(--rojo-tinta); color: var(--rojo-tinta); }
+    .nota.aula{ background: var(--azul-fondo); border-color: var(--azul-tinta); color: var(--azul-tinta); }
+
+    /* ---------- Table ---------- */
+    .tabla-envoltura{ overflow-x: auto; margin: 16px 0; }
+    table{
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 15.5px;
+      min-width: 480px;
+    }
+    caption{
+      position: absolute;
+      width: 1px; height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+    th, td{
+      border: 1px solid var(--verde-borde);
+      padding: 10px 14px;
+      text-align: left;
+      vertical-align: top;
+    }
+    thead th{
+      background: var(--verde-fondo);
+      color: #ffffff;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+    }
+    tbody th{ background: var(--verde-tinte); color: var(--verde-fondo); font-weight: 600; }
+    tbody tr:nth-child(even) td{ background: #FBFDFB; }
+
+    /* ---------- Footer ---------- */
+    footer{
+      margin-top: 50px;
+      padding: 26px 20px;
+      border-top: 2px solid var(--verde-borde);
+      color: var(--apagado);
+      font-size: 14px;
+      text-align: center;
+    }
+    footer a{ color: var(--verde-fondo); }
+
+    a:focus-visible, summary:focus-visible, .btn:focus-visible{
+      outline: 3px solid var(--verde-claro);
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      html{ scroll-behavior: auto; }
+      .chevron{ transition: none; }
+    }
+
+    @media (max-width: 560px){
+      body{ font-size: 16px; }
+      .cuerpo{ padding: 8px 18px 24px; }
+      .num-circulo{ width: 34px; height: 34px; font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="cabecera">
+    <div class="cabecera-interior">
+      <p class="eyebrow">Professional Development · GED</p>
+      <h1>Google Sheets in the classroom: collaborative work with your students</h1>
+      <p class="subtitulo">A step-by-step guide for teachers starting from scratch. You will learn how to use the tool and, above all, how to make the most of it for team work with your class.</p>
+    </div>
+  </header>
+
+  <main class="envoltura">
+
+    <section class="caja-objetivos">
+      <h2>What you will accomplish with this guide</h2>
+      <ul>
+        <li>Create, name, and design a spreadsheet ready for your students to work in.</li>
+        <li>Share the document with the correct permissions, both directly and through Google Classroom.</li>
+        <li>Monitor the work in real time, leave comments, and assign tasks to specific students.</li>
+        <li>Assess students individually within a group assignment by using version history.</li>
+        <li>Apply the tool to real activities in your GED class.</li>
+      </ul>
+    </section>
+
+    <p class="intro">Google Sheets is Google's free spreadsheet application. You do not need to install anything: a browser and an internet connection are enough, and you can access it from a computer, a tablet, or a phone. Its greatest advantage for teaching is that several people can work in the same document at the same time, which makes it a natural tool for team work. This guide is designed to be read in order, but each section also works on its own.</p>
+
+    <nav class="toc" aria-label="Manual contents">
+      <h2>Contents</h2>
+      <ol>
+        <li><a href="#s1">What Google Sheets is and why bring it to the classroom</a></li>
+        <li><a href="#s2">Getting started: create and name your sheet</a></li>
+        <li><a href="#s3">Design a good collaborative template</a></li>
+        <li><a href="#s4">Protect the structure to prevent accidents</a></li>
+        <li><a href="#s5">Share the document with your students</a></li>
+        <li><a href="#s6">Collaborate and monitor in real time</a></li>
+        <li><a href="#s7">Comments and task assignment</a></li>
+        <li><a href="#s8">Version history: assess who worked</a></li>
+        <li><a href="#s9">Connect a Google Form</a></li>
+        <li><a href="#s10">Add-ons: superpowers for your sheet</a></li>
+        <li><a href="#s11">The QUERY function: advanced searching</a></li>
+        <li><a href="#s12">Collaborative activity ideas for GED</a></li>
+        <li><a href="#s13">Best practices for managing team work</a></li>
+      </ol>
+      <div class="controles">
+        <button class="btn" id="abrir-todo" type="button">Expand all</button>
+        <button class="btn" id="cerrar-todo" type="button">Collapse all</button>
+      </div>
+    </nav>
+
+    <!-- 1 -->
+    <details class="seccion-grande" id="s1" open>
+      <summary>
+        <span class="num-circulo" aria-hidden="true">1</span>
+        <h2>What Google Sheets is and why bring it to the classroom</h2>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <div class="cuerpo">
+        <p>Google Sheets is a spreadsheet application that lives inside Google Drive. A spreadsheet organizes information in a grid of <strong>cells</strong>, grouped into <strong>rows</strong> (numbered: 1, 2, 3…) and <strong>columns</strong> (labeled with letters: A, B, C…). Each cell has a unique address, such as <code class="celda">B5</code>, which is the intersection of column B and row 5.</p>
+
+        <h3>What you need to get started</h3>
+        <ul>
+          <li>A Google account (the same Gmail address you already use with Drive or Classroom).</li>
+          <li>A browser with an internet connection. There is nothing to install or update.</li>
+        </ul>
+
+        <h3>Why it is valuable in the classroom</h3>
+        <p>The main reason is <strong>real-time collaboration</strong>: the whole group can write in the same document simultaneously, each person from their own device, and everyone sees the changes instantly. This turns an individual task into a shared experience and allows team work to happen even at a distance.</p>
+        <p>For the teacher, everything is also recorded: the system keeps track of who wrote what and when. This solves the classic problem of group work—knowing who contributed and who did not—without any manual monitoring.</p>
+
+        <div class="nota aula">
+          <span class="etiqueta">In the classroom</span>
+          <p>Thinking of the sheet as a "shared space" changes the dynamic: instead of turning in separate copies, the group builds a single product. This encourages shared responsibility and, at the same time, lets you identify each student's contribution.</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- 2 -->
+    <details class="seccion-grande" id="s2">
+      <summary>
+        <span class="num-circulo" aria-hidden="true">2</span>
+        <h2>Getting started: create and name your sheet</h2>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <div class="cuerpo">
+        <h3>Create the file</h3>
+        <ol>
+          <li>Go to Google Drive and sign in with your Gmail account.</li>
+          <li>Click <span class="ruta">New <span class="sep" aria-hidden="true">▸</span> Google Sheets</span>. A blank sheet will open in a new tab.</li>
+        </ol>
+
+        <h3>Name it</h3>
+        <p>In the top-left corner you will see the text <em>Untitled spreadsheet</em>. Click on it and type a clear name for your project, for example <strong>Research Project · Group 1</strong>, then press <em>Enter</em>. A good name will save you confusion when you have several documents.</p>
+
+        <h3>Finding your way around the screen</h3>
+        <ul>
+          <li>The central <strong>grid</strong> is where you type. To write, click a cell and start typing.</li>
+          <li>At the bottom left are the <strong>tabs</strong> (also called "sheets"). One file can hold several; useful, for example, to give each group its own tab.</li>
+          <li>Everything is <strong>saved automatically</strong>. There is no "Save" button; the document updates in the cloud every time you type.</li>
+        </ul>
+
+        <div class="nota consejo">
+          <span class="etiqueta">Tip</span>
+          <p>Before sharing anything with your students, get the document completely ready: with its titles, instructions, and everything they need to complete. Sharing a finished template prevents misunderstandings.</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- 3 -->
+    <details class="seccion-grande" id="s3">
+      <summary>
+        <span class="num-circulo" aria-hidden="true">3</span>
+        <h2>Design a good collaborative template</h2>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <div class="cuerpo">
+        <p>The template is the document your students will receive already prepared. A clear template reduces questions and errors. Type into the cells the questions, tables, or data that the group will need to complete.</p>
+
+        <h3>Design recommendations</h3>
+        <ul>
+          <li><strong>Visible headers.</strong> Use the first row for each column's title and give it a distinct background color, so it stands out from the cells the student must fill in.</li>
+          <li><strong>Instructions inside the sheet.</strong> Place a line or a cell with brief directions ("Type your answer here"). The student will not need to leave the document to know what to do.</li>
+          <li><strong>Empty cells for contributions.</strong> Clearly leave blank the cells they are meant to fill in.</li>
+          <li><strong>One area per student or per role.</strong> If they work as a team, assigning a row or a block to each member makes it easy to see who contributes what.</li>
+        </ul>
+
+        <div class="nota aula">
+          <span class="etiqueta">In the classroom</span>
+          <p>A simple "Responsible person" column at the start of each row, where each student writes their name next to their contribution, makes tracking much more transparent and reinforces individual accountability.</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- 4 -->
+    <details class="seccion-grande" id="s4">
+      <summary>
+        <span class="num-circulo" aria-hidden="true">4</span>
+        <h2>Protect the structure to prevent accidents</h2>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <div class="cuerpo">
+        <p>When several people write in one document, it is wise to protect the parts that should not be touched—the titles, the headers, the formulas—so that no one deletes or changes them by mistake and breaks the design.</p>
+
+        <h3>How to protect a row or a range</h3>
+        <ol>
+          <li>Select the row or the range you want to protect (for example, row 1 with the titles).</li>
+          <li>Go to <span class="ruta">Data <span class="sep" aria-hidden="true">▸</span> Protect sheets and ranges</span>.</li>
+          <li>A panel will open on the right. Click <strong>Set permissions</strong> and choose the <strong>Only you</strong> option, so that only you can edit that part.</li>
+        </ol>
+
+        <p>The result: your students will be able to write freely in the empty cells, but if they try to delete or change the protected area, the system will prevent it and display a warning. This way you protect your work without limiting theirs.</p>
+
+        <div class="nota consejo">
+          <span class="etiqueta">Tip</span>
+          <p>Protect the cells that contain formulas as well. An accidental deletion of a formula is one of the most common errors, and one of the hardest to spot afterward.</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- 5 -->
+    <details class="seccion-grande" id="s5">
+      <summary>
+        <span class="num-circulo" aria-hidden="true">5</span>
+        <h2>Share the document with your students</h2>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <div class="cuerpo">
+        <p>For your students to collaborate, you must share the document and, above all, give them the <strong>correct permission</strong>. This is the most important point in the entire guide.</p>
+
+        <h3>The three permission types</h3>
+        <div class="tabla-envoltura">
+          <table>
+            <caption>Comparison of the three Google Sheets permissions and when to use each one.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Permission</th>
+                <th scope="col">What the student can do</th>
+                <th scope="col">When to use it</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Editor</th>
+                <td>Write in and modify the sheet.</td>
+                <td>Collaborative work. <strong>This is the one you need</strong> for the group to work.</td>
+              </tr>
+              <tr>
+                <th scope="row">Commenter</th>
+                <td>Leave comments, but not change the content.</td>
+                <td>Peer reviews or feedback without altering the work.</td>
+              </tr>
+              <tr>
+                <th scope="row">Viewer</th>
+                <td>Read only; cannot write or comment.</td>
+                <td>Sharing reference material or examples.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Option A · Share directly (best for a few students)</h3>
+        <ol>
+          <li>In the top-right corner, click the blue <strong>Share</strong> button.</li>
+          <li>Type in the email addresses of the students in the group.</li>
+          <li>Next to each name, assign the <strong>Editor</strong> permission so they can write.</li>
+          <li>Click <strong>Send</strong>. Each student will receive an email with a direct link to the document.</li>
+        </ol>
+
+        <h3>Option B · Assign with Google Classroom (best for the whole class)</h3>
+        <p>If you already use Classroom, this method saves a lot of time and keeps everything organized within the class.</p>
+        <ol>
+          <li>In your Classroom class, click <span class="ruta">Create <span class="sep" aria-hidden="true">▸</span> Assignment</span>.</li>
+          <li>Give it a title (for example, <em>Group 1 · Research Project</em>) and attach the Sheets template from your Drive.</li>
+          <li>When attaching the file, choose the option <strong>"Students can edit file"</strong>. This ensures everyone collaborates in the same document.</li>
+          <li>Assign the task <strong>only to the students in that group</strong>, deselecting the others.</li>
+          <li>For the next group, use <strong>Reuse post</strong>: choose the Group 1 assignment, check "make a copy of the attachments," and assign it to Group 2. You will not have to redo anything.</li>
+        </ol>
+
+        <div class="nota atencion">
+          <span class="etiqueta">Caution</span>
+          <p>If you share with the <strong>Viewer</strong> permission by mistake, your students will see the document but will not be able to write, and they will think "it isn't working." Always verify that the permission is set to <strong>Editor</strong> before sending.</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- 6 -->
+    <details class="seccion-grande" id="s6">
+      <summary>
+        <span class="num-circulo" aria-hidden="true">6</span>
+        <h2>Collaborate and monitor in real time</h2>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <div class="cuerpo">
+        <p>Once your students open the link, you will see the collaboration live, with no need to reload the page.</p>
+        <ul>
+          <li><strong>Colored cursors.</strong> Each connected person appears with a differently colored cursor that moves across the sheet. If you hover over a cursor, you will see the name of the student in that cell.</li>
+          <li><strong>Instant changes.</strong> When someone enters data, it appears immediately on your screen and on everyone else's.</li>
+          <li><strong>Live support.</strong> You can enter the document while the class is working and "walk around" the sheet to see each group's progress in real time.</li>
+        </ul>
+
+        <div class="nota aula">
+          <span class="etiqueta">In the classroom</span>
+          <p>This live view is ideal for spotting, in time, the group that got stuck and offering help right when it is needed, instead of discovering it at the end.</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- 7 -->
+    <details class="seccion-grande" id="s7">
+      <summary>
+        <span class="num-circulo" aria-hidden="true">7</span>
+        <h2>Comments and task assignment</h2>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <div class="cuerpo">
+        <h3>Leaving a comment</h3>
+        <ol>
+          <li>Select the cell you want to comment on.</li>
+          <li>Click <strong>Add comment</strong> and type your message. The comment will stay anchored to that cell for the student to see.</li>
+        </ol>
+
+        <h3>Assigning a task to a specific student</h3>
+        <p>Inside a comment, type the <strong>+</strong> sign followed by the student's email (for example, <code class="celda">+anna@email.com</code>). This <strong>assigns the task</strong> to them and sends an automatic email notification. It is a direct way to request a correction or a specific contribution without interrupting the rest of the group.</p>
+
+        <div class="nota consejo">
+          <span class="etiqueta">Tip</span>
+          <p>Comments serve as feedback without altering the student's work: you correct and guide, but the contribution remains theirs. Once the student addresses the note, they can mark the comment as <em>Resolved</em>.</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- 8 -->
+    <details class="seccion-grande" id="s8">
+      <summary>
+        <span class="num-circulo" aria-hidden="true">8</span>
+        <h2>Version history: assess who worked</h2>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <div class="cuerpo">
+        <p>The biggest fear in group work is not knowing who did the work. The <strong>version history</strong> solves exactly that: it keeps a record of every change, with its author and time.</p>
+
+        <h3>How to view it</h3>
+        <ol>
+          <li>Go to <span class="ruta">File <span class="sep" aria-hidden="true">▸</span> Version history <span class="sep" aria-hidden="true">▸</span> See version history</span>.</li>
+          <li>On the right, a list will appear with all the dates and times the document was modified.</li>
+          <li>When you click on any point in time, you will see exactly <strong>which student wrote each item</strong>: each author has an assigned color, and their contributions are highlighted in that color.</li>
+        </ol>
+
+        <h3>Two key uses for the teacher</h3>
+        <ul>
+          <li><strong>Individual assessment.</strong> Even though the product is a group one, you can see each student's actual contribution and grade fairly.</li>
+          <li><strong>Recovering lost work.</strong> If someone deleted everything by accident, select an earlier version and click <strong>Restore this version</strong> to recover the document.</li>
+        </ul>
+
+        <div class="nota aula">
+          <span class="etiqueta">In the classroom</span>
+          <p>Tell your students from the start that the history exists. Knowing that every contribution is recorded is a strong incentive for everyone to participate, and it eliminates arguments about "who did more."</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- 9 -->
+    <details class="seccion-grande" id="s9">
+      <summary>
+        <span class="num-circulo" aria-hidden="true">9</span>
+        <h2>Connect a Google Form</h2>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <div class="cuerpo">
+        <p>If you need to gather information in an orderly way—surveys, student data, quiz responses—you can link a Google Form to your sheet. The responses will arrive automatically in Sheets, one per row.</p>
+
+        <h3>How to create and connect the form</h3>
+        <ol>
+          <li>Open your spreadsheet and go to <span class="ruta">Tools <span class="sep" aria-hidden="true">▸</span> Create a new form</span>.</li>
+          <li>A basic form will be generated, already linked.</li>
+          <li>Back in the sheet, you will see a new tab with a purple icon: this is the sign that Sheets and Forms are now connected. Each submitted response will appear there automatically.</li>
+        </ol>
+
+        <div class="nota aula">
+          <span class="etiqueta">In the classroom</span>
+          <p>A form is perfect for collecting responses from the whole class without chaos: review quizzes, start-of-course surveys, or attendance logs. You receive everything neatly in columns, ready to analyze.</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- 10 -->
+    <details class="seccion-grande" id="s10">
+      <summary>
+        <span class="num-circulo" aria-hidden="true">10</span>
+        <h2>Add-ons: superpowers for your sheet</h2>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <div class="cuerpo">
+        <p>Add-ons are applications, created by third parties, that install inside Google Sheets to give it extra features for specific tasks.</p>
+
+        <h3>How to install one</h3>
+        <ol>
+          <li>With your sheet open, go to <span class="ruta">Extensions <span class="sep" aria-hidden="true">▸</span> Add-ons <span class="sep" aria-hidden="true">▸</span> Get add-ons</span>.</li>
+          <li>The catalog (Marketplace) will open. Search for the tool you need.</li>
+          <li>Click the add-on you want and then <strong>Install</strong>.</li>
+        </ol>
+
+        <div class="nota atencion">
+          <span class="etiqueta">Caution</span>
+          <p>When you install an add-on, it will request access permissions. Install only add-ons from recognized sources, and review the permissions it asks for before accepting, especially if you handle student data.</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- 11 -->
+    <details class="seccion-grande" id="s11">
+      <summary>
+        <span class="num-circulo" aria-hidden="true">11</span>
+        <h2>The QUERY function: advanced searching</h2>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <div class="cuerpo">
+        <p>Once you feel comfortable, <code class="celda">QUERY</code> is one of the most powerful tools in Sheets for searching and filtering information within a large table. It is an advanced topic: you do not need it to get started, but it is worth knowing it exists.</p>
+
+        <h3>Basic structure</h3>
+        <span class="formula">=QUERY(data, "query", headers)</span>
+
+        <h3>An example</h3>
+        <span class="formula">=QUERY(A1:F15, "Select A where F = 'Yes'", 1)</span>
+        <p>What you are asking the formula to do, part by part:</p>
+        <ul>
+          <li><code class="celda">A1:F15</code> is the <strong>range</strong> where your data lives.</li>
+          <li><code class="celda">Select A</code> tells it to show <strong>only column A</strong>.</li>
+          <li><code class="celda">where F = 'Yes'</code> filters to show <strong>only the rows</strong> in which column F says "Yes."</li>
+          <li>The final <code class="celda">1</code> indicates that the <strong>first row</strong> of your data contains the titles or headers.</li>
+        </ul>
+
+        <div class="nota aula">
+          <span class="etiqueta">In the classroom</span>
+          <p>A useful application: if your class filled in a table with their results, with <code class="celda">QUERY</code> you can instantly pull out, for example, only the names of those who marked "Yes" in a column, without reviewing the list by hand.</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- 12 -->
+    <details class="seccion-grande" id="s12">
+      <summary>
+        <span class="num-circulo" aria-hidden="true">12</span>
+        <h2>Collaborative activity ideas for GED</h2>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <div class="cuerpo">
+        <p>Beyond the tool itself, what matters is what we use it for with students. These are concrete ideas that apply to a GED class, organized by area.</p>
+
+        <h3>Mathematics</h3>
+        <ul>
+          <li><strong>Bank of solved problems.</strong> Each group contributes a problem and its step-by-step solution in its own row. In the end, the class has a review collection built by everyone.</li>
+          <li><strong>Data table for statistics.</strong> The group collects real data (expenses, distances, times) and organizes it in columns to later calculate mean, median, and mode.</li>
+          <li><strong>Practice tracker.</strong> Each student logs the exercises they complete and their score, which makes their own progress visible across the weeks.</li>
+        </ul>
+
+        <h3>Language Arts</h3>
+        <ul>
+          <li><strong>Essay planning.</strong> A table with columns for thesis, arguments, and evidence helps the group structure a text before drafting it.</li>
+          <li><strong>Vocabulary bank.</strong> Columns for the word, its definition, and an example sentence, which the class expands continuously.</li>
+        </ul>
+
+        <h3>For any subject</h3>
+        <ul>
+          <li><strong>Team log.</strong> A tab where the group records what each person did each day and who was responsible for each part.</li>
+          <li><strong>Shared checklist.</strong> A table with the tasks of a project and a box each student marks as they complete their part.</li>
+        </ul>
+
+        <div class="nota consejo">
+          <span class="etiqueta">Tip</span>
+          <p>Start with a simple, low-pressure activity—for example, a vocabulary table—so that both you and your students grow familiar with the tool before a graded project.</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- 13 -->
+    <details class="seccion-grande" id="s13">
+      <summary>
+        <span class="num-circulo" aria-hidden="true">13</span>
+        <h2>Best practices for managing team work</h2>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <div class="cuerpo">
+        <p>These habits prevent the most common problems and keep the class under control even with several groups working at once.</p>
+        <ul>
+          <li><strong>One tab per group.</strong> Using separate tabs within a single file keeps the work organized and lets you supervise everything from one document.</li>
+          <li><strong>Clear names.</strong> Establish from the start that each student uses their real name in their Google profile; that way the history and the cursors will be easy to identify.</li>
+          <li><strong>Protect before you share.</strong> Lock titles, headers, and formulas (section 4) before giving the class access.</li>
+          <li><strong>Assign roles.</strong> Within each group, dividing responsibilities (who writes, who reviews, who organizes data) reduces overlap and passivity.</li>
+          <li><strong>Check the history.</strong> A quick look at the version history (section 8) tells you at a glance how the actual work was divided.</li>
+          <li><strong>Start with small groups.</strong> Three or four members per document is a good size: enough to collaborate, without anyone fading into the background.</li>
+        </ul>
+
+        <div class="nota aula">
+          <span class="etiqueta">In the classroom</span>
+          <p>Spend the first five minutes of the first session on guided practice: have everyone enter the same test document and type their name in a cell. Seeing collaboration work live removes the initial fear of the tool.</p>
+        </div>
+      </div>
+    </details>
+
+  </main>
+
+  <footer>
+    <p>Google Sheets Manual for Teachers · GED Professional Development</p>
+    <p>Author: José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago.</p>
+    <p>This work is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="license">Creative Commons BY-NC-SA 4.0</a>.</p>
+  </footer>
+
+  <script>
+    (function(){
+      var secciones = document.querySelectorAll('details.seccion-grande');
+
+      // Expand / collapse all
+      var abrir = document.getElementById('abrir-todo');
+      var cerrar = document.getElementById('cerrar-todo');
+      if (abrir) abrir.addEventListener('click', function(){
+        secciones.forEach(function(d){ d.open = true; });
+      });
+      if (cerrar) cerrar.addEventListener('click', function(){
+        secciones.forEach(function(d){ d.open = false; });
+      });
+
+      // Automatically open when a TOC link is clicked
+      document.querySelectorAll('.toc a').forEach(function(enlace){
+        enlace.addEventListener('click', function(){
+          var id = this.getAttribute('href').slice(1);
+          var destino = document.getElementById(id);
+          if (destino) destino.open = true;
+        });
+      });
+
+      // Automatically open if the URL carries an anchor (#sX)
+      function abrirPorHash(){
+        var hash = window.location.hash.slice(1);
+        if (!hash) return;
+        var destino = document.getElementById(hash);
+        if (destino && destino.tagName.toLowerCase() === 'details'){
+          destino.open = true;
+          destino.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+      window.addEventListener('hashchange', abrirPorHash);
+      abrirPorHash();
+    })();
+  </script>
+
+</body>
+</html>
