@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<!--
+============================================================================
+  Guía de AsciiMath para MyOpenMath
+  Referencia interactiva de sintaxis AsciiMath con renderizado en vivo.
+
+  Autor:   José M. Fernández, ABE/ASE Math Master Teacher
+           Harry S. Truman College — City Colleges of Chicago
+  Año:      2026
+  Licencia: Creative Commons Atribución-NoComercial-CompartirIgual 4.0
+            (CC BY-NC-SA 4.0)  https://creativecommons.org/licenses/by-nc-sa/4.0/
+============================================================================
+-->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía de AsciiMath para MyOpenMath</title>
+
+  <meta name="author" content="José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago">
+  <meta name="license" content="CC BY-NC-SA 4.0">
+  <meta name="description" content="Referencia interactiva de la sintaxis AsciiMath para escribir matemáticas en MyOpenMath / IMathAS, con ejemplos renderizados en vivo y un cajón de pruebas.">
+  <link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- MathJax 3 con entrada AsciiMath (delimitada por acentos graves) -->
+  <script>
+    window.MathJax = {
+      loader: { load: ['input/asciimath', 'output/chtml'] },
+      asciimath: { delimiters: [['`', '`']] },
+      options: { ignoreHtmlClass: 'no-mathjax', processHtmlClass: 'mathjax' },
+      chtml: { scale: 1.05 },
+      startup: {
+        pageReady: function () {
+          return MathJax.startup.defaultPageReady().then(function () {
+            if (window.initApp) window.initApp();
+          });
+        }
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/startup.js" id="MathJax-script"></script>
+
+  <style>
+    :root{
+      --tiza:#F5F1E8;        /* fondo crema (tiza) */
+      --tiza-2:#ECE6D8;      /* panel ligeramente más oscuro */
+      --pizarra:#18342A;     /* verde pizarra (héroe / sandbox) */
+      --pizarra-2:#0F2219;   /* pizarra más profunda */
+      --tinta:#16261F;       /* texto principal */
+      --gris:#555555;        /* texto secundario (>=4.5:1 sobre crema) */
+      --verde:#2D8402;       /* verde de marca */
+      --verde-osc:#1C5A00;   /* verde para enlaces sobre fondo claro */
+      --verde-claro:#9BE06A; /* tiza verde sobre pizarra */
+      --linea:#D6CFBE;       /* bordes suaves */
+      --radio:10px;
+      --sombra:0 1px 2px rgba(22,38,31,.08), 0 8px 24px rgba(22,38,31,.06);
+    }
+
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth; scroll-padding-top:1rem;}
+    body{
+      margin:0;
+      background:var(--tiza);
+      color:var(--tinta);
+      font-family:"Source Sans 3", system-ui, sans-serif;
+      font-size:18px;
+      line-height:1.65;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    /* --- Saltar al contenido --- */
+    .saltar{
+      position:absolute; left:-999px; top:0; z-index:100;
+      background:var(--verde-osc); color:#fff; padding:.6rem 1rem;
+      border-radius:0 0 var(--radio) 0; font-weight:600; text-decoration:none;
+    }
+    .saltar:focus{left:0;}
+
+    a{color:var(--verde-osc); text-underline-offset:3px;}
+    a:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visible{
+      outline:3px solid var(--verde); outline-offset:2px; border-radius:4px;
+    }
+
+    .contenedor{max-width:1080px; margin:0 auto; padding:0 1.25rem;}
+
+    /* ====================== HÉROE ====================== */
+    .hero{
+      background:
+        radial-gradient(1200px 400px at 80% -10%, rgba(155,224,106,.10), transparent 60%),
+        linear-gradient(180deg, var(--pizarra) 0%, var(--pizarra-2) 100%);
+      color:var(--tiza);
+      border-bottom:4px solid var(--verde);
+    }
+    .hero-inner{padding:3.2rem 1.25rem 2.6rem;}
+    .marca-tic{
+      font-family:"JetBrains Mono", monospace;
+      color:var(--verde-claro);
+      letter-spacing:.04em; font-size:.95rem;
+      display:inline-flex; align-items:center; gap:.55rem;
+      border:1px solid rgba(155,224,106,.35);
+      padding:.3rem .7rem; border-radius:999px; margin-bottom:1.1rem;
+    }
+    .hero h1{
+      font-family:"Fraunces", Georgia, serif;
+      font-weight:600; font-size:clamp(2.1rem, 5vw, 3.3rem);
+      line-height:1.08; margin:.2rem 0 .6rem;
+      color:var(--tiza);
+    }
+    .hero h1 .tic{color:var(--verde-claro); font-family:"JetBrains Mono",monospace; font-weight:500;}
+    .hero p.lede{font-size:1.15rem; max-width:62ch; color:#E7E0CF; margin:.2rem 0 0;}
+
+    /* tira "lo que escribes -> lo que ves" */
+    .demo-hero{
+      margin-top:2rem; display:grid;
+      grid-template-columns:1fr auto 1fr; align-items:center; gap:1rem;
+      max-width:680px;
+    }
+    .demo-cara{
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(245,241,232,.18);
+      border-radius:var(--radio); padding:1rem 1.1rem; min-height:74px;
+      display:flex; flex-direction:column; justify-content:center;
+    }
+    .demo-cara .et{
+      font-size:.72rem; text-transform:uppercase; letter-spacing:.09em;
+      color:#C9D8C2; margin-bottom:.35rem;
+    }
+    .demo-cara code{
+      font-family:"JetBrains Mono",monospace; color:var(--verde-claro);
+      font-size:1.05rem; word-break:break-word;
+    }
+    .demo-cara .rend{color:var(--tiza); font-size:1.4rem;}
+    .demo-flecha{color:var(--verde-claro); font-size:1.6rem; text-align:center;}
+
+    /* ====================== BARRA DE NAVEGACIÓN ====================== */
+    .navbar{
+      position:sticky; top:0; z-index:30;
+      background:rgba(245,241,232,.92);
+      backdrop-filter:saturate(1.2) blur(6px);
+      border-bottom:1px solid var(--linea);
+    }
+    .navbar-inner{display:flex; align-items:center; gap:1rem; padding:.7rem 1.25rem; flex-wrap:wrap;}
+    .buscador{flex:1 1 260px; position:relative; min-width:220px;}
+    .buscador input{
+      width:100%; padding:.6rem .9rem .6rem 2.4rem;
+      border:1.5px solid var(--linea); border-radius:999px;
+      font-size:1rem; background:#fff; color:var(--tinta);
+      font-family:inherit;
+    }
+    .buscador .lupa{position:absolute; left:.85rem; top:50%; transform:translateY(-50%); color:var(--gris);}
+    .salto-rapido{display:flex; gap:.4rem; flex-wrap:wrap;}
+    .salto-rapido a{
+      font-size:.85rem; text-decoration:none; color:var(--tinta);
+      background:#fff; border:1px solid var(--linea); border-radius:999px;
+      padding:.3rem .7rem;
+    }
+    .salto-rapido a:hover{border-color:var(--verde); color:var(--verde-osc);}
+
+    /* ====================== SECCIONES DE CONTENIDO ====================== */
+    main{padding:2.5rem 0 4rem;}
+    .intro{margin-bottom:2.5rem;}
+    .intro h2{font-family:"Fraunces",serif; font-size:1.7rem; margin:0 0 .4rem;}
+
+    .caja-objetivos{
+      background:var(--tiza-2);
+      border-left:6px solid var(--verde);
+      border-radius:0 var(--radio) var(--radio) 0;
+      padding:1.1rem 1.3rem; margin:1.4rem 0;
+    }
+    .caja-objetivos h2{
+      font-family:"Source Sans 3",sans-serif; font-size:1.05rem; text-transform:uppercase;
+      letter-spacing:.06em; color:var(--verde-osc); margin:0 0 .5rem;
+    }
+    .caja-objetivos ul{margin:0; padding-left:1.2rem;}
+    .caja-objetivos li{margin:.25rem 0;}
+
+    .nota-clave{
+      background:#fff; border:1px solid var(--linea); border-radius:var(--radio);
+      padding:1rem 1.2rem; box-shadow:var(--sombra);
+    }
+    .nota-clave code, .inline-code{
+      font-family:"JetBrains Mono",monospace; background:var(--tiza-2);
+      padding:.08em .35em; border-radius:5px; font-size:.92em; color:var(--pizarra-2);
+    }
+
+    .categoria{margin:2.6rem 0; scroll-margin-top:5.5rem;}
+    .categoria > h2{
+      font-family:"Fraunces",serif; font-size:1.55rem; font-weight:600;
+      margin:0 0 .15rem; display:flex; align-items:baseline; gap:.6rem;
+    }
+    .categoria > h2 .num{
+      font-family:"JetBrains Mono",monospace; font-size:.95rem; color:var(--verde-osc);
+      background:var(--tiza-2); padding:.1rem .5rem; border-radius:6px; flex:none;
+    }
+    .cat-desc{color:var(--gris); margin:.1rem 0 1rem; max-width:72ch;}
+
+    /* ---- tablas de referencia ---- */
+    .tabla-wrap{
+      border:1px solid var(--linea); border-radius:var(--radio);
+      overflow:hidden; box-shadow:var(--sombra); background:#fff;
+    }
+    table{width:100%; border-collapse:collapse;}
+    thead th{
+      text-align:left; font-size:.78rem; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--gris); background:var(--tiza-2);
+      padding:.6rem 1rem; border-bottom:1px solid var(--linea); font-weight:700;
+    }
+    tbody td{padding:.7rem 1rem; border-bottom:1px solid var(--linea); vertical-align:middle;}
+    tbody tr:last-child td{border-bottom:none;}
+    tbody tr:hover{background:#FBFAF5;}
+
+    .celda-codigo{width:38%; white-space:nowrap;}
+    .celda-codigo .par-cod{display:flex; align-items:center; gap:.5rem;}
+    .celda-codigo code{
+      font-family:"JetBrains Mono",monospace; font-size:1rem;
+      background:var(--pizarra); color:var(--verde-claro);
+      padding:.32em .6em; border-radius:6px; white-space:pre; overflow-x:auto; max-width:100%;
+    }
+    .copiar{
+      flex:none; border:1px solid var(--linea); background:#fff; color:var(--gris);
+      border-radius:6px; padding:.28rem .5rem; cursor:pointer; font-size:.78rem;
+      font-family:inherit; line-height:1; display:inline-flex; align-items:center; gap:.3rem;
+    }
+    .copiar:hover{border-color:var(--verde); color:var(--verde-osc);}
+    .copiar.ok{border-color:var(--verde); color:var(--verde-osc); background:#F3FBEE;}
+    .celda-render{width:26%; font-size:1.18rem; color:var(--tinta);}
+    .celda-nota{color:var(--gris); font-size:.94rem;}
+
+    .sin-resultados{display:none; text-align:center; color:var(--gris); padding:2.5rem 1rem; font-size:1.05rem;}
+    .sin-resultados.activo{display:block;}
+
+    /* ====================== SANDBOX (PIZARRA) ====================== */
+    .sandbox{
+      background:linear-gradient(180deg, var(--pizarra) 0%, var(--pizarra-2) 100%);
+      border:1px solid var(--pizarra-2); border-radius:14px;
+      padding:1.6rem; margin:3rem 0 1rem; color:var(--tiza);
+      box-shadow:var(--sombra);
+    }
+    .sandbox h2{font-family:"Fraunces",serif; color:var(--tiza); margin:0 0 .2rem; font-size:1.5rem;}
+    .sandbox p.sb-sub{color:#CBD8C2; margin:.1rem 0 1.1rem;}
+    .sb-grid{display:grid; grid-template-columns:1fr 1fr; gap:1.1rem;}
+    .sb-bloque label.sb-et{display:block; font-size:.78rem; text-transform:uppercase; letter-spacing:.07em; color:var(--verde-claro); margin-bottom:.4rem;}
+    #sandbox-input{
+      width:100%; min-height:130px; resize:vertical;
+      font-family:"JetBrains Mono",monospace; font-size:1.05rem; line-height:1.5;
+      background:var(--pizarra-2); color:var(--verde-claro);
+      border:1px solid rgba(155,224,106,.3); border-radius:8px; padding:.9rem 1rem;
+    }
+    #sandbox-preview{
+      min-height:130px; background:rgba(255,255,255,.05);
+      border:1px solid rgba(245,241,232,.18); border-radius:8px;
+      padding:.9rem 1rem; font-size:1.5rem; color:var(--tiza);
+      display:flex; align-items:center; flex-wrap:wrap; word-break:break-word; overflow-x:auto;
+    }
+    .chips{display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1rem;}
+    .chips .et-chip{width:100%; font-size:.78rem; color:#CBD8C2; margin-bottom:.1rem;}
+    .chip{
+      font-family:"JetBrains Mono",monospace; font-size:.85rem;
+      background:rgba(255,255,255,.08); color:var(--verde-claro);
+      border:1px solid rgba(155,224,106,.3); border-radius:6px;
+      padding:.3rem .55rem; cursor:pointer;
+    }
+    .chip:hover{background:rgba(155,224,106,.18);}
+
+    /* ====================== PIE / LICENCIA ====================== */
+    footer{
+      border-top:1px solid var(--linea); margin-top:3rem;
+      padding:2rem 0 3rem; color:var(--gris); font-size:.92rem;
+    }
+    footer .lic{display:flex; gap:.6rem; align-items:flex-start; flex-wrap:wrap;}
+    footer strong{color:var(--tinta);}
+    footer a{color:var(--verde-osc);}
+
+    /* ====================== UTILIDADES ====================== */
+    .sr-only{
+      position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+      overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+    }
+
+    /* ====================== RESPONSIVO ====================== */
+    @media (max-width:760px){
+      body{font-size:17px;}
+      .demo-hero{grid-template-columns:1fr; max-width:100%;}
+      .demo-flecha{transform:rotate(90deg);}
+      .sb-grid{grid-template-columns:1fr;}
+      .celda-codigo{width:auto; white-space:normal;}
+      .celda-render{width:auto;}
+      .celda-nota{display:none;}            /* la nota se omite en pantallas estrechas para conservar legibilidad */
+      thead th:nth-child(3){display:none;}
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      *{scroll-behavior:auto !important; transition:none !important; animation:none !important;}
+    }
+  </style>
+</head>
+<body>
+  <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+  <!-- ====================== HÉROE ====================== -->
+  <header class="hero">
+    <div class="hero-inner contenedor">
+      <span class="marca-tic" aria-hidden="true">&#96; AsciiMath &#96;</span>
+      <h1>Guía de <span class="tic">AsciiMath</span> para MyOpenMath</h1>
+      <p class="lede">Dentro de MyOpenMath e IMathAS las matemáticas no se escriben en LaTeX, sino en AsciiMath: texto sencillo entre acentos graves. Esta es tu referencia, con cada ejemplo renderizado en vivo.</p>
+
+      <div class="demo-hero" aria-hidden="true">
+        <div class="demo-cara">
+          <span class="et">Lo que escribes</span>
+          <code>&#96;root(3)(a)&#96;</code>
+        </div>
+        <div class="demo-flecha">&#10142;</div>
+        <div class="demo-cara">
+          <span class="et">Lo que ves</span>
+          <span class="rend">`root(3)(a)`</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ====================== NAVEGACIÓN ====================== -->
+  <nav class="navbar" aria-label="Búsqueda y navegación rápida">
+    <div class="navbar-inner contenedor">
+      <div class="buscador">
+        <span class="lupa" aria-hidden="true">&#128269;</span>
+        <input type="search" id="buscar" placeholder="Filtrar por símbolo, palabra o nota…"
+               aria-label="Filtrar la referencia de AsciiMath" autocomplete="off">
+      </div>
+      <div class="salto-rapido" id="salto-rapido" aria-label="Saltar a una categoría"></div>
+    </div>
+  </nav>
+
+  <!-- ====================== CONTENIDO ====================== -->
+  <main id="contenido" class="contenedor">
+
+    <section class="intro" aria-labelledby="intro-h">
+      <h2 id="intro-h">Lo esencial en un minuto</h2>
+      <p>En MyOpenMath, todo lo que va entre acentos graves <span class="inline-code">&#96; &#96;</span> se interpreta como AsciiMath. La raíz cuadrada coincide con LaTeX por casualidad (<span class="inline-code">sqrt(x)</span>), pero casi todo lo demás cambia: la raíz cúbica es <span class="inline-code">root(3)(x)</span>, multiplicar es <span class="inline-code">xx</span> y dividir es <span class="inline-code">-:</span>.</p>
+
+      <div class="caja-objetivos">
+        <h2>Tres reglas de oro</h2>
+        <ul>
+          <li><strong>Índice entre paréntesis, radicando entre paréntesis:</strong> la raíz n-ésima es <span class="inline-code">root(n)(a)</span> &mdash; el primer paréntesis lleva el índice, el segundo lleva lo que va bajo el radical.</li>
+          <li><strong>Más de un carácter, agrúpalo:</strong> <span class="inline-code">x^(10)</span> da `x^(10)`, pero <span class="inline-code">x^10</span> da `x^10` (solo el 1 sube). Lo mismo con subíndices y fracciones.</li>
+          <li><strong>Las palabras van en <span class="inline-code">text(...)</span>:</strong> el texto suelto se interpreta como variables. Usa <span class="inline-code">text(si)</span> o comillas para escribir palabras dentro de una fórmula.</li>
+        </ul>
+      </div>
+
+      <div class="nota-clave">
+        <p style="margin:.2rem 0;"><strong>AsciiMath vs. LaTeX.</strong> Si copiaste algo como <span class="inline-code">\sqrt[3]{a}</span> y no funcionó, es porque eso es LaTeX. En MyOpenMath, dentro de los acentos graves, ese mismo resultado se escribe <span class="inline-code">root(3)(a)</span>. Toda esta guía está en el dialecto de MyOpenMath.</p>
+      </div>
+    </section>
+
+    <!-- Las tablas de referencia se construyen aquí -->
+    <div id="referencia"></div>
+
+    <p class="sin-resultados" id="sin-resultados" role="status">
+      No hay coincidencias para tu búsqueda. Prueba con otro término.
+    </p>
+
+    <!-- ====================== SANDBOX ====================== -->
+    <section class="sandbox" aria-labelledby="sb-h">
+      <h2 id="sb-h">Cajón de pruebas</h2>
+      <p class="sb-sub">Escribe AsciiMath (sin los acentos graves) y míralo renderizarse al instante. Cuando te guste, cópialo entre <span style="font-family:'JetBrains Mono',monospace;">&#96; &#96;</span> en MyOpenMath.</p>
+      <div class="sb-grid">
+        <div class="sb-bloque">
+          <label class="sb-et" for="sandbox-input">Tu AsciiMath</label>
+          <textarea id="sandbox-input" spellcheck="false" aria-describedby="sb-h">x = (-b +- sqrt(b^2 - 4ac))/(2a)</textarea>
+        </div>
+        <div class="sb-bloque">
+          <span class="sb-et">Resultado en vivo</span>
+          <div id="sandbox-preview" aria-live="polite"></div>
+        </div>
+      </div>
+      <div class="chips" id="chips">
+        <span class="et-chip">Inserta rápido:</span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ====================== PIE / LICENCIA ====================== -->
+  <footer>
+    <div class="contenedor">
+      <div class="lic">
+        <span aria-hidden="true" style="font-size:1.3rem;">&#9883;</span>
+        <p style="margin:0;">
+          <strong>Guía de AsciiMath para MyOpenMath</strong> &middot;
+          <strong>José M. Fernández</strong>, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago &middot; 2026.<br>
+          Obra bajo licencia
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="license">Creative Commons Atribución-NoComercial-CompartirIgual 4.0 (CC&nbsp;BY-NC-SA&nbsp;4.0)</a>.
+          Puedes compartir y adaptar el material citando la autoría, sin fines comerciales y bajo la misma licencia.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  /* ====================================================================
+     DATOS DE REFERENCIA
+     Cada fila es [asciimath, nota]. El código y el resultado salen del
+     mismo origen: el código se muestra entre acentos graves y el
+     resultado se renderiza con MathJax.
+  ==================================================================== */
+  const CATEGORIAS = [
+    {
+      id:'operaciones', titulo:'Operaciones básicas',
+      desc:'Suma, resta, multiplicación y división. Ojo: multiplicar y dividir no usan los símbolos del teclado.',
+      filas:[
+        ['a + b', 'Suma.'],
+        ['a - b', 'Resta.'],
+        ['a xx b', 'Multiplicación (×). Dos equis, sin espacios obligatorios.'],
+        ['a * b', 'Punto de multiplicar (⋅).'],
+        ['a -: b', 'División (÷).'],
+        ['a // b', 'Barra literal, no fracción.'],
+        ['a / b', 'Fracción apilada.'],
+        ['+-', 'Más-menos (±).'],
+        ['a^2', 'Potencia / exponente.'],
+        ['|a|', 'Valor absoluto.']
+      ]
+    },
+    {
+      id:'fracciones', titulo:'Fracciones, potencias y subíndices',
+      desc:'La barra / apila automáticamente. Para que suba o baje más de un carácter, agrúpalo entre paréntesis.',
+      filas:[
+        ['a/b', 'Fracción simple.'],
+        ['(a+b)/(c+d)', 'Los paréntesis agrupan y desaparecen en la fracción.'],
+        ['x^2', 'Cuadrado.'],
+        ['x^(2n)', 'Exponente de varios caracteres: agrúpalo.'],
+        ['x^10', 'Sin paréntesis solo sube el primer carácter (cuidado).'],
+        ['x_i', 'Subíndice.'],
+        ['x_(i j)', 'Subíndice de varios caracteres.'],
+        ['x_i^2', 'Subíndice y exponente a la vez.'],
+        ['root(2)(x^2+y^2)', 'Combinando raíz, potencias y suma.'],
+        ['(2/3)^4', 'Fracción elevada a potencia.']
+      ]
+    },
+    {
+      id:'raices', titulo:'Raíces',
+      desc:'sqrt para la cuadrada; root(n)(a) para cualquier índice. Primer paréntesis = índice, segundo = radicando.',
+      filas:[
+        ['sqrt(x)', 'Raíz cuadrada.'],
+        ['sqrt(x+1)', 'El radicando puede ser una expresión completa.'],
+        ['root(3)(a)', 'Raíz cúbica.'],
+        ['root(4)(16)', 'Raíz cuarta.'],
+        ['root(n)(a)', 'Raíz n-ésima genérica.'],
+        ['root(3)(x)=b text( si ) b xx b xx b = a', 'Tu definición completa de raíz cúbica.']
+      ]
+    },
+    {
+      id:'relaciones', titulo:'Relaciones y comparaciones',
+      desc:'Igualdades, desigualdades y aproximaciones.',
+      filas:[
+        ['a = b', 'Igual.'],
+        ['a != b', 'Distinto (≠).'],
+        ['a < b', 'Menor que.'],
+        ['a > b', 'Mayor que.'],
+        ['a <= b', 'Menor o igual (≤).'],
+        ['a >= b', 'Mayor o igual (≥).'],
+        ['a ~~ b', 'Aproximadamente igual (≈).'],
+        ['a ~= b', 'Congruente (≅).'],
+        ['a -= b', 'Idéntico / equivalente (≡).'],
+        ['y prop x', 'Proporcional a (∝).']
+      ]
+    },
+    {
+      id:'agrupacion', titulo:'Agrupación y delimitadores',
+      desc:'Paréntesis que crecen, valores absolutos, parte entera y corchetes invisibles.',
+      filas:[
+        ['(a+b)', 'Paréntesis normales.'],
+        ['[a, b]', 'Corchetes.'],
+        ['{a, b}', 'Llaves.'],
+        ['abs(x)', 'Valor absoluto (crece con el contenido).'],
+        ['floor(x)', 'Parte entera por defecto (⌊x⌋).'],
+        ['ceil(x)', 'Parte entera por exceso (⌈x⌉).'],
+        ['norm(vec(v))', 'Norma (‖ ‖).'],
+        ['(:a, b:)', 'Paréntesis angulares ⟨a, b⟩.'],
+        ['{: x/y :}', 'Corchetes invisibles (agrupan sin mostrarse).']
+      ]
+    },
+    {
+      id:'griegas', titulo:'Letras griegas',
+      desc:'Escribe el nombre de la letra. Con mayúscula inicial obtienes la versión mayúscula.',
+      filas:[
+        ['alpha, beta, gamma', 'Minúsculas comunes.'],
+        ['Delta', 'Mayúscula (Δ): inicial en mayúscula.'],
+        ['theta', 'Theta (θ), muy usada en ángulos.'],
+        ['pi', 'Pi (π).'],
+        ['lambda', 'Lambda (λ).'],
+        ['mu', 'Mu (μ), media poblacional.'],
+        ['sigma', 'Sigma minúscula (σ), desviación típica.'],
+        ['Sigma', 'Sigma mayúscula (Σ).'],
+        ['Omega', 'Omega mayúscula (Ω).'],
+        ['varphi', 'Variante de phi (φ).']
+      ]
+    },
+    {
+      id:'funciones', titulo:'Funciones y operadores con nombre',
+      desc:'Trigonometría, logaritmos y funciones se reconocen por su nombre y salen en redonda.',
+      filas:[
+        ['sin(x), cos(x), tan(x)', 'Trigonométricas.'],
+        ['csc, sec, cot', 'Recíprocas.'],
+        ['sinh, cosh, tanh', 'Hiperbólicas.'],
+        ['log(x)', 'Logaritmo decimal.'],
+        ['log_b(x)', 'Logaritmo en base b.'],
+        ['ln(x)', 'Logaritmo natural.'],
+        ['exp(x)', 'Exponencial.'],
+        ['f(x) = x^2', 'Notación de función.'],
+        ['gcd(a,b)', 'Máximo común divisor.'],
+        ['max(a, b)', 'Máximo.']
+      ]
+    },
+    {
+      id:'calculo', titulo:'Sumatorias, productos, límites e integrales',
+      desc:'Los límites superior e inferior van con ^ y _, igual que exponentes y subíndices.',
+      filas:[
+        ['sum_(n=1)^oo a_n', 'Sumatoria (∞ se escribe oo).'],
+        ['prod_(k=1)^n k', 'Productorio.'],
+        ['lim_(x->0) (sin x)/x', 'Límite.'],
+        ['int_a^b f(x) dx', 'Integral definida.'],
+        ['int f(x) dx', 'Integral indefinida.'],
+        ['oint_C F dr', 'Integral de línea cerrada.'],
+        ['(dy)/(dx)', 'Derivada (fracción agrupada).'],
+        ['(del f)/(del x)', 'Derivada parcial (∂).'],
+        ['oo', 'Infinito (∞).'],
+        ['f(x) -> L', 'Tiende a.']
+      ]
+    },
+    {
+      id:'logica', titulo:'Flechas, lógica y conjuntos',
+      desc:'Implicaciones, cuantificadores y los conjuntos numéricos clásicos.',
+      filas:[
+        ['a -> b', 'Flecha simple (→).'],
+        ['a |-> b', 'Asignación (↦).'],
+        ['p => q', 'Implica (⇒).'],
+        ['p <=> q', 'Si y solo si (⇔).'],
+        ['AA x', 'Para todo (∀).'],
+        ['EE x', 'Existe (∃).'],
+        ['x in A', 'Pertenece (∈).'],
+        ['x !in A', 'No pertenece (∉).'],
+        ['A uu B', 'Unión (∪).'],
+        ['A nn B', 'Intersección (∩).'],
+        ['A sube B', 'Subconjunto o igual (⊆).'],
+        ['NN, ZZ, QQ, RR, CC', 'Conjuntos numéricos (ℕ ℤ ℚ ℝ ℂ).'],
+        ['O/', 'Conjunto vacío (∅).']
+      ]
+    },
+    {
+      id:'matrices', titulo:'Matrices, vectores y sistemas',
+      desc:'Las filas van entre corchetes y se separan por comas. Con corchetes invisibles se arman los sistemas con llave.',
+      filas:[
+        ['[[a,b],[c,d]]', 'Matriz 2×2.'],
+        ['[[1,0,0],[0,1,0],[0,0,1]]', 'Matriz identidad 3×3.'],
+        ['((x),(y),(z))', 'Vector columna.'],
+        ['det[[a,b],[c,d]]', 'Determinante.'],
+        ['{(x+y=2),(x-y=0):}', 'Sistema de ecuaciones con llave.'],
+        ['vec(AB)', 'Vector con flecha.']
+      ]
+    },
+    {
+      id:'decoraciones', titulo:'Acentos, decoraciones y tipos de letra',
+      desc:'Sombreros, barras, llaves superiores y estilos de letra (negrita, pizarra, caligráfica).',
+      filas:[
+        ['hat(x)', 'Sombrero (x̂).'],
+        ['bar(x)', 'Barra / media (x̄).'],
+        ['vec(v)', 'Vector (v⃗).'],
+        ['dot(x)', 'Punto (derivada temporal).'],
+        ['ul(texto)', 'Subrayado.'],
+        ['overbrace(a+b+c)^(n text( términos))', 'Llave superior con etiqueta.'],
+        ['underbrace(1+1+1)_(=3)', 'Llave inferior con etiqueta.'],
+        ['bb(A)', 'Negrita.'],
+        ['bbb(R)', 'Pizarra / blackboard (ℝ).'],
+        ['cc(L)', 'Caligráfica.'],
+        ['tt(texto)', 'Máquina de escribir (monoespaciada).'],
+        ['text(velocidad)', 'Texto literal dentro de la fórmula.']
+      ]
+    }
+  ];
+
+  /* Atajos para el cajón de pruebas */
+  const CHIPS = ['sqrt(x)','root(3)(x)','a/b','x^(2)','x_(i)','sum_(n=1)^oo','int_a^b f(x) dx','+-','<=','>=','pi','theta','[[a,b],[c,d]]','text(si)'];
+
+  /* ====================================================================
+     CONSTRUCCIÓN DE LA INTERFAZ
+  ==================================================================== */
+
+  function esc(s){
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // Crea una celda de código con su botón de copiar
+  function celdaCodigo(am){
+    const td = document.createElement('td');
+    td.className = 'celda-codigo';
+    const wrap = document.createElement('div');
+    wrap.className = 'par-cod';
+
+    const code = document.createElement('code');
+    code.className = 'no-mathjax';
+    code.textContent = '`' + am + '`';
+
+    const btn = document.createElement('button');
+    btn.className = 'copiar';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'Copiar el código ' + am);
+    btn.innerHTML = '<span aria-hidden="true">&#128203;</span> copiar';
+    btn.addEventListener('click', function(){ copiar('`' + am + '`', btn); });
+
+    wrap.appendChild(code);
+    wrap.appendChild(btn);
+    td.appendChild(wrap);
+    return td;
+  }
+
+  function construirReferencia(){
+    const cont = document.getElementById('referencia');
+    const salto = document.getElementById('salto-rapido');
+
+    CATEGORIAS.forEach(function(cat, idx){
+      // enlace de salto rápido
+      const a = document.createElement('a');
+      a.href = '#' + cat.id;
+      a.textContent = cat.titulo;
+      salto.appendChild(a);
+
+      // sección
+      const sec = document.createElement('section');
+      sec.className = 'categoria';
+      sec.id = cat.id;
+      sec.setAttribute('aria-labelledby', cat.id + '-h');
+
+      const h2 = document.createElement('h2');
+      h2.id = cat.id + '-h';
+      const num = document.createElement('span');
+      num.className = 'num';
+      num.setAttribute('aria-hidden','true');
+      num.textContent = String(idx+1).padStart(2,'0');
+      h2.appendChild(num);
+      h2.appendChild(document.createTextNode(cat.titulo));
+      sec.appendChild(h2);
+
+      const p = document.createElement('p');
+      p.className = 'cat-desc';
+      p.textContent = cat.desc;
+      sec.appendChild(p);
+
+      const wrap = document.createElement('div');
+      wrap.className = 'tabla-wrap';
+      const table = document.createElement('table');
+
+      const cap = document.createElement('caption');
+      cap.className = 'sr-only';
+      cap.textContent = 'Referencia AsciiMath: ' + cat.titulo;
+      table.appendChild(cap);
+
+      const thead = document.createElement('thead');
+      thead.innerHTML =
+        '<tr><th scope="col">Lo que escribes</th>'
+      + '<th scope="col">Lo que ves</th>'
+      + '<th scope="col">Nota</th></tr>';
+      table.appendChild(thead);
+
+      const tbody = document.createElement('tbody');
+      cat.filas.forEach(function(fila){
+        const am = fila[0], nota = fila[1] || '';
+        const tr = document.createElement('tr');
+        tr.dataset.busqueda = (am + ' ' + nota).toLowerCase();
+
+        tr.appendChild(celdaCodigo(am));
+
+        const tdR = document.createElement('td');
+        tdR.className = 'celda-render';
+        tdR.textContent = '`' + am + '`';   // MathJax lo renderizará
+        tr.appendChild(tdR);
+
+        const tdN = document.createElement('td');
+        tdN.className = 'celda-nota';
+        tdN.textContent = nota;
+        tr.appendChild(tdN);
+
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody);
+      wrap.appendChild(table);
+      sec.appendChild(wrap);
+      cont.appendChild(sec);
+    });
+  }
+
+  /* ---- Copiar al portapapeles ---- */
+  function copiar(texto, btn){
+    const exito = function(){
+      const original = btn.innerHTML;
+      btn.classList.add('ok');
+      btn.innerHTML = '<span aria-hidden="true">&#10003;</span> copiado';
+      setTimeout(function(){ btn.classList.remove('ok'); btn.innerHTML = original; }, 1400);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(texto).then(exito).catch(function(){ copiarFallback(texto, exito); });
+    } else {
+      copiarFallback(texto, exito);
+    }
+  }
+  function copiarFallback(texto, cb){
+    const t = document.createElement('textarea');
+    t.value = texto; t.style.position='fixed'; t.style.opacity='0';
+    document.body.appendChild(t); t.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(t);
+  }
+
+  /* ---- Búsqueda / filtrado ---- */
+  function activarBusqueda(){
+    const input = document.getElementById('buscar');
+    const sinRes = document.getElementById('sin-resultados');
+    input.addEventListener('input', function(){
+      const q = input.value.trim().toLowerCase();
+      let totalVisible = 0;
+      document.querySelectorAll('.categoria').forEach(function(sec){
+        let visiblesEnSec = 0;
+        sec.querySelectorAll('tbody tr').forEach(function(tr){
+          const coincide = !q || tr.dataset.busqueda.indexOf(q) !== -1;
+          tr.style.display = coincide ? '' : 'none';
+          if (coincide) visiblesEnSec++;
+        });
+        sec.style.display = visiblesEnSec ? '' : 'none';
+        totalVisible += visiblesEnSec;
+      });
+      sinRes.classList.toggle('activo', totalVisible === 0);
+    });
+  }
+
+  /* ---- Cajón de pruebas ---- */
+  let temporizador;
+  function activarSandbox(){
+    const ta = document.getElementById('sandbox-input');
+    const out = document.getElementById('sandbox-preview');
+    const render = function(){
+      out.innerHTML = '`' + esc(ta.value || ' ') + '`';
+      if (window.MathJax && MathJax.typesetPromise){
+        MathJax.typesetClear([out]);
+        MathJax.typesetPromise([out]).catch(function(){});
+      }
+    };
+    ta.addEventListener('input', function(){
+      clearTimeout(temporizador);
+      temporizador = setTimeout(render, 200);
+    });
+    render();
+
+    // chips de inserción
+    const cont = document.getElementById('chips');
+    CHIPS.forEach(function(c){
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip';
+      chip.textContent = c;
+      chip.setAttribute('aria-label', 'Insertar ' + c + ' en el cajón de pruebas');
+      chip.addEventListener('click', function(){
+        const start = ta.selectionStart, end = ta.selectionEnd;
+        ta.value = ta.value.slice(0,start) + c + ta.value.slice(end);
+        ta.focus();
+        ta.selectionStart = ta.selectionEnd = start + c.length;
+        render();
+      });
+      cont.appendChild(chip);
+    });
+  }
+
+  /* ---- Arranque (lo llama MathJax al terminar de cargar) ---- */
+  window.initApp = function(){
+    construirReferencia();
+    activarBusqueda();
+    activarSandbox();
+    if (window.MathJax && MathJax.typesetPromise){
+      MathJax.typesetPromise([document.getElementById('referencia')]).catch(function(){});
+    }
+  };
+
+  /* Respaldo: si por algún motivo MathJax no dispara pageReady,
+     construimos la interfaz de todas formas tras cargar la página. */
+  window.addEventListener('load', function(){
+    setTimeout(function(){
+      if (!document.querySelector('#referencia .categoria')) {
+        window.initApp();
+      }
+    }, 2500);
+  });
+  </script>
+</body>
+</html>
